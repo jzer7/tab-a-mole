@@ -1,0 +1,5 @@
+{
+    "editor.fontLigatures": false,
+    "editor.renderWhitespace": "boundary",
+    "editor.rulers": [80,100]
+}

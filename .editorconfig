@@ -1,0 +1,44 @@
+# top-most EditorConfig file
+root = true
+
+# Sane settings for most text files
+# - UTF-8 as default charset
+# - Unix-style newlines
+# - newline ending every text file
+[*]
+charset = utf-8
+end_of_line = lf
+
+indent_size = 2
+indent_style = space
+
+insert_final_newline = false
+
+trim_trailing_whitespace = false
+
+[*.{bash,sh,zsh}]
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = false
+
+[*.js]
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.json]
+indent_size = 2
+trim_trailing_whitespace = true
+
+[*.md]
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = false
+
+[{Makefile*,*.mk}]
+indent_size = 8
+indent_style = tab
+insert_final_newline = true

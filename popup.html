@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tab-a-mole</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <h1>Tab-a-mole</h1>
+    <div class="controls">
+      <label for="matchLevel">Match by:</label>
+      <select id="matchLevel">
+        <option value="full" selected>full URL</option>
+        <option value="no-hash">URL minus hash</option>
+        <option value="no-query">URL minus query or hash</option>
+         <option value="hostname">hostname</option>
+        <option value="domain">domain</option>
+      </select>
+      <!-- TODO: reduce the space between the word "Example:" and the example -->
+      <div>Example:</div>
+      <div class="example-url">
+        <span class="url-part matched" data-part="subdomains">www.</span><span class="url-part matched" data-part="domain">example.com</span><span class="url-part matched" data-part="path">/news/earth</span><span class="url-part matched" data-part="query">?q=2025</span><span class="url-part matched" data-part="hash">#water</span>
+      </div>
+    </div>
+  </div>
+  <button id="findDuplicates">Find Duplicates</button>
+  <div id="duplicateList"></div>
+  <script src="popup.js"></script>
+</body>
+</html>

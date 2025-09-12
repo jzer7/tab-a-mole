@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  if (window.chrome && chrome.runtime && chrome.runtime.id) {
+    /* Temporary, while we debug in chrome */
   chrome.runtime.onMessage.addListener(function (
     request,
     sender,
@@ -21,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
       displayDuplicateTabs(request.tabs);
     }
   });
+  }
 
   matchLevelSelect.addEventListener("change", function (event) {
     updateExampleUrl(event.target.value);

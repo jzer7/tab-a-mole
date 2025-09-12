@@ -1,4 +1,5 @@
 {
+  "$schema": "https://www.schemastore.org/chrome-manifest.json",
   "manifest_version": 3,
   "name": "Tab-a-mole",
   "version": "1.0",

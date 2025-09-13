@@ -4,10 +4,8 @@
   "name": "Tab-a-mole",
   "version": "1.0",
   "description": "Find and close duplicate tabs.",
-  "permissions": [
-    "tabs",
-    "storage"
-  ],
+  "homepage_url": "https://github.com/jzer7/tab-a-mole",
+  "permissions": ["tabs", "storage"],
   "background": {
     "service_worker": "background.js"
   },

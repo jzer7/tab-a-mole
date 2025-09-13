@@ -6,6 +6,21 @@ document.addEventListener('DOMContentLoaded', function () {
   const currentWindowOnlyCheckbox =
     document.getElementById('currentWindowOnly');
 
+  // Load saved settings from chrome.storage.local
+  chrome.storage.local.get(
+    ['matchLevelSliderValue', 'currentWindowOnlyChecked'],
+    (result) => {
+      if (result.matchLevelSliderValue !== undefined) {
+        matchLevelSlider.value = result.matchLevelSliderValue;
+      }
+      if (result.currentWindowOnlyChecked !== undefined) {
+        currentWindowOnlyCheckbox.checked = result.currentWindowOnlyChecked;
+      }
+      // Update UI to reflect loaded values
+      updateExampleUrl(sliderToMatchLevel[matchLevelSlider.value]);
+    }
+  );
+
   const sliderToMatchLevel = {
     5: 'full',
     4: 'no-hash',
@@ -27,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (window.chrome && chrome.runtime && chrome.runtime.id) {
     /* Temporary, while we debug in chrome */
     chrome.runtime.onMessage.addListener(
-      function (request, sender, sendResponse) {
+      function (request, _sender, _sendResponse) {
         if (request.message === 'duplicate_tabs') {
           displayDuplicateTabs(request.tabs);
         }
@@ -38,10 +53,18 @@ document.addEventListener('DOMContentLoaded', function () {
   matchLevelSlider.addEventListener('input', function (event) {
     const matchLevel = sliderToMatchLevel[event.target.value];
     updateExampleUrl(matchLevel);
+    // Save slider value to chrome.storage.local
+    chrome.storage.local.set({ matchLevelSliderValue: event.target.value });
   });
 
-  // Set initial state on load
-  updateExampleUrl(sliderToMatchLevel[matchLevelSlider.value]);
+  currentWindowOnlyCheckbox.addEventListener('change', function (event) {
+    // Save checkbox value to chrome.storage.local
+    chrome.storage.local.set({
+      currentWindowOnlyChecked: event.target.checked
+    });
+  });
+
+  // Set initial state on load (now handled after loading from storage)
 
   function updateExampleUrl(matchLevel) {
     const partMatchers = {
@@ -53,9 +76,11 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const matchedParts = partMatchers[matchLevel] || [];
+    console.log('updatematchlevel:', matchedParts);
 
     // Re-select all parts in case the DOM was changed
     const allUrlParts = document.querySelectorAll('.url-part');
+    console.log('allUrlParts:', allUrlParts);
 
     allUrlParts.forEach((part) => {
       // part is the string

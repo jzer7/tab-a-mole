@@ -2,11 +2,13 @@
 console.log('Background script running');
 
 // Example: Listen for a message from the popup
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.message === 'find_duplicates') {
-    findDuplicateTabs(request.matchLevel, request.scope);
+chrome.runtime.onMessage.addListener(
+  function (request, _sender, _sendResponse) {
+    if (request.message === 'find_duplicates') {
+      findDuplicateTabs(request.matchLevel, request.scope);
+    }
   }
-});
+);
 
 function getUrlMatchKey(urlString, matchLevel) {
   try {
@@ -28,7 +30,7 @@ function getUrlMatchKey(urlString, matchLevel) {
       default:
         return url.href;
     }
-  } catch (e) {
+  } catch {
     // For non-http URLs like chrome://extensions
     return urlString;
   }
@@ -55,6 +57,7 @@ function findDuplicateTabs(matchLevel = 'full', scope = 'all') {
         url: tab.url,
         title: tab.title,
         lastAccessed: tab.lastAccessed,
+        // windowId: tab.windowId,
         pinned: tab.pinned
       };
       if (urlMap.has(matchKey)) {

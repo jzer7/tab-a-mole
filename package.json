@@ -4,13 +4,14 @@
   "private": true,
   "description": "chrome extension",
   "scripts": {
-    "build": "extension build",
+    "build": "extension build --browser chrome",
     "dev": "extension dev",
     "preview": "extension preview",
     "prettier": "npx prettier **/*.{md,html,json} -w",
     "lint": "eslint '**/*.js'",
     "lint:fix": "npm run lint -- --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "package": "extension build --zip"
   },
   "repository": {
     "type": "git",

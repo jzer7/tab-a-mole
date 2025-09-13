@@ -1,10 +1,6 @@
 # top-most EditorConfig file
 root = true
 
-# Sane settings for most text files
-# - UTF-8 as default charset
-# - Unix-style newlines
-# - newline ending every text file
 [*]
 charset = utf-8
 end_of_line = lf
@@ -20,12 +16,14 @@ trim_trailing_whitespace = false
 indent_size = 4
 indent_style = space
 insert_final_newline = true
+max_line_length = 80
 trim_trailing_whitespace = false
 
 [*.js]
 indent_size = 2
 indent_style = space
 insert_final_newline = true
+max_line_length = 90
 trim_trailing_whitespace = true
 
 [*.json]
@@ -36,6 +34,7 @@ trim_trailing_whitespace = true
 indent_size = 2
 indent_style = space
 insert_final_newline = true
+max_line_length = 90
 trim_trailing_whitespace = false
 
 [{Makefile*,*.mk}]

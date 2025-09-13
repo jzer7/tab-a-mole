@@ -5,10 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const matchLevelSlider = document.getElementById('matchLevelSlider');
   const currentWindowOnlyCheckbox =
     document.getElementById('currentWindowOnly');
+  const httpsOnlyCheckbox = document.getElementById('httpsOnly');
 
   // Load saved settings from chrome.storage.local
   chrome.storage.local.get(
-    ['matchLevelSliderValue', 'currentWindowOnlyChecked'],
+    ['matchLevelSliderValue', 'currentWindowOnlyChecked', 'httpsOnlyChecked'],
     (result) => {
       if (result.matchLevelSliderValue !== undefined) {
         matchLevelSlider.value = result.matchLevelSliderValue;
@@ -16,26 +17,31 @@ document.addEventListener('DOMContentLoaded', function () {
       if (result.currentWindowOnlyChecked !== undefined) {
         currentWindowOnlyCheckbox.checked = result.currentWindowOnlyChecked;
       }
+      if (result.httpsOnlyChecked !== undefined) {
+        httpsOnlyCheckbox.checked = result.httpsOnlyChecked;
+      }
       // Update UI to reflect loaded values
       updateExampleUrl(sliderToMatchLevel[matchLevelSlider.value]);
     }
   );
 
-  const sliderToMatchLevel = {
+  const sliderToMatchLevel = Object.freeze({
     5: 'full',
     4: 'no-hash',
     3: 'no-query',
     2: 'hostname',
     1: 'domain'
-  };
+  });
 
   findDuplicatesButton.addEventListener('click', function () {
     const matchLevel = sliderToMatchLevel[matchLevelSlider.value];
     const scope = currentWindowOnlyCheckbox.checked ? 'current' : 'all';
+    const httpsOnly = httpsOnlyCheckbox.checked;
     chrome.runtime.sendMessage({
       message: 'find_duplicates',
       matchLevel: matchLevel,
-      scope: scope
+      scope: scope,
+      httpsOnly: httpsOnly
     });
   });
 
@@ -44,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
     chrome.runtime.onMessage.addListener(
       function (request, _sender, _sendResponse) {
         if (request.message === 'duplicate_tabs') {
-          displayDuplicateTabs(request.tabs);
+          displayDuplicateTabs(request.matched_tab_groups);
         }
       }
     );
@@ -61,6 +67,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Save checkbox value to chrome.storage.local
     chrome.storage.local.set({
       currentWindowOnlyChecked: event.target.checked
+    });
+  });
+
+  httpsOnlyCheckbox.addEventListener('change', function (event) {
+    chrome.storage.local.set({
+      httpsOnlyChecked: event.target.checked
     });
   });
 

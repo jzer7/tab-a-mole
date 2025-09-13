@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
   <head>
+    <meta charset="utf-8" />
     <title>Tab-a-mole</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
@@ -32,6 +33,10 @@
     <div class="options">
       <input type="checkbox" id="currentWindowOnly" name="currentWindowOnly" />
       <label for="currentWindowOnly">Find in current window only</label>
+    </div>
+    <div class="options">
+      <input type="checkbox" id="httpsOnly" name="httpsOnly" />
+      <label for="httpsOnly">Match HTTPS URLs only</label>
     </div>
     <button id="findDuplicates">Find Duplicates</button>
     <div id="duplicateList"></div>

@@ -1,4 +1,5 @@
 /*global chrome*/
+
 document.addEventListener('DOMContentLoaded', function () {
   const findDuplicatesButton = document.getElementById('findDuplicates');
   const duplicateListDiv = document.getElementById('duplicateList');
@@ -7,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('currentWindowOnly');
   const httpsOnlyCheckbox = document.getElementById('httpsOnly');
 
-  // Load saved settings from chrome.storage.local
+  // On-load, retrieve saved settings from chrome.storage.local, and adjust UI elements
   chrome.storage.local.get(
     ['matchLevelSliderValue', 'currentWindowOnlyChecked', 'httpsOnlyChecked'],
     (result) => {
@@ -25,20 +26,40 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   );
 
+  const msgType = Object.freeze({
+    GROUP_TABS_CMD: 'get_grouped_tabs',
+    GROUP_TABS_ANS: 'grouped_tabs'
+  });
+
+  const urlScope = Object.freeze({
+    FULL: 'full',
+    NO_HASH: 'no-hash',
+    NO_QUERY: 'no-query',
+    HOSTNAME: 'hostname',
+    DOMAIN: 'domain'
+  });
+
+  const windowScope = Object.freeze({
+    ALL: 'all',
+    CURRENT: 'current'
+  });
+
   const sliderToMatchLevel = Object.freeze({
-    5: 'full',
-    4: 'no-hash',
-    3: 'no-query',
-    2: 'hostname',
-    1: 'domain'
+    5: urlScope.FULL,
+    4: urlScope.NO_HASH,
+    3: urlScope.NO_QUERY,
+    2: urlScope.HOSTNAME,
+    1: urlScope.DOMAIN
   });
 
   findDuplicatesButton.addEventListener('click', function () {
     const matchLevel = sliderToMatchLevel[matchLevelSlider.value];
-    const scope = currentWindowOnlyCheckbox.checked ? 'current' : 'all';
+    const scope = currentWindowOnlyCheckbox.checked
+      ? windowScope.CURRENT
+      : windowScope.ALL;
     const httpsOnly = httpsOnlyCheckbox.checked;
     chrome.runtime.sendMessage({
-      message: 'find_duplicates',
+      message: msgType.GROUP_TABS_CMD,
       matchLevel: matchLevel,
       scope: scope,
       httpsOnly: httpsOnly
@@ -49,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* Temporary, while we debug in chrome */
     chrome.runtime.onMessage.addListener(
       function (request, _sender, _sendResponse) {
-        if (request.message === 'duplicate_tabs') {
+        if (request.message === msgType.GROUP_TABS_ANS) {
           displayDuplicateTabs(request.matched_tab_groups);
         }
       }
@@ -75,8 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
       httpsOnlyChecked: event.target.checked
     });
   });
-
-  // Set initial state on load (now handled after loading from storage)
 
   function updateExampleUrl(matchLevel) {
     const partMatchers = {
@@ -111,16 +130,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  function displayDuplicateTabs(duplicateTabs) {
+  function displayDuplicateTabs(groupedTabs) {
     duplicateListDiv.innerHTML = ''; // Clear previous results
     // No matches
-    if (duplicateTabs.length === 0) {
+    if (groupedTabs.length === 0) {
       duplicateListDiv.innerHTML = `<div class="no-duplicates">No duplicate tabs found.</div>`;
       return;
     }
 
     const list = document.createElement('ul');
-    duplicateTabs.forEach((matchedGroup) => {
+    groupedTabs.forEach((matchedGroup) => {
       // Matched Group portion
       const listItem = document.createElement('li');
       const groupInfo = document.createElement('div');
@@ -182,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function () {
       listItem.appendChild(individualTabsList);
 
       // Close Button
-
       const closeButton = document.createElement('button');
       closeButton.textContent = `Close ${
         matchedGroup.tabInfos.length - 1

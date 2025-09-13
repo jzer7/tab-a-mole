@@ -2,8 +2,8 @@
 console.log('Background script running');
 
 const msgType = Object.freeze({
-  GROUP_TABS_CMD: 'find_duplicates',
-  GROUP_TABS_ANS: 'duplicate_tabs'
+  GROUP_TABS_CMD: 'get_grouped_tabs',
+  GROUP_TABS_ANS: 'grouped_tabs'
 });
 
 const urlScope = Object.freeze({
@@ -107,7 +107,7 @@ function groupTabsBy(
       }
     }
 
-    // Send the duplicate tabs to the popup
+    // Send the tab groups back to the popup
     chrome.runtime.sendMessage({
       message: msgType.GROUP_TABS_ANS,
       matched_tab_groups: matchedTabGroups

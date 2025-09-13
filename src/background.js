@@ -46,9 +46,16 @@ function findDuplicateTabs(matchLevel = 'full', scope = 'all') {
 
     tabs.forEach((tab) => {
       const matchKey = getUrlMatchKey(tab.url, matchLevel);
+      // This is what we remember of each tab. Do not store the whole tab
+      // object, as it will slow down the extension. People who use this
+      // extension have upward of 120 tabs open at once. We can extend it later
+      // if needed.
       const oneTabInfo = {
         id: tab.id,
-        title: tab.title
+        url: tab.url,
+        title: tab.title,
+        lastAccessed: tab.lastAccessed,
+        pinned: tab.pinned
       };
       if (urlMap.has(matchKey)) {
         urlMap.get(matchKey).tabInfos.push(oneTabInfo);
@@ -59,7 +66,6 @@ function findDuplicateTabs(matchLevel = 'full', scope = 'all') {
 
     for (const [matchKey, data] of urlMap.entries()) {
       if (data.tabInfos.length > 1) {
-        console.log('Duplicate tabs found, matchKey:', matchKey, 'data:', data);
         duplicateTabs.push({ matchKey: matchKey, tabInfos: data.tabInfos });
       }
     }

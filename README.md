@@ -4,12 +4,12 @@
 
 ## Important Files
 
-* `manifest.json`: The core configuration file for the Chrome extension.
+- `manifest.json`: The core configuration file for the Chrome extension.
   It defines the extension's name, version, permissions, and the files it uses.
-* `popup.html`: The HTML structure for the extension's user interface, which is
+- `popup.html`: The HTML structure for the extension's user interface, which is
   shown when you click the extension's icon.
-* `popup.css`: The stylesheet for the popup interface.
-* `popup.js`: The JavaScript file that controls the behavior of the popup.
+- `popup.css`: The stylesheet for the popup interface.
+- `popup.js`: The JavaScript file that controls the behavior of the popup.
   It handles user interactions, communicates with the background script, and
   displays the results.
 

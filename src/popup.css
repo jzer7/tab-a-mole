@@ -26,37 +26,75 @@ h1 {
   gap: 8px;
 }
 
-/* Select Dropdown Styles */
-.controls select {
+/* Slider Container Styles */
+.slider-container {
   width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #dfe1e6;
-  border-radius: 4px;
-  background-color: #fafbfc;
-  color: #172b4d;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 15px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+  border-radius: 5px;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #0052cc; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+  border-radius: 50%;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #0052cc; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+  border-radius: 50%;
 }
 
 /* Example URL Styles */
 .example-url {
   font-family: "SF Mono", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
   font-size: 12px;
-  padding: 8px;
-  background-color: #ffffff;
-  border: 1px solid #dfe1e6;
-  border-radius: 4px;
   word-break: break-all;
-  margin-top: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 .url-part.matched {
-  color: #091e42;
+  color: #2949b4;
   font-weight: 600;
 }
 
 .url-part.unmatched {
-  color: #97a0af;
+  color: #787862;
   font-weight: 400;
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 8px;
 }
 
 /* Button Styles */
@@ -101,24 +139,24 @@ button:hover {
   font-size: 14px;
 }
 
-.url-text {
+.matched-tab-group-text {
   word-break: break-all;
   color: #5e6c84;
 }
 
-.url-text strong {
+.matched-tab-group-text strong {
     color: #172b4d;
 }
 
 /* Sub-list for individual tabs */
-.individual-tabs {
+.matched-tabs {
   list-style: none;
   padding: 10px 0 0 0;
   margin: 10px 0 0 0;
   border-top: 1px solid #dfe1e6;
 }
 
-.individual-tabs li {
+.matched-tabs li {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -131,7 +169,7 @@ button:hover {
 }
 
 /* Go To Button inside the sub-list */
-.go-to-button {
+.go-to-tab-button {
   background-color: #0065ff; /* A slightly different blue */
   padding: 4px 10px !important;
   font-size: 12px !important;

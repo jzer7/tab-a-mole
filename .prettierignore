@@ -1,4 +1,6 @@
 .github
 .vscode
+.attic.skip
+**/*.skip
 dist
 node_modules

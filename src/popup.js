@@ -76,30 +76,61 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function displayDuplicateTabs(duplicateTabs) {
     duplicateListDiv.innerHTML = ''; // Clear previous results
+    // No matches
     if (duplicateTabs.length === 0) {
       duplicateListDiv.innerHTML = `<div class="no-duplicates">No duplicate tabs found.</div>`;
       return;
     }
 
     const list = document.createElement('ul');
-    duplicateTabs.forEach((duplicate) => {
+    duplicateTabs.forEach((matchedGroup) => {
+      // Matched Group portion
       const listItem = document.createElement('li');
-      const urlInfo = document.createElement('div');
-      urlInfo.classList.add('url-text');
-      urlInfo.innerHTML = `<strong>match:</strong> ${duplicate.matchKey} <br><strong>tabs:</strong> ${duplicate.tabInfos.length}`;
-      listItem.appendChild(urlInfo);
+      const groupInfo = document.createElement('div');
+      groupInfo.classList.add('matched-tab-group-text');
+      groupInfo.innerHTML = `<strong>match:</strong> ${matchedGroup.matchKey} <br>
+                             <strong>tabs:</strong> ${matchedGroup.tabInfos.length}`;
+      listItem.appendChild(groupInfo);
 
+      // Matched Tabs portion
       // Create a sub-list for individual tabs
       const individualTabsList = document.createElement('ul');
-      individualTabsList.classList.add('individual-tabs');
-      duplicate.tabInfos.forEach((oneTabInfo) => {
+      individualTabsList.classList.add('matched-tabs');
+      matchedGroup.tabInfos.forEach((oneTabInfo) => {
         // Display a single Tab
         const tabItem = document.createElement('li');
-        tabItem.textContent = `Title: ${oneTabInfo.title}`;
+
+        // The title of the tab
+        let tabTitle = oneTabInfo.title || '(no title)';
+        if (tabTitle.length > 100) {
+          tabTitle = tabTitle.substring(0, 100) + '...';
+        }
+
+        // If possible, show time since last accessed in human format
+        if (!oneTabInfo.lastAccessed) {
+          const timeSinceAccessMs = Date.now() - oneTabInfo.lastAccessed;
+          let timeSinceAccessText = '';
+          if (timeSinceAccessMs < 60000) {
+            timeSinceAccessText = `${Math.floor(timeSinceAccessMs / 1000)} seconds ago`;
+          } else if (timeSinceAccessMs < 3600000) {
+            timeSinceAccessText = `${Math.floor(timeSinceAccessMs / 60000)} minutes ago`;
+          } else if (timeSinceAccessMs < 86400000) {
+            timeSinceAccessText = `${Math.floor(timeSinceAccessMs / 3600000)} hours ago`;
+          } else {
+            timeSinceAccessText = `${Math.floor(timeSinceAccessMs / 86400000)} days ago`;
+          }
+          tabTitle += ` (${timeSinceAccessText})`;
+        }
+
+        // Add icons for pinned tabs
+        if (oneTabInfo.pinned) {
+          tabTitle += ' 📌'; // Pinned icon (U+1F4CC)
+        }
+        tabItem.textContent = `${tabTitle}`;
 
         const goToButton = document.createElement('button');
         goToButton.textContent = 'Go to Tab';
-        goToButton.classList.add('go-to-button');
+        goToButton.classList.add('go-to-tab-button');
         goToButton.addEventListener('click', () => {
           // Switch to the selected tab
           chrome.tabs.update(oneTabInfo.id, { active: true });
@@ -117,11 +148,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const closeButton = document.createElement('button');
       closeButton.textContent = `Close ${
-        duplicate.tabInfos.length - 1
+        matchedGroup.tabInfos.length - 1
       } Duplicates`;
       closeButton.addEventListener('click', () => {
-        const tabsToClose = duplicate.tabInfos.slice(1);
-        chrome.tabs.remove(tabsToClose);
+        const tabsToClose = matchedGroup.tabInfos.slice(1);
+        const tabIdsToClose = tabsToClose.map((tab) => tab.id);
+        chrome.tabs.remove(tabIdsToClose);
         listItem.remove();
         if (list.children.length === 0) {
           displayDuplicateTabs([]);

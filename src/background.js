@@ -20,13 +20,11 @@ const windowScope = Object.freeze({
 });
 
 // Listen for a message from the popup
-chrome.runtime.onMessage.addListener(
-  function (request, _sender, _sendResponse) {
-    if (request.message === msgType.GROUP_TABS_CMD) {
-      groupTabsBy(request.matchLevel, request.scope, request.httpsOnly);
-    }
+chrome.runtime.onMessage.addListener(function (request, _sender, _sendResponse) {
+  if (request.message === msgType.GROUP_TABS_CMD) {
+    groupTabsBy(request.matchLevel, request.scope, request.httpsOnly);
   }
-);
+});
 
 function getUrlMatchKey(urlString, matchLevel, includeParseErrors = true) {
   try {
@@ -81,10 +79,11 @@ function groupTabsBy(
       if (!matchKey) {
         return; // Skip tabs with special URLs
       }
-      // This is what we remember of each tab. Do not store the whole tab
-      // object, as it will slow down the extension. People who use this
-      // extension have upward of 120 tabs open at once. We can extend it later
-      // if needed.
+      // This is what we can read about each tab.
+      //   https://developer.chrome.com/docs/extensions/reference/api/tabs#type-Tab
+      // Do not store the whole tab object, as it will slow down the extension.
+      // People who use this extension have upward of 120 tabs open at once. We
+      // can extend it later if needed.
       const oneTabInfo = {
         id: tab.id,
         url: tab.url,

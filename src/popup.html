@@ -1,45 +1,94 @@
 <!doctype html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <title>Tab-a-mole</title>
-    <link rel="stylesheet" href="popup.css" />
+  <meta charset="utf-8" />
+  <title>Tab-a-mole</title>
+  <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
     <div class="header">
       <h1>Tab-a-mole</h1>
-      <div class="controls">
-        <label for="matchLevelSlider">Match by:</label>
-        <div class="slider-container">
-          <input
-            type="range"
-            min="1"
-            max="5"
-            value="5"
-            class="slider"
-            id="matchLevelSlider"
-          />
-        </div>
-        <div>Example:</div>
-        <div class="example-url">
-          <span class="url-part matched" data-part="subdomains">www.</span
-          ><span class="url-part matched" data-part="domain">example.com</span
-          ><span class="url-part matched" data-part="path">/news/earth</span
-          ><span class="url-part matched" data-part="query">?q=2025</span
-          ><span class="url-part matched" data-part="hash">#water</span>
+    </div>
+    <div class="controls">
+      <div class="slider">
+        <label class="slider__label" for="matchLevelSlider">Match by:</label>
+        <input type="range" min="1" max="5" value="5" class="slider__slide" id="matchLevelSlider" />
+      </div>
+
+      <div class="text-pattern">
+        <div class="text-pattern__label">Example:</div>
+
+        <div class="text-pattern__text" id="sampleUrl">
+          <span class="enabled" data-part="subdomains">www.</span
+          ><span class="enabled" data-part="domain">example.com</span
+          ><span class="enabled" data-part="path">/news/earth</span
+          ><span class="enabled" data-part="query">?q=2025</span
+          ><span class="enabled" data-part="hash">#water</span>
         </div>
       </div>
+
+      <div class="controls__options">
+        <input type="checkbox" id="currentWindowOnly" name="currentWindowOnly" />
+        <label for="currentWindowOnly">Find in current window only</label>
+      </div>
+
+      <div class="controls__options">
+        <input type="checkbox" id="httpsOnly" name="httpsOnly" />
+        <label for="httpsOnly">Match HTTPS URLs only</label>
+      </div>
+
+      <div class="controls__options">
+        <button id="findDuplicates" type="button">Find Duplicates</button>
+      </div>
+
     </div>
-    <div class="options">
-      <input type="checkbox" id="currentWindowOnly" name="currentWindowOnly" />
-      <label for="currentWindowOnly">Find in current window only</label>
+
+    <div class="results">
+
+      <div class="results__msg" id="startSearch" aria-live="polite">Configure options, and start a search</div>
+      <div class="results__msg" id="loadingMessage" hidden aria-live="polite">Loading...</div>
+      <div class="results__msg" id="noDuplicatesMessage" hidden aria-live="polite">No duplicate tabs found.</div>
+      <div class="results__msg" id="duplicateList" hidden aria-live="polite"></div>
+
+      <template id="matched-group-template">
+        <section class="matched-group" role="region" aria-label="Duplicate Tab Group">
+          <header class="matched-group__header">
+            <span class="matched-group__key"></span>
+            <span class="matched-group__count"></span>
+          </header>
+          <div class="matched-group__items">
+            <ul class="matched-group__list" role="list"></ul>
+          </div>
+          <div class="matched-group__actions">
+            <button class="matched-group__close-all" type="button" aria-label="Close all tabs in this group">
+              Close All
+            </button>
+            <button class="matched-group__goto-first" type="button" aria-label="Go to first tab in this group">
+              Go to First
+            </button>
+          </div>
+        </section>
+      </template>
+
+      <template id="tab-item-template">
+        <li role="listitem">
+          <div class="tab-item">
+            <div>
+              <span class="tab-item__title"></span>
+              <span class="tab-item__elapsed"></span>
+              <span class="tab-item__symbol"></span>
+            </div>
+            <div class="tab-item__goto">
+              <button type="button" aria-label="Go to this tab">Go</button>
+            </div>
+            <div class="tab-item__close">
+              <button type="button" aria-label="Close this tab">Close</button>
+            </div>
+          </div>
+        </li>
+      </template>
     </div>
-    <div class="options">
-      <input type="checkbox" id="httpsOnly" name="httpsOnly" />
-      <label for="httpsOnly">Match HTTPS URLs only</label>
-    </div>
-    <button id="findDuplicates">Find Duplicates</button>
-    <div id="duplicateList"></div>
+
     <script src="popup.js"></script>
   </body>
 </html>

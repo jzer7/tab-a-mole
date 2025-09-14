@@ -1,199 +1,348 @@
+/* ------------------------------------------------------ */
+/* Popup CSS File for Tab-A-Mole Chrome Extension         */
+/* ------------------------------------------------------ */
+
+/* ------------------------------------------------------ */
+/* Design Notes:
+ * - Use a clean, modern design with a focus on usability.
+ * - Ensure good contrast for readability.
+ * - Use consistent spacing and alignment.
+ * - Make interactive elements (buttons, sliders) visually distinct.
+ * - Use "design tokens" for colors, fonts, and spacing to ensure consistency.
+ * - Follow accessibility best practices (e.g., sufficient color contrast, focus states).
+ * - Offer 2 color themes: light (default) and dark (user-selectable).
+ */
+
+/* ------------------------------------------------------ */
+/* CSS Variables (Design Tokens) */
+:root {
+  --color-bg: #f4f5f7; /* Main background */
+  --color-bg-light: #fff; /* Card/Panel background */
+  --color-bg-group: #f6f8fa; /* Group header background */
+
+  --color-border: #d0d7de;
+  --color-shadow: rgba(27, 31, 35, 0.03);
+
+  --color-text: #172b4d;
+  --color-text-dark: #091e42; /* High emphasis text (headers, labels) */
+  --color-text-muted: #57606a; /* Medium emphasis text (secondary info) */
+  --color-text-disabled: #787862;
+  --color-text-enabled: #2949b4;
+
+  --color-accent: #0052cc;    /* Primary action color (slider, button) */
+  --color-accent-hover: #0065ff;
+  --color-accent-alt: #19cbd8;  /* Currently unused */
+  --color-accent-alt-hover: #15b0bb;
+  --color-danger: #cf222e;  /* Danger/Destructive action color */
+  --color-danger-hover: #a40e26;
+
+  --color-success: #19d81f; /* Success color (currently unused) */
+
+  --radius: 4px; /* Default border radius for discrete elements */
+  --radius-lg: 6px; /* Larger border radius for cards/panels */
+  --radius-pill: 2em; /* For pill-shaped elements */
+
+  --space-xxs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-smd: 10px;
+  --space-mdlg: 12px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-xxl: 24px;
+
+  --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+}
+
+
+/* ------------------------------------------------------ */
 /* General Body Styles */
 body {
   width: 450px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f4f5f7;
-  color: #172b4d;
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   margin: 0;
-  padding: 16px;
+  padding: var(--space-lg);
   box-sizing: border-box;
 }
 
-/* Header Styles */
+/* ------------------------------------------------------ */
+/* Element defaults */
+
 h1 {
   font-size: 20px;
   font-weight: 600;
-  margin: 0 0 16px 0;
+  margin: 0 0 var(--space-lg) 0;
   text-align: center;
-  color: #091e42;
+  color: var(--color-text-dark);
 }
 
+button {
+  width: 100%;
+  padding: var(--space-md);
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background-color: var(--color-accent);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: var(--color-accent-hover);
+}
+
+label {
+  font-size: 14px;
+  color: var(--color-text-dark);
+}
+
+/* ------------------------------------------------------ */
 /* Controls Container */
 .controls {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-lg);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-sm);
+  width: 100%;
 }
 
+/* ------------------------------------------------------ */
+/* Sample control Style */
+
+.controls__options {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+  gap: var(--space-sm);
+}
+
+/* ------------------------------------------------------ */
 /* Slider Container Styles */
-.slider-container {
+.slider {
   width: 100%;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-sm);
+}
+
+.slider__label {
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-dark);
 }
 
 /* The slider itself */
-.slider {
-  -webkit-appearance: none;  /* Override default CSS styles */
+.slider__slide {
+  -webkit-appearance: none; /* Override default CSS styles */
   appearance: none;
   width: 100%; /* Full-width */
   height: 15px; /* Specified height */
   background: #d3d3d3; /* Grey background */
   outline: none; /* Remove outline */
   opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
-  transition: opacity .2s;
-  border-radius: 5px;
+  -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+  transition: opacity 0.2s;
+  border-radius: var(--radius);
 }
 
 /* Mouse-over effects */
-.slider:hover {
+.slider__slide:hover {
   opacity: 1; /* Fully shown on mouse-over */
 }
 
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
-.slider::-webkit-slider-thumb {
+.slider__slide::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #0052cc; /* Green background */
+  background: var(--color-accent);
   cursor: pointer; /* Cursor on hover */
   border-radius: 50%;
 }
 
-.slider::-moz-range-thumb {
+.slider__slide::-moz-range-thumb {
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #0052cc; /* Green background */
+  background: var(--color-accent);
   cursor: pointer; /* Cursor on hover */
   border-radius: 50%;
 }
 
-/* Example URL Styles */
-.example-url {
-  font-family: "SF Mono", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
-  font-size: 12px;
-  word-break: break-all;
-  padding-left: 12px;
-  padding-right: 12px;
+/* ------------------------------------------------------ */
+/* Text Pattern Style */
+.text-pattern {
+  width: 100%;
+  margin-bottom: var(--space-sm);
+  
 }
 
-.url-part.matched {
-  color: #2949b4;
+.text-pattern__label {
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-dark);
+}
+
+.text-pattern__text {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  word-break: break-all;
+  padding-top: var(--space-sm);
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+.text-pattern__text .enabled {
+  color: var(--color-text-enabled);
   font-weight: 600;
 }
 
-.url-part.unmatched {
-  color: #787862;
+.text-pattern__text .disabled {
+  color: var(--color-text-disabled);
   font-weight: 400;
 }
 
-.options {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
-  gap: 8px;
+
+/* ------------------------------------------------------ */
+/* Button Styles */
+.main-button {
+  width: 100%;
+  padding: var(--space-smd);
+  margin-bottom: var(--space-sm);
 }
 
-/* Button Styles */
-button {
-  width: 100%;
-  padding: 10px;
+/* ------------------------------------------------------ */
+/* Results */
+
+
+/* Matched Group Styles (BEM) */
+.matched-group {
+  background: var(--color-bg-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-lg);
+  box-shadow: 0 1px 2px var(--color-shadow);
+  padding: 0;
+}
+
+.matched-group__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-mdlg);
+  padding: var(--space-mdlg) var(--space-lg) 0 var(--space-lg);
+  font-weight: 600;
+  color: #24292f;
+  font-size: 15px;
+}
+.matched-group__key {
+  flex: 1 1 auto;
+  word-break: break-all;
+}
+.matched-group__count {
+  background: var(--color-bg-group);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-pill);
+  padding: var(--space-xxs) var(--space-smd);
+  font-size: 13px;
+  font-weight: 500;
+}
+.matched-group__items {
+  padding: 0 var(--space-lg);
+}
+.matched-group__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.matched-group__actions {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-mdlg) var(--space-lg) var(--space-mdlg) var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-group);
+}
+.matched-group__actions button {
+  flex: 1 1 0;
+  background: var(--color-danger);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 8px 0;
   font-size: 14px;
   font-weight: 500;
-  color: #fff;
-  background-color: #0052cc;
-  border: none;
-  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  margin-bottom: 16px;
+  transition: background 0.2s;
+}
+.matched-group__actions button:hover {
+  background: var(--color-danger-hover);
 }
 
-button:hover {
-  background-color: #0065ff;
-}
-
-/* Duplicate List Styles */
-#duplicateList {
-  margin-top: 16px;
-}
-
-#duplicateList ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-#duplicateList li {
-  background-color: #ffffff;
-  border: 1px solid #dfe1e6;
-  border-radius: 4px;
-  padding: 12px;
-  margin-bottom: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 14px;
-}
-
-.matched-tab-group-text {
-  word-break: break-all;
-  color: #5e6c84;
-}
-
-.matched-tab-group-text strong {
-    color: #172b4d;
-}
-
-/* Sub-list for individual tabs */
-.matched-tabs {
-  list-style: none;
-  padding: 10px 0 0 0;
-  margin: 10px 0 0 0;
-  border-top: 1px solid #dfe1e6;
-}
-
-.matched-tabs li {
-  display: flex;
-  justify-content: space-between;
+/* Tab Item Styles (BEM) */
+.tab-item {
+  
   align-items: center;
-  padding: 8px 0;
-  margin: 0;
-  border: none;
-  background-color: transparent;
-  font-size: 13px;
-  color: #42526e;
+  gap: var(--space-smd);
+  padding: var(--space-smd) 0;
+  /* border-bottom: 1px solid var(--color-bg-group); */
+  font-size: 14px;
+  color: #24292f;
 }
-
-/* Go To Button inside the sub-list */
-.go-to-tab-button {
-  background-color: #0065ff; /* A slightly different blue */
-  padding: 4px 10px !important;
-  font-size: 12px !important;
-  width: auto !important;
-  margin-bottom: 0 !important;
+.matched-group__list li:last-child .tab-item {
+  border-bottom: none;
 }
-
-/* Close Button inside list items */
-#duplicateList li button {
-  background-color: #de350b;
-  width: auto; /* Override the 100% width */
-  align-self: flex-end; /* Align to the right */
-  padding: 6px 12px;
+.tab-item__title {
+  flex: 2 1 0;
+  font-weight: 500;
+  word-break: break-all;
+}
+.tab-item__elapsed {
+  color: var(--color-text-muted);
   font-size: 12px;
+  min-width: 80px;
+  text-align: right;
+}
+.tab-item__symbol {
+  font-size: 16px;
+  min-width: 20px;
+  text-align: center;
+}
+.tab-item__goto, .tab-item__close {
+  border: none;
+  border-radius: var(--radius);
+  padding: var(--space-xs) var(--space-smd);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
-#duplicateList li button:hover {
-  background-color: #bf2600;
+.tab-item__goto button {
+  background-color: var(--color-accent-alt);
+  color: #fff;
+}
+.tab-item__goto button:hover {
+  background-color: var(--color-accent-alt-hover);
+}
+.tab-item__close button {
+  background-color: var(--color-danger);
+  margin-left: var(--space-xs);
+}
+.tab-item__close:hover button{
+  background-color: var(--color-danger-hover);
 }
 
 .no-duplicates {
-    text-align: center;
-    color: #5e6c84;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 4px;
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: var(--space-xl);
+  background-color: var(--color-bg-light);
+  border-radius: var(--radius-lg);
 }

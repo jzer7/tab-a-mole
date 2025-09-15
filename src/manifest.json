@@ -3,7 +3,7 @@
   "manifest_version": 3,
   "name": "Tab-a-mole",
   "version": "1.0",
-  "description": "Find and close duplicate tabs.",
+  "description": "Helps you manage your large collection of tabs.",
   "homepage_url": "https://github.com/jzer7/tab-a-mole",
 
   "permissions": [
@@ -16,18 +16,19 @@
   },
 
   "action": {
+    "default_title": "Tab-a-mole - manage a pile of tabs",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "images/mini-square-16.png",
       "32": "images/mini-square-32.png",
       "48": "images/mini-square-48.png",
-      "128": "images/mini-square-128.png"
+      "128": "images/banned-stack-128.png"
     }
   },
   "icons": {
     "16": "images/mini-square-16.png",
     "32": "images/mini-square-32.png",
     "48": "images/mini-square-48.png",
-    "128": "images/mini-square-128.png"
+    "128": "images/banned-stack-128.png"
   }
 }

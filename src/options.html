@@ -7,7 +7,7 @@
   </head>
   <body>
     <header>
-      <h1>Options</h1>
+      <h1>Extension options</h1>
     </header>
     <main>
       <section aria-labelledby="theme-options">
@@ -18,9 +18,6 @@
           <label><input type="radio" name="theme" value="system" /> System</label>
           <label><input type="radio" name="theme" value="dark" /> Dark</label>
         </fieldset>
-      </section>
-      <section aria-labelledby="font-size-options">
-        <h2 id="font-size-options">Font Size</h2>
         <fieldset>
           <legend>Font size</legend>
           <label><input type="radio" name="font-size" value="s" /> Small</label>
@@ -28,20 +25,25 @@
           <label><input type="radio" name="font-size" value="l" /> Large</label>
         </fieldset>
       </section>
-      <section aria-labelledby="other-options">
-        <h2 id="other-options">Other Options</h2>
-        <div>
-          <label>
-            <input type="checkbox" name="show-pinned-icon" />
-            Show pinned icon
-          </label>
-        </div>
-        <div>
-          <label>
-            <input type="checkbox" name="show-elapsed-time" />
-            Show elapsed time
-          </label>
-        </div>
+      <section aria-labelledby="information-options">
+        <h2 id="information-options">Information Options</h2>
+        <fieldset>
+          <legend>Display options</legend>
+          <div class="section-item">
+            <label>
+              <input type="checkbox" name="show-pinned-icon" />
+              Show pinned icon
+            </label>
+            <small class="help-text">Show a pinned icon next to results that are pinned tabs</small>
+          </div>
+          <div class="section-item">
+            <label>
+              <input type="checkbox" name="show-elapsed-time" />
+              Show elapsed time
+            </label>
+            <small class="help-text">Show the time elapsed since the tab was last accessed</small>
+          </div>
+        </fieldset>
       </section>
     </main>
     <script src="options.js"></script>

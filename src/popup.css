@@ -8,29 +8,49 @@
 html[data-theme="light"] {
   /* Light theme variables are in theme.css */
 }
+
 html[data-theme="dark"] {
   /* Dark theme variables are in theme.css */
 }
 
 /* ------------------------------------------------------ */
 /* General Body Styles */
+
 body {
-  width: 450px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
   font-family: var(--font-main);
+  font-size: var(--font-size-body);
   background-color: var(--color-bg);
   color: var(--color-text);
-  margin: 0;
-  padding: var(--space-lg);
-  box-sizing: border-box;
+  margin-bottom: var(--space-sm);
+  cursor: pointer;
 }
 
 /* ------------------------------------------------------ */
 /* Element defaults */
 
+header {
+  padding: var(--space-lg);
+  text-align: center;
+  background-color: var(--color-bg-header);
+  color: var(--color-text-header);
+}
+
 h1 {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0 0 var(--space-lg) 0;
+  margin: 0 0 var(--space-md) 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  color: var(--color-text-emphasis);
+}
+
+h2 {
+  margin: 0 0 var(--space-md) 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
   text-align: center;
   color: var(--color-text-emphasis);
 }
@@ -38,7 +58,7 @@ h1 {
 button {
   width: 100%;
   padding: var(--space-md);
-  font-size: 14px;
+  font-size: var(--font-size-md);
   font-weight: 500;
   color: #fff;
   background-color: var(--color-accent);
@@ -53,9 +73,24 @@ button:hover {
 }
 
 label {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
   color: var(--color-text-emphasis);
+  display: inline-block;
+  margin-right: var(--space-lg);
 }
+
+/* Container and theme rule */
+/* Occupies the full width up to 500px */
+main {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: var(--color-bg-panel);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px var(--space-xs) var(--color-shadow);
+  padding: var(--space-lg);
+}
+
 
 /* ------------------------------------------------------ */
 /* Controls Container */
@@ -87,7 +122,7 @@ label {
 .slider__label {
   display: block;
   margin-bottom: var(--space-xs);
-  font-size: 14px;
+  font-size: var(--font-size-md);
   font-weight: 500;
   color: var(--color-text-emphasis);
 }
@@ -98,7 +133,7 @@ label {
   appearance: none;
   width: 100%; /* Full-width */
   height: 15px; /* Specified height */
-  background: #d3d3d3; /* Grey background */
+  background-color: #d3d3d3; /* Grey background */
   outline: none; /* Remove outline */
   opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
   -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
@@ -117,7 +152,7 @@ label {
   appearance: none;
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: var(--color-accent);
+  background-color: var(--color-accent);
   cursor: pointer; /* Cursor on hover */
   border-radius: 50%;
 }
@@ -125,7 +160,7 @@ label {
 .slider__slide::-moz-range-thumb {
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: var(--color-accent);
+  background-color: var(--color-accent);
   cursor: pointer; /* Cursor on hover */
   border-radius: 50%;
 }
@@ -135,20 +170,20 @@ label {
 .text-pattern {
   width: 100%;
   margin-bottom: var(--space-sm);
-  
+
 }
 
 .text-pattern__label {
   display: block;
   margin-bottom: var(--space-xs);
-  font-size: 14px;
+  font-size: var(--font-size-md);
   font-weight: 500;
   color: var(--color-text-emphasis);
 }
 
 .text-pattern__text {
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: var(--font-size-md);
   word-break: break-all;
   padding-top: var(--space-sm);
   padding-left: var(--space-md);
@@ -157,7 +192,7 @@ label {
 
 .text-pattern__text .enabled {
   color: var(--color-text-enabled);
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
 }
 
 .text-pattern__text .disabled {
@@ -170,7 +205,7 @@ label {
 /* Button Styles */
 .main-button {
   width: 100%;
-  padding: var(--space-smd);
+  padding: var(--space-sm);
   margin-bottom: var(--space-sm);
 }
 
@@ -180,7 +215,7 @@ label {
 
 /* Matched Group Styles (BEM) */
 .matched-group {
-  background: var(--color-bg-panel);
+  background-color: var(--color-bg-panel);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   margin-bottom: var(--space-lg);
@@ -191,8 +226,8 @@ label {
 .matched-group__header {
   display: flex;
   align-items: center;
-  gap: var(--space-mdlg);
-  padding: var(--space-mdlg) var(--space-lg) 0 var(--space-lg);
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg) 0 var(--space-lg);
   font-weight: 600;
   color: #24292f;
   font-size: 15px;
@@ -202,10 +237,10 @@ label {
   word-break: break-all;
 }
 .matched-group__count {
-  background: var(--color-bg-group);
+  background-color: var(--color-bg-group);
   color: var(--color-text-muted);
   border-radius: var(--radius-pill);
-  padding: var(--space-xxs) var(--space-smd);
+  padding: var(--space-xs) var(--space-sm);
   font-size: 13px;
   font-weight: 500;
 }
@@ -220,13 +255,13 @@ label {
 .matched-group__actions {
   display: flex;
   gap: var(--space-sm);
-  padding: var(--space-mdlg) var(--space-lg) var(--space-mdlg) var(--space-lg);
+  padding: var(--space-md) var(--space-lg) var(--space-md) var(--space-lg);
   border-top: 1px solid var(--color-border);
-  background: var(--color-bg-group);
+  background-color: var(--color-bg-group);
 }
 .matched-group__actions button {
   flex: 1 1 0;
-  background: var(--color-danger);
+  background-color: var(--color-danger);
   color: #fff;
   border: none;
   border-radius: var(--radius);
@@ -237,15 +272,15 @@ label {
   transition: background 0.2s;
 }
 .matched-group__actions button:hover {
-  background: var(--color-danger-hover);
+  background-color: var(--color-danger-hover);
 }
 
 /* Tab Item Styles (BEM) */
 .tab-item {
-  
+
   align-items: center;
-  gap: var(--space-smd);
-  padding: var(--space-smd) 0;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
   /* border-bottom: 1px solid var(--color-bg-group); */
   font-size: 14px;
   color: #24292f;
@@ -272,7 +307,7 @@ label {
 .tab-item__goto, .tab-item__close {
   border: none;
   border-radius: var(--radius);
-  padding: var(--space-xs) var(--space-smd);
+  padding: var(--space-xs) var(--space-sm);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -297,7 +332,7 @@ label {
 .no-duplicates {
   text-align: center;
   color: var(--color-text-muted);
-  padding: var(--space-xl);
+  padding: var(--space-lg);
   background-color: var(--color-bg-panel);
   border-radius: var(--radius-lg);
 }

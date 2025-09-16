@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tab-a-mole Options</title>
+    <link rel="stylesheet" href="options.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Options</h1>
+    </header>
+    <main>
+      <section aria-labelledby="theme-options">
+        <h2 id="theme-options">Theme</h2>
+        <fieldset>
+          <legend>Choose theme</legend>
+          <label><input type="radio" name="theme" value="light" /> Light</label>
+          <label><input type="radio" name="theme" value="system" /> System</label>
+          <label><input type="radio" name="theme" value="dark" /> Dark</label>
+        </fieldset>
+      </section>
+      <section aria-labelledby="font-size-options">
+        <h2 id="font-size-options">Font Size</h2>
+        <fieldset>
+          <legend>Font size</legend>
+          <label><input type="radio" name="font-size" value="s" /> Small</label>
+          <label><input type="radio" name="font-size" value="m" /> Medium</label>
+          <label><input type="radio" name="font-size" value="l" /> Large</label>
+        </fieldset>
+      </section>
+      <section aria-labelledby="other-options">
+        <h2 id="other-options">Other Options</h2>
+        <div>
+          <label>
+            <input type="checkbox" name="show-pinned-icon" />
+            Show pinned icon
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" name="show-elapsed-time" />
+            Show elapsed time
+          </label>
+        </div>
+      </section>
+    </main>
+    <script src="options.js"></script>
+  </body>
+</html>

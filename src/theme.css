@@ -1,0 +1,107 @@
+/* ------------------------------------------------------ */
+/* theme.css - Centralized Design Tokens for Tab-A-Mole   */
+/* ------------------------------------------------------ */
+
+/* ------------------------------------------------------ */
+/* Design Notes:
+ * - Use a clean, modern design with a focus on usability.
+ * - Ensure good contrast for readability.
+ * - Use consistent spacing and alignment.
+ * - Make interactive elements (buttons, sliders) visually distinct.
+ * - Use "design tokens" for colors, fonts, and spacing to ensure consistency.
+ * - Follow accessibility best practices (e.g., sufficient color contrast, focus states).
+ * - Offer 2 color themes: light (default) and dark (user-selectable).
+ */
+
+:root {
+  /* Colors for backgrounds: general, header, sections, grouped items */
+  --color-bg: #f4f5f7;
+  --color-bg-header: #00a7df;
+  --color-bg-panel: #fff;
+  --color-bg-group: #f6f8fa;
+  --color-bg-fieldset: #f8f9fa;
+
+  /* Borders and shadows for depth */
+  --color-border: #d0d7de;
+  --color-shadow: rgba(27, 31, 35, 0.03);
+
+  /* Text colors: primary, header, emphasis, muted, disabled, enabled */
+  --color-text: #172b4d;
+  --color-text-header: #fff;
+  --color-text-emphasis: #091e42;
+  --color-text-secondary: #57606a;
+  --color-text-disabled: #787862;
+  --color-text-enabled: #2949b4;
+
+  /* Accent colors for interactive elements and states */
+  --color-accent: #0052cc; /* Primary action color */
+  --color-accent-hover: #0065ff;
+  --color-accent-alt: #19cbd8; /* Secondary action color */
+  --color-accent-alt-hover: #15b0bb;
+  --color-danger: #cf222e; /* Error/warning color */
+  --color-danger-hover: #a40e26;
+  --color-success: #19d81f; /* Success/confirmation color */
+
+  /* Border radius for rounded corners: elements, cards/panesl, pill-shaped */
+  --radius: 4px;
+  --radius-lg: 6px;
+  --radius-pill: 2em;
+
+  --space-xxs: 2px; /* 1 time */
+  --space-xs: 4px;  /* 4 times */
+  --space-sm: 8px;  /* 8 times */
+  --space-smd: 10px; /* 5 times */
+  --space-mdlg: 12px; /* 4 times */
+  --space-md: 12px; /* 3 times */
+  --space-lg: 16px; /* 9 times */
+  --space-xl: 20px; /* 1 time */
+  --space-xxl: 24px; /* unused */
+
+  --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+
+  --font-xl: 20px;
+  --font-lg: 16px;
+  --font-md: 14px;
+  --font-sm: 12px;
+}
+
+html[data-theme="light"] {
+  --color-bg: #f4f5f7;
+  --color-bg-header: #00a7df;
+  --color-bg-panel: #fff;
+  --color-bg-group: #f6f8fa;
+  --color-bg-fieldset: #f8f9fa;
+  --color-text: #172b4d;
+  --color-text-header: #fff;
+  --color-text-emphasis: #091e42;
+  --color-text-secondary: #57606a;
+  --color-border: #d0d7de;
+  --color-accent: #0052cc;
+  --color-accent-hover: #0065ff;
+  --color-accent-alt: #19cbd8;
+  --color-accent-alt-hover: #15b0bb;
+  --color-danger: #cf222e;
+  --color-danger-hover: #a40e26;
+  --color-success: #19d81f;
+}
+
+html[data-theme="dark"] {
+  --color-bg: #181a1b;
+  --color-bg-header: #0077a7;
+  --color-bg-panel: #23272a;
+  --color-bg-group: #23272a;
+  --color-bg-fieldset: #23272a;
+  --color-text: #f1f1f1;
+  --color-text-header: #fff;
+  --color-text-emphasis: #fff;
+  --color-text-secondary: #b0b0b0;
+  --color-border: #333;
+  --color-accent: #0077a7;
+  --color-accent-hover: #0099ff;
+  --color-accent-alt: #00a7df;
+  --color-accent-alt-hover: #00cfff;
+  --color-danger: #ff4b5c;
+  --color-danger-hover: #a40e26;
+  --color-success: #19d81f;
+}

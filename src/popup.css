@@ -1,61 +1,16 @@
 /* ------------------------------------------------------ */
-/* Popup CSS File for Tab-A-Mole Chrome Extension         */
+/* css for popup.html                                     */
 /* ------------------------------------------------------ */
 
-/* ------------------------------------------------------ */
-/* Design Notes:
- * - Use a clean, modern design with a focus on usability.
- * - Ensure good contrast for readability.
- * - Use consistent spacing and alignment.
- * - Make interactive elements (buttons, sliders) visually distinct.
- * - Use "design tokens" for colors, fonts, and spacing to ensure consistency.
- * - Follow accessibility best practices (e.g., sufficient color contrast, focus states).
- * - Offer 2 color themes: light (default) and dark (user-selectable).
- */
+@import url('./theme.css');
 
-/* ------------------------------------------------------ */
-/* CSS Variables (Design Tokens) */
-:root {
-  --color-bg: #f4f5f7; /* Main background */
-  --color-bg-light: #fff; /* Card/Panel background */
-  --color-bg-group: #f6f8fa; /* Group header background */
-
-  --color-border: #d0d7de;
-  --color-shadow: rgba(27, 31, 35, 0.03);
-
-  --color-text: #172b4d;
-  --color-text-dark: #091e42; /* High emphasis text (headers, labels) */
-  --color-text-muted: #57606a; /* Medium emphasis text (secondary info) */
-  --color-text-disabled: #787862;
-  --color-text-enabled: #2949b4;
-
-  --color-accent: #0052cc;    /* Primary action color (slider, button) */
-  --color-accent-hover: #0065ff;
-  --color-accent-alt: #19cbd8;  /* Currently unused */
-  --color-accent-alt-hover: #15b0bb;
-  --color-danger: #cf222e;  /* Danger/Destructive action color */
-  --color-danger-hover: #a40e26;
-
-  --color-success: #19d81f; /* Success color (currently unused) */
-
-  --radius: 4px; /* Default border radius for discrete elements */
-  --radius-lg: 6px; /* Larger border radius for cards/panels */
-  --radius-pill: 2em; /* For pill-shaped elements */
-
-  --space-xxs: 2px;
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-smd: 10px;
-  --space-mdlg: 12px;
-  --space-md: 12px;
-  --space-lg: 16px;
-  --space-xl: 20px;
-  --space-xxl: 24px;
-
-  --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+/* Theme attribute selectors for popup */
+html[data-theme="light"] {
+  /* Light theme variables are in theme.css */
 }
-
+html[data-theme="dark"] {
+  /* Dark theme variables are in theme.css */
+}
 
 /* ------------------------------------------------------ */
 /* General Body Styles */
@@ -77,7 +32,7 @@ h1 {
   font-weight: 600;
   margin: 0 0 var(--space-lg) 0;
   text-align: center;
-  color: var(--color-text-dark);
+  color: var(--color-text-emphasis);
 }
 
 button {
@@ -99,7 +54,7 @@ button:hover {
 
 label {
   font-size: 14px;
-  color: var(--color-text-dark);
+  color: var(--color-text-emphasis);
 }
 
 /* ------------------------------------------------------ */
@@ -134,7 +89,7 @@ label {
   margin-bottom: var(--space-xs);
   font-size: 14px;
   font-weight: 500;
-  color: var(--color-text-dark);
+  color: var(--color-text-emphasis);
 }
 
 /* The slider itself */
@@ -188,7 +143,7 @@ label {
   margin-bottom: var(--space-xs);
   font-size: 14px;
   font-weight: 500;
-  color: var(--color-text-dark);
+  color: var(--color-text-emphasis);
 }
 
 .text-pattern__text {
@@ -225,7 +180,7 @@ label {
 
 /* Matched Group Styles (BEM) */
 .matched-group {
-  background: var(--color-bg-light);
+  background: var(--color-bg-panel);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   margin-bottom: var(--space-lg);
@@ -343,6 +298,6 @@ label {
   text-align: center;
   color: var(--color-text-muted);
   padding: var(--space-xl);
-  background-color: var(--color-bg-light);
+  background-color: var(--color-bg-panel);
   border-radius: var(--radius-lg);
 }

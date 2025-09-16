@@ -1,0 +1,81 @@
+/* ------------------------------------------------------ */
+/* css for options.html                                     */
+/* ------------------------------------------------------ */
+
+@import url('./theme.css');
+
+/* Theme attribute selectors for popup */
+html[data-theme="light"] {
+  /* Light theme variables are in theme.css */
+}
+
+html[data-theme="dark"] {
+  /* Dark theme variables are in theme.css */
+}
+
+/* ------------------------------------------------------ */
+/* General Body Styles */
+
+body {
+  font-family: var(--font-main);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: background 0.2s, color 0.2s;
+}
+
+header {
+  background-color: var(--color-bg-header);
+  color: var(--color-text-header);
+  padding: 16px;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+main {
+  padding: 16px;
+}
+
+section {
+  margin-bottom: 24px;
+}
+
+section:last-child {
+  margin-bottom: 0;
+}
+
+h1, h2 {
+  margin: 0 0 8px 0;
+}
+
+fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 12px 16px 8px 16px;
+  margin-bottom: 16px;
+  background: var(--color-bg-fieldset);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+legend {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+label {
+  display: inline-block;
+  margin-right: 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+div {
+  padding: 8px 0;
+  text-align: left;
+}
+
+input[type="radio"], input[type="checkbox"] {
+  margin-right: 6px;
+}

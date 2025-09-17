@@ -1,6 +1,7 @@
 /*global chrome*/
 
 document.addEventListener('DOMContentLoaded', function () {
+  console.log('Popup script loaded');
   const findDuplicatesButton = document.getElementById('findDuplicates');
   const duplicateListDiv = document.getElementById('duplicateList');
   const matchLevelSlider = document.getElementById('matchLevelSlider');
@@ -66,13 +67,15 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('loadingMessage').hidden = false;
     document.getElementById('noDuplicatesMessage').hidden = true;
     document.getElementById('duplicateList').hidden = true;
+
     duplicateListDiv.innerHTML = '';
 
     chrome.runtime.sendMessage({
       message: msgType.GROUP_TABS_CMD,
       matchLevel: matchLevel,
       scope: scope,
-      httpsOnly: httpsOnly
+      httpsOnly: httpsOnly,
+      matchBy: document.querySelector('input[name="match-by"]:checked').value
     });
   });
 
@@ -80,10 +83,26 @@ document.addEventListener('DOMContentLoaded', function () {
     /* Temporary, while we debug in chrome */
     chrome.runtime.onMessage.addListener(function (request, _sender, _sendResponse) {
       if (request.message === msgType.GROUP_TABS_ANS) {
-        displayDuplicateTabs(request.matched_tab_groups);
+        displayGroupedTabs(request.matched_tab_groups);
       }
     });
   }
+
+  // Configure the radios
+  const matchByRadios = document.getElementsByName('match-by');
+  matchByRadios.forEach((radio) => {
+    radio.addEventListener('change', function (event) {
+      const value = event.target.value;
+      const urlScopeFieldset = document.getElementById('urlScope');
+      if (value === 'url') {
+        urlScopeFieldset.hidden = false;
+        matchLevelSlider.disabled = false;
+      } else {
+        urlScopeFieldset.hidden = true;
+        matchLevelSlider.disabled = true;
+      }
+    });
+  });
 
   matchLevelSlider.addEventListener('input', function (event) {
     const matchLevel = sliderToMatchLevel[event.target.value];
@@ -140,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  function displayDuplicateTabs(groupedTabs) {
+  function displayGroupedTabs(groupedTabs) {
     duplicateListDiv.innerHTML = '';
     // No matches
     if (!groupedTabs || groupedTabs.length === 0) {
@@ -157,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
     groupedTabs.forEach((matchedGroup) => {
       // Clone group template
       const groupNode = groupTemplate.content.cloneNode(true);
-      groupNode.querySelector('.matched-group__key').textContent = matchedGroup.matchKey;
+      groupNode.querySelector('.matched-group__key').textContent = matchedGroup.criteria;
       groupNode.querySelector('.matched-group__count').textContent =
         matchedGroup.tabInfos.length;
 
@@ -222,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function () {
           groupNode.firstElementChild.remove();
           // If no groups left, show empty state
           if (duplicateListDiv.children.length === 0) {
-            displayDuplicateTabs([]);
+            displayGroupedTabs([]);
           }
         });
       groupNode

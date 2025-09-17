@@ -12,29 +12,40 @@
     <header>
       <h1>Tab-a-mole</h1>
     </header>
-
     <main>
       <!-- Controls Section -->
       <section class="controls" aria-labelledby="controls-legend">
         <fieldset>
-          <legend id="controls-legend">Search Options</legend>
-          <!-- Slider control -->
-          <div class="slider">
-            <label class="slider__label" for="matchLevelSlider">Match by:</label>
-            <input type="range" min="1" max="5" value="5" class="slider__slide" id="matchLevelSlider" />
-          </div>
+          <legend id="controls-legend">Configure search</legend>
 
-          <!-- Text pattern indicator -->
-          <div class="text-pattern">
-            <div class="text-pattern__label">Example:</div>
-            <div class="text-pattern__text" id="sampleUrl">
-              <span class="enabled" data-part="subdomains">www.</span
-              ><span class="enabled" data-part="domain">example.com</span
-              ><span class="enabled" data-part="path">/news/earth</span
-              ><span class="enabled" data-part="query">?q=2025</span
-              ><span class="enabled" data-part="hash">#water</span>
+          <!-- Search modality -->
+          <fieldset>
+            <legend>Match by</legend>
+            <label><input type="radio" name="match-by" value="url" checked /> URL</label>
+            <label><input type="radio" name="match-by" value="title" /> Title</label>
+          </fieldset>
+
+          <!-- Search by URL -->
+          <fieldset id="urlScope">
+            <legend>Configure URL scope</legend>
+            <!-- Slider control -->
+            <div class="slider">
+              <label for="matchLevelSlider">Adjust scope of URLs:</label>
+              <input type="range" min="1" max="5" value="5" class="slider__slide" id="matchLevelSlider" />
             </div>
-          </div>
+
+            <!-- Text pattern indicator -->
+            <div class="text-pattern">
+              <div class="text-pattern__label">Example:</div>
+              <div class="text-pattern__text" id="sampleUrl">
+                <span class="enabled" data-part="subdomains">www.</span
+                ><span class="enabled" data-part="domain">example.com</span
+                ><span class="enabled" data-part="path">/news/earth</span
+                ><span class="enabled" data-part="query">?q=2025</span
+                ><span class="enabled" data-part="hash">#water</span>
+              </div>
+            </div>
+          </fieldset>
 
           <!-- Control options -->
           <div class="controls__options">

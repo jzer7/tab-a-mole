@@ -1,0 +1,59 @@
+/* ------------------------------------------------------
+ * color.css - Centralized Color Design Tokens
+ * ------------------------------------------------------ */
+
+/* --------------------------------------------------------
+ * Color Tokens for Light and Dark Themes
+ * ------------------------------------------------------ */
+
+:root {
+  /* Palette:
+   *  - Start with a simple palette of 3 colors: primary, secondary
+   *    and accent. They will be used for 60%, 30% and 10% of a page.
+   *
+   *    primary:   white    100%
+   *    secondary: teal     25%, 50%, 75% tint approx.
+   *    accent:    beige    25%, 50%, 75% tint approx.
+   */
+  --c-white:   #FFFFFF;
+  --c-teal-1:  #CCE1E6; /* light teal, but not white */
+  --c-teal-2:  #506B70; /* teal */
+  --c-teal-3:  #1A2F33; /* very dark teal, black replacement */
+  --c-beige-1: #F0BF95; /* almost like a soft peach */
+  --c-beige-2: #B8A28F; /* neutral beige */
+  --c-beige-3: #807369; /* a darker muted beige */
+}
+
+:root {
+  /* Set 2 color schemes */
+  color-scheme: light dark;
+
+  /* Colors for backgrounds: general, header, sections, grouped items */
+  --color-bg:               light-dark(#ffffff, #000000);
+  --color-bg-header:        light-dark(#00a7df, #7f7f7f);
+  --color-bg-panel:         light-dark(#cadcdc, #2f2f2f);
+  --color-bg-group:         light-dark(#cadcdc, #2f2f2f);
+  --color-bg-fieldset:      light-dark(#efffff, #1f1f1f);
+
+  /* Borders and shadows for depth */
+  --color-border:           light-dark(#d0d7de, #f1f1f1);
+  --color-shadow:           light-dark(#1b1f2308, #1b1f2308);
+
+  /* Text colors: primary, header, emphasis, muted, enabled, disabled */
+  --color-text:             light-dark(#172b4d, #f1f1f1);
+  --color-text-header:      light-dark(#ffffff, #ffffff);
+  --color-text-emphasis:    light-dark(#091e42, #ffffff);
+  --color-text-secondary:   light-dark(#57606a, #b0b0b0);
+  --color-text-enabled:     light-dark(#2949b4, #f1f1f1);
+  --color-text-disabled:    light-dark(#787862, #121212);
+
+  /* Accent colors for interactive elements and states */
+  --color-accent:           light-dark(#0052cc, #0077a7);
+  --color-accent-hover:     light-dark(#0065ff, #0099ff);
+  --color-accent-alt:       light-dark(#19cbd8, #00a7df);
+  --color-accent-alt-hover: light-dark(#15b0bb, #00cfff);
+  --color-danger:           light-dark(#cf222e, #ff4b5c);
+  --color-danger-hover:     light-dark(#a40e26, #a40e26);
+  --color-success:          light-dark(#19d81f, #19d81f);
+}
+

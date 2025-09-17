@@ -1,8 +1,8 @@
-/* ------------------------------------------------------ */
-/* css for popup.html                                     */
-/* ------------------------------------------------------ */
+/* ------------------------------------------------------
+ * css for popup.html
+ * ------------------------------------------------------ */
 
-@import url('./theme.css');
+@import url('./main.css');
 
 /* Theme attribute selectors for popup */
 html[data-theme="light"] {
@@ -13,84 +13,9 @@ html[data-theme="dark"] {
   /* Dark theme variables are in theme.css */
 }
 
-/* ------------------------------------------------------ */
-/* General Body Styles */
-
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-
-  font-family: var(--font-main);
-  font-size: var(--font-size-body);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  margin-bottom: var(--space-sm);
-  cursor: pointer;
-}
-
-/* ------------------------------------------------------ */
-/* Element defaults */
-
-header {
-  padding: var(--space-lg);
-  text-align: center;
-  background-color: var(--color-bg-header);
-  color: var(--color-text-header);
-}
-
-h1 {
-  margin: 0 0 var(--space-md) 0;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  text-align: center;
-  color: var(--color-text-emphasis);
-}
-
-h2 {
-  margin: 0 0 var(--space-md) 0;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  text-align: center;
-  color: var(--color-text-emphasis);
-}
-
-button {
-  width: 100%;
-  padding: var(--space-md);
-  font-size: var(--font-size-md);
-  font-weight: 500;
-  color: #fff;
-  background-color: var(--color-accent);
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-button:hover {
-  background-color: var(--color-accent-hover);
-}
-
-label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-text-emphasis);
-  display: inline-block;
-  margin-right: var(--space-lg);
-}
-
-/* Container and theme rule */
-/* Occupies the full width up to 500px */
-main {
-  max-width: 500px;
-  margin: 0 auto;
-  background-color: var(--color-bg-panel);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 2px var(--space-xs) var(--color-shadow);
-  padding: var(--space-lg);
-}
-
+/* ------------------------------------------------------
+ * Page specific styles
+ * ------------------------------------------------------ */
 
 /* ------------------------------------------------------ */
 /* Controls Container */
@@ -117,14 +42,6 @@ main {
 .slider {
   width: 100%;
   margin-bottom: var(--space-sm);
-}
-
-.slider__label {
-  display: block;
-  margin-bottom: var(--space-xs);
-  font-size: var(--font-size-md);
-  font-weight: 500;
-  color: var(--color-text-emphasis);
 }
 
 /* The slider itself */
@@ -174,11 +91,12 @@ main {
 }
 
 .text-pattern__label {
-  display: block;
-  margin-bottom: var(--space-xs);
-  font-size: var(--font-size-md);
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
   color: var(--color-text-emphasis);
+  display: inline-block;
+  margin-right: var(--space-lg);
+  margin-bottom: var(--space-sm);
 }
 
 .text-pattern__text {
@@ -238,7 +156,7 @@ main {
 }
 .matched-group__count {
   background-color: var(--color-bg-group);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   border-radius: var(--radius-pill);
   padding: var(--space-xs) var(--space-sm);
   font-size: 13px;
@@ -294,7 +212,7 @@ main {
   word-break: break-all;
 }
 .tab-item__elapsed {
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   font-size: 12px;
   min-width: 80px;
   text-align: right;
@@ -331,7 +249,7 @@ main {
 
 .no-duplicates {
   text-align: center;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   padding: var(--space-lg);
   background-color: var(--color-bg-panel);
   border-radius: var(--radius-lg);

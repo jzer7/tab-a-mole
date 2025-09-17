@@ -1,8 +1,8 @@
-/* ------------------------------------------------------ */
-/* css for options.html                                     */
-/* ------------------------------------------------------ */
+/* ------------------------------------------------------
+ * css for options.html
+ * ------------------------------------------------------ */
 
-@import url('./theme.css');
+@import url('./main.css');
 
 /* Theme attribute selectors for popup */
 html[data-theme="light"] {
@@ -13,100 +13,7 @@ html[data-theme="dark"] {
   /* Dark theme variables are in theme.css */
 }
 
-/* ------------------------------------------------------ */
-/* General Body Styles */
+/* ------------------------------------------------------
+ * Page specific styles
+ * ------------------------------------------------------ */
 
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-
-  font-family: var(--font-main);
-  font-size: var(--font-size-body);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  transition: background 0.2s, color 0.2s;
-}
-
-/* ------------------------------------------------------ */
-/* Element defaults */
-
-header {
-  padding: var(--space-lg);
-  text-align: center;
-  background-color: var(--color-bg-header);
-  color: var(--color-text-header);
-}
-
-h1 {
-  margin: 0 0 var(--space-md) 0;
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  text-align: center;
-  color: var(--color-text-emphasis);
-}
-
-h2 {
-  margin: 0 0 var(--space-md) 0;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  text-align: center;
-  color: var(--color-text-emphasis);
-}
-
-label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-text-emphasis);
-  display: inline-block;
-  margin-right: var(--space-lg);
-  margin-bottom: var(--space-sm);
-  cursor: pointer;
-}
-
-/* Container and theme rule */
-/* Occupies the full width up to 500px */
-main {
-  max-width: 500px;
-  margin: 0 auto;
-  background-color: var(--color-bg-panel);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 2px var(--space-xs) var(--color-shadow);
-  padding: var(--space-lg);
-}
-
-/* Pure container, no color or fonts here */
-section {
-  background-color: var(--color-bg-group);
-  margin-bottom: var(--space-lg);
-}
-
-section:last-child {
-  margin-bottom: 0;
-}
-
-fieldset {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: var(--space-md) var(--space-lg) var(--space-sm) var(--space-lg);
-  margin-bottom: var(--space-lg);
-  background-color: var(--color-bg-fieldset);
-  transition: background 0.2s, border-color 0.2s;
-}
-
-legend {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-normal);
-  margin-bottom: var(--space-sm);
-}
-
-
-section-item {
-  display: block;
-  padding: var(--space-sm) 0;
-  text-align: left;
-}
-
-input[type="radio"], input[type="checkbox"] {
-  margin-right: var(--space-xs);
-}

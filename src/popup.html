@@ -43,26 +43,27 @@
           </div>
           <div class="controls__options">
             <input type="checkbox" id="httpsOnly" name="httpsOnly" />
-            <label for="httpsOnly">Match HTTPS URLs only</label>
-          </div>
-          <div class="controls__options">
-            <button id="findDuplicates" type="button">Find Duplicates</button>
+            <label for="httpsOnly">Only match tabs with HTTPS URLs (e.g., <em>chrome://</em> )</label>
           </div>
         </fieldset>
+        <div class="controls__options">
+          <button id="findDuplicates" type="button">Find Duplicates</button>
+        </div>
       </section>
 
       <!-- Results Section -->
       <section class="results" aria-labelledby="results-legend">
         <fieldset>
           <legend id="results-legend">Results</legend>
-          <div class="results__msg" id="startSearch" aria-live="polite">Configure options, and start a search</div>
+          <div class="results__msg" id="startSearch" aria-live="polite">
+            Configure search options, and start a search
+          </div>
           <div class="results__msg" id="loadingMessage" hidden aria-live="polite">Loading...</div>
-          <div class="results__msg" id="noDuplicatesMessage" hidden aria-live="polite">No duplicate tabs found.</div>
+          <div class="results__msg" id="noDuplicatesMessage" hidden aria-live="polite">No duplicate tabs found. 😎</div>
           <div class="results__msg" id="duplicateList" hidden aria-live="polite"></div>
         </fieldset>
       </section>
     </main>
-
     <template id="matched-group-template">
       <section class="matched-group" role="region" aria-label="Duplicate Tab Group">
         <header class="matched-group__header">
@@ -82,7 +83,6 @@
         </div>
       </section>
     </template>
-
     <template id="tab-item-template">
       <li role="listitem">
         <div class="tab-item">
@@ -100,7 +100,6 @@
         </div>
       </li>
     </template>
-
     <!-- Script: ensure it loads at the end -->
     <script src="popup.js"></script>
   </body>

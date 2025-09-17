@@ -1,0 +1,142 @@
+/* ------------------------------------------------------
+ * main.css
+ * ------------------------------------------------------ */
+
+/* ------------------------------------------------------ */
+/* Design Notes:
+ * - Use a clean, modern design with a focus on usability.
+ * - Ensure good contrast for readability.
+ * - Use consistent spacing and alignment.
+ * - Make interactive elements (buttons, sliders) visually distinct.
+ * - Use "design tokens" for colors, fonts, and spacing to ensure consistency.
+ * - Follow accessibility best practices (e.g., sufficient color contrast, focus states).
+ * - Offer 2 color themes: light (default) and dark (user-selectable).
+ */
+
+
+@import url('./color.css');
+@import url('./geometry.css');
+
+/* ------------------------------------------------------
+ * DO NOT HARDCODE VALUES IN THIS FILE
+ * Use the design tokens defined in color.css and geometry.css
+ * ------------------------------------------------------ */
+
+/* ------------------------------------------------------ */
+/* General Body Styles */
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  font-family: var(--font-main);
+  font-size: var(--font-size-body);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* ------------------------------------------------------ */
+/* Element defaults */
+
+header {
+  padding: var(--space-lg);
+  text-align: center;
+  background-color: var(--color-bg-header);
+  color: var(--color-text-header);
+  /* box-shadow: 0 2px var(--space-xs) var(--color-shadow); */
+}
+
+h1 {
+  margin: 0 0 var(--space-md) 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  color: var(--color-text-emphasis);
+  text-shadow: 0 0 12px var(--color-accent);
+  /* text-shadow: 0px 0px 20px #fff; 2px 2px 3px #000; */
+  /* text-shadow: #ffcc00 1px 0 10px; */
+}
+
+h2 {
+  margin: 0 0 var(--space-sm) 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  color: var(--color-text-emphasis);
+}
+
+button {
+  width: 100%;
+  padding: var(--space-md);
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  color: #fff;
+  background-color: var(--color-accent);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: var(--color-accent-hover);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin-right: var(--space-xs);
+}
+
+label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-emphasis);
+  display: inline-block;
+  margin-right: var(--space-lg);
+  margin-bottom: var(--space-sm);
+  cursor: pointer;
+}
+
+/* Container and theme rule */
+/* Occupies the full width up to 500px */
+main {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: var(--color-bg-panel);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px var(--space-xs) var(--color-shadow);
+  padding: var(--space-lg);
+}
+
+/* Pure container, no color or fonts here */
+section {
+  background-color: var(--color-bg-group);
+  margin-bottom: var(--space-lg);
+}
+
+section:last-child {
+  margin-bottom: 0;
+}
+
+fieldset {
+  border-radius: var(--radius);
+  padding: var(--space-sm) var(--space-md) var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+  transition: background 0.2s, border-color 0.2s;
+  /* background-color: var(--color-bg-fieldset); */
+}
+
+legend {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+  margin-bottom: var(--space-sm);
+}
+
+section-item {
+  display: block;
+  padding: var(--space-sm) 0;
+  text-align: left;
+}

@@ -3,12 +3,20 @@
     "editor.renderWhitespace": "boundary",
     "editor.rulers": [80,100],
     "files.exclude": {
-      "**/.git": true,
-      "**/.svn": true,
-      "**/.hg": true,
-      "**/.DS_Store": true,
-      "**/Thumbs.db": true,
-      "package-lock.json": true,
-      "node_modules": true
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "package-lock.json": true,
+        "node_modules": true
     },
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/jest.config.json"
+            ],
+            "url": "https://www.schemastore.org/jest.json"
+        }
+    ],
 }

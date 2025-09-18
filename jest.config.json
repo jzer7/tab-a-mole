@@ -1,0 +1,11 @@
+{
+  "testEnvironment": "node",
+  "roots": ["<rootDir>/src"],
+  "testMatch": ["**/?(*.)+(test).[jt]s"],
+  "moduleFileExtensions": ["js", "json"],
+  "setupFiles": [],
+  "collectCoverage": true,
+  "coverageDirectory": "coverage",
+  "coverageReporters": ["text", "lcov"],
+  "verbose": true
+}

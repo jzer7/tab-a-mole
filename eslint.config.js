@@ -26,9 +26,11 @@ module.exports = [
     },
     languageOptions: {
       ecmaVersion: 'latest',
-      sourceType: 'module',
+      sourceType: 'commonjs',
       globals: {
         ...globals.browser,
+        ...globals.chrome,
+        ...globals.jest,
       }
     }
   },

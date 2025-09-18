@@ -24,6 +24,9 @@ lint:  ## review code for Javascript issues
 format:  ## consistent formatting of JS, HTML and CSS files
 	npm run prettier
 
+test:  ## runs unit tests
+	npm run test
+
 dev: images  ## starts a development server with hot reloading
 	npm run dev
 

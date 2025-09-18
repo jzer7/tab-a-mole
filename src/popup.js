@@ -1,7 +1,10 @@
 /*global chrome*/
 
+const { timeSinceAccessText, fillGroupNode } = require('./popup-utils');
+
 document.addEventListener('DOMContentLoaded', function () {
-  console.log('Popup script loaded');
+  console.info('Popup script loaded');
+
   const findDuplicatesButton = document.getElementById('findDuplicates');
   const duplicateListDiv = document.getElementById('duplicateList');
   const matchLevelSlider = document.getElementById('matchLevelSlider');
@@ -55,6 +58,11 @@ document.addEventListener('DOMContentLoaded', function () {
     1: urlScope.DOMAIN
   });
 
+  /* 1. Listen for clicks on the Find Duplicates button
+   *    When clicked, send a message to the background script to find
+   *    duplicates. The background script will respond with the results,
+   *    which we will display
+   */
   findDuplicatesButton.addEventListener('click', function () {
     const matchLevel = sliderToMatchLevel[matchLevelSlider.value];
     const scope = currentWindowOnlyCheckbox.checked
@@ -79,16 +87,19 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  if (window.chrome && chrome.runtime && chrome.runtime.id) {
-    /* Temporary, while we debug in chrome */
-    chrome.runtime.onMessage.addListener(function (request, _sender, _sendResponse) {
-      if (request.message === msgType.GROUP_TABS_ANS) {
-        displayGroupedTabs(request.matched_tab_groups);
-      }
-    });
-  }
+  // add the next line if debugging keep messing up with chrome
+  // if (window.chrome && chrome.runtime && chrome.runtime.id)
 
-  // Configure the radios
+  /* 2. Listen for messages from the background script */
+  chrome.runtime.onMessage.addListener(function (request, _sender, _sendResponse) {
+    if (request.message === msgType.GROUP_TABS_ANS) {
+      displayGroupedTabs(request.matched_tab_groups);
+    }
+  });
+
+  // 3. Listen for changes to all the "match by" radio buttons
+  //    When "URL" is selected, show the URL scope fieldset and enable the slider
+  //    When "Title" is selected, hide the URL scope fieldset and disable the slider
   const matchByRadios = document.getElementsByName('match-by');
   matchByRadios.forEach((radio) => {
     radio.addEventListener('change', function (event) {
@@ -104,28 +115,32 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // 4. Listen for changes to the match level slider
+  //    When there's a change, save the slider's value to
+  //    chrome.storage.local
   matchLevelSlider.addEventListener('input', function (event) {
     const matchLevel = sliderToMatchLevel[event.target.value];
     updateExampleUrl(matchLevel);
-    // Save slider value to chrome.storage.local
     chrome.storage.local.set({ matchLevelSliderValue: event.target.value });
   });
 
+  // 5. Listen for changes to the "current window only" checkbox
+  //    When there's a change, save the checkbox's value to
+  //    chrome.storage.local
   currentWindowOnlyCheckbox.addEventListener('change', function (event) {
     // Save checkbox value to chrome.storage.local
-    chrome.storage.local.set({
-      currentWindowOnlyChecked: event.target.checked
-    });
+    chrome.storage.local.set({ currentWindowOnlyChecked: event.target.checked });
   });
 
+  // 6. Listen for changes to the "HTTPS only" checkbox
+  //    When there's a change, save the checkbox's value to
+  //    chrome.storage.local
   httpsOnlyCheckbox.addEventListener('change', function (event) {
     // Save checkbox value to chrome.storage.local
-    chrome.storage.local.set({
-      httpsOnlyChecked: event.target.checked
-    });
+    chrome.storage.local.set({ httpsOnlyChecked: event.target.checked });
   });
 
-  // Highlight the parts of the example URL based on the match level
+  // Highlight the parts of the example URL matching the level from the slider
   function updateExampleUrl(matchLevel) {
     const partMatchers = {
       full: ['subdomains', 'domain', 'path', 'query', 'hash'],
@@ -136,11 +151,10 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const matchedParts = partMatchers[matchLevel] || [];
-    console.log('updatematchlevel:', matchedParts);
+    console.debug('updatematchlevel:', matchedParts);
 
     // Re-select all parts in case the DOM was changed (can this happen?)
     // const sampleUrlParts = document.querySelectorAll('span');
-    // console.log('sampleUrlParts:', sampleUrlParts);
 
     sampleUrlParts.forEach((part) => {
       // part is the string
@@ -160,8 +174,12 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function displayGroupedTabs(groupedTabs) {
+    console.debug('Displaying grouped tabs:', groupedTabs);
+
+    // Clear previous results
     duplicateListDiv.innerHTML = '';
-    // No matches
+
+    // Show: no matches
     if (!groupedTabs || groupedTabs.length === 0) {
       document.getElementById('startSearch').hidden = true;
       document.getElementById('loadingMessage').hidden = true;
@@ -170,93 +188,56 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
+    // There's at least one match, so we proceed to display them
+
+    // First let's get the templates
     const groupTemplate = document.getElementById('matched-group-template');
     const tabTemplate = document.getElementById('tab-item-template');
 
+    // Add callbacks to be passed to fillGroupNode
+    const callbacks = {
+      onGoToTab: (tabInfo) => {
+        chrome.tabs.update(tabInfo.id, { active: true });
+        chrome.tabs.get(tabInfo.id, (tab) => {
+          chrome.windows.update(tab.windowId, { focused: true });
+        });
+      },
+      onCloseTab: (tabInfo, tabNode) => {
+        chrome.tabs.remove(tabInfo.id);
+        // Remove the tab item from the list
+        tabNode.firstElementChild.parentElement.remove();
+      },
+      onGoToFirstTab: (firstTab) => {
+        chrome.tabs.update(firstTab.id, { active: true });
+        chrome.tabs.get(firstTab.id, (tab) => {
+          chrome.windows.update(tab.windowId, { focused: true });
+        });
+      },
+      onCloseAllTabs: (tabInfos, groupNode) => {
+        const tabsToClose = tabInfos.slice(1);
+        const tabIdsToClose = tabsToClose.map((tab) => tab.id);
+        chrome.tabs.remove(tabIdsToClose);
+        groupNode.firstElementChild.remove();
+        if (duplicateListDiv.children.length === 0) {
+          displayGroupedTabs([]);
+        }
+      }
+    };
+
     groupedTabs.forEach((matchedGroup) => {
-      // Clone group template
-      const groupNode = groupTemplate.content.cloneNode(true);
-      groupNode.querySelector('.matched-group__key').textContent = matchedGroup.criteria;
-      groupNode.querySelector('.matched-group__count').textContent =
-        matchedGroup.tabInfos.length;
-
-      const ul = groupNode.querySelector('.matched-group__list');
-      matchedGroup.tabInfos.forEach((oneTabInfo, _idx) => {
-        // Clone tab template
-        const tabNode = tabTemplate.content.cloneNode(true);
-        let tabTitle = oneTabInfo.title || '(no title)';
-        if (tabTitle.length > 100) {
-          tabTitle = tabTitle.substring(0, 100) + '...';
-        }
-
-        // Show time since last accessed in human format
-        if (oneTabInfo.lastAccessed) {
-          const timeSinceAccessMs = Date.now() - oneTabInfo.lastAccessed;
-          let timeSinceAccessText = '';
-          if (timeSinceAccessMs < 60000) {
-            timeSinceAccessText = `${Math.floor(timeSinceAccessMs / 1000)} seconds ago`;
-          } else if (timeSinceAccessMs < 3600000) {
-            timeSinceAccessText = `${Math.floor(timeSinceAccessMs / 60000)} minutes ago`;
-          } else if (timeSinceAccessMs < 86400000) {
-            timeSinceAccessText = `${Math.floor(timeSinceAccessMs / 3600000)} hours ago`;
-          } else {
-            timeSinceAccessText = `${Math.floor(timeSinceAccessMs / 86400000)} days ago`;
-          }
-          tabNode.querySelector('.tab-item__elapsed').textContent = timeSinceAccessText;
-        } else {
-          tabNode.querySelector('.tab-item__elapsed').textContent = '';
-        }
-
-        tabNode.querySelector('.tab-item__title').textContent = tabTitle;
-        tabNode.querySelector('.tab-item__symbol').textContent = oneTabInfo.pinned
-          ? '📌'
-          : '';
-
-        // Go to tab button
-        tabNode.querySelector('.tab-item__goto').addEventListener('click', () => {
-          chrome.tabs.update(oneTabInfo.id, { active: true });
-          chrome.tabs.get(oneTabInfo.id, (tab) => {
-            chrome.windows.update(tab.windowId, { focused: true });
-          });
-        });
-        // Close tab button
-        tabNode.querySelector('.tab-item__close').addEventListener('click', () => {
-          chrome.tabs.remove(oneTabInfo.id);
-          // Remove the tab item from the list
-          tabNode.firstElementChild.parentElement.remove();
-        });
-
-        ul.appendChild(tabNode);
+      // 2. Call function to fill in the groupNode DOM element with data from matchedGroup
+      const filledGroupNode = fillGroupNode({
+        groupTemplate,
+        tabTemplate,
+        matchedGroup,
+        timeSinceAccessText,
+        ...callbacks
       });
 
-      // Group actions
-      groupNode
-        .querySelector('.matched-group__close-all')
-        .addEventListener('click', () => {
-          // Close all but the first tab in the group
-          const tabsToClose = matchedGroup.tabInfos.slice(1);
-          const tabIdsToClose = tabsToClose.map((tab) => tab.id);
-          chrome.tabs.remove(tabIdsToClose);
-          // Remove the group from the DOM
-          groupNode.firstElementChild.remove();
-          // If no groups left, show empty state
-          if (duplicateListDiv.children.length === 0) {
-            displayGroupedTabs([]);
-          }
-        });
-      groupNode
-        .querySelector('.matched-group__goto-first')
-        .addEventListener('click', () => {
-          // Go to the first tab in the group
-          const firstTab = matchedGroup.tabInfos[0];
-          chrome.tabs.update(firstTab.id, { active: true });
-          chrome.tabs.get(firstTab.id, (tab) => {
-            chrome.windows.update(tab.windowId, { focused: true });
-          });
-        });
-
-      duplicateListDiv.appendChild(groupNode);
+      // 4. Append filled group node to the list (DOM)
+      duplicateListDiv.appendChild(filledGroupNode);
     });
+
     document.getElementById('startSearch').hidden = true;
     document.getElementById('loadingMessage').hidden = true;
     document.getElementById('noDuplicatesMessage').hidden = true;

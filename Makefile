@@ -19,31 +19,31 @@ cleanup_images: ## cleanup processed images
 prepare: lint format
 
 lint:  ## review code for Javascript issues
-	npm run lint
+	bun run lint
 
 format:  ## consistent formatting of JS, HTML and CSS files
-	npm run prettier
+	bun run prettier
 
 test:  ## runs unit tests
-	npm run test
+	bun run test
 
 dev: images  ## starts a development server with hot reloading
-	npm run dev
+	bun run dev
 
 preview: images  ## previews the extension in production without building
-	npm run preview
+	bun run preview
 
 build: images  ## builds a production version of the extension
-	npm run prepare
-	npm run build
+	bun run prepare
+	bun run build
 
 package: build  ## produce the .zip artifact
-	npm run package
+	bun run package
 	mkdir -p dist
 	cp -p src/dist/chrome/tab-a-mole-1.0.zip dist
 
 cleanup_code: ## cleanup development environment
-	npx extension cleanup
+	bunx extension cleanup
 	#-find . -name dist -not -path '*/node_modules/*' -delete -print
 	-rm -r ./src/dist ./dist
 
@@ -58,6 +58,9 @@ show: build
 # Cleanup Commands
 # ----------------------------------------------------------
 
-clean: cleanup_images cleanup_code ## cleanup project
+clean: cleanup_images cleanup_code cleanup_tests  ## cleanup project
 
-.PHONY: clean
+cleanup_tests:
+	-rm -r ./coverage
+
+.PHONY: clean cleanup_tests

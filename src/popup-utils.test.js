@@ -1,4 +1,5 @@
 // popup-utils.test.js
+import { describe, it, expect } from 'bun:test';
 import { timeSinceAccessText } from './popup-utils.js';
 
 describe('timeSinceAccessText', () => {

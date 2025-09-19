@@ -4,6 +4,7 @@
         "davidanson.vscode-markdownlint",
         "editorconfig.editorconfig",
         "esbenp.prettier-vscode",
-        "ms-vscode.live-server"
+        "ms-vscode.live-server",
+        "oven.bun-vscode"
     ]
 }

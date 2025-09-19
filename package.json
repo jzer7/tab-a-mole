@@ -1,10 +1,22 @@
 {
   "$schema": "https://www.schemastore.org/package.json",
   "name": "tab-a-mole",
-  "version": "1.0.0",
-  "private": true,
   "description": "chrome extension",
-  "type": "module",
+  "author": "Me Yo",
+  "license": "MIT",
+  "private": true,
+  "version": "1.0.0",
+  "keywords": [
+    "chrome-extension"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jzer7/tab-a-mole.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jzer7/tab-a-mole/issues"
+  },
+  "homepage": "https://github.com/jzer7/tab-a-mole#readme",
   "scripts": {
     "build": "extension build --browser chrome",
     "dev": "extension dev",
@@ -16,19 +28,6 @@
     "package": "extension build --zip",
     "test": "jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jzer7/tab-a-mole.git"
-  },
-  "keywords": [
-    "chrome-extension"
-  ],
-  "author": "Me Yo",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jzer7/tab-a-mole/issues"
-  },
-  "homepage": "https://github.com/jzer7/tab-a-mole#readme",
   "devDependencies": {
     "@babel/preset-env": "^7.28.3",
     "@eslint/config-inspector": "^1.2.0",

@@ -2,6 +2,8 @@
 
 "Tab-a-mole" is a Chrome extension that helps you find and manage duplicate tabs.
 
+This project uses ES6.
+
 ## Important Files
 
 - `manifest.json`: The core configuration file for the Chrome extension.

@@ -3,9 +3,12 @@
   "roots": ["<rootDir>/src"],
   "testMatch": ["**/?(*.)+(test).[jt]s"],
   "moduleFileExtensions": ["js", "json"],
-  "setupFiles": [],
+  "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
   "collectCoverage": true,
   "coverageDirectory": "coverage",
   "coverageReporters": ["text", "lcov"],
+  "transform": {
+    "^.+\\.js$": "babel-jest"
+  },
   "verbose": true
 }

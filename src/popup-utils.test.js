@@ -1,5 +1,5 @@
 // popup-utils.test.js
-const { timeSinceAccessText } = require('./popup-utils');
+import { timeSinceAccessText } from './popup-utils.js';
 
 describe('timeSinceAccessText', () => {
   const now = 1_000_000_000_000; // fixed timestamp for deterministic tests

@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "chrome extension",
+  "type": "module",
   "scripts": {
     "build": "extension build --browser chrome",
     "dev": "extension dev",
@@ -13,7 +14,7 @@
     "lint:fix": "npm run lint -- --fix",
     "prepare": "husky",
     "package": "extension build --zip",
-    "test": "jest --setupFilesAfterEnv=./jest.setup.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -29,9 +30,11 @@
   },
   "homepage": "https://github.com/jzer7/tab-a-mole#readme",
   "devDependencies": {
+    "@babel/preset-env": "^7.28.3",
     "@eslint/config-inspector": "^1.2.0",
     "@eslint/js": "^9.35.0",
     "@types/chrome": "^0.1.11",
+    "babel-jest": "^30.1.2",
     "chrome-types": "^0.1.375",
     "eslint": "^9.35.0",
     "eslint-config-prettier": "^10.1.8",

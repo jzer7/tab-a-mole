@@ -1,1 +1,1 @@
-require('jest-chrome');
+import 'jest-chrome';

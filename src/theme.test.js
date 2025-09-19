@@ -1,4 +1,4 @@
-const { applyTheme } = require('./theme-utils');
+import { applyTheme } from './theme-utils.js';
 
 describe('applyTheme', () => {
   let root;

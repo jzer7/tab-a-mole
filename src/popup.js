@@ -1,6 +1,6 @@
 /*global chrome*/
 
-const { timeSinceAccessText, fillGroupNode } = require('./popup-utils');
+import { timeSinceAccessText, fillGroupNode } from './popup-utils.mjs';
 
 document.addEventListener('DOMContentLoaded', function () {
   console.info('Popup script loaded');

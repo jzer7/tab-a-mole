@@ -1,6 +1,7 @@
 // popup-utils.js
 // Utility: Convert ms since last access to human readable string
-function timeSinceAccessText(lastAccessed, now = Date.now()) {
+
+export function timeSinceAccessText(lastAccessed, now = Date.now()) {
   const timeSinceAccessMs = now - lastAccessed;
   if (timeSinceAccessMs < 60000) {
     return `${Math.floor(timeSinceAccessMs / 1000)} seconds ago`;
@@ -26,7 +27,7 @@ function timeSinceAccessText(lastAccessed, now = Date.now()) {
  * @param {Function} params.onCloseAllTabs - (tabInfos, groupNode) => void
  * @returns {Element} The filled groupNode
  */
-function fillGroupNode({
+export function fillGroupNode({
   groupTemplate,
   tabTemplate,
   matchedGroup,
@@ -89,5 +90,3 @@ function fillGroupNode({
     .addEventListener('click', () => onGoToFirstTab(matchedGroup.tabInfos[0]));
   return groupNode;
 }
-
-module.exports = { timeSinceAccessText, fillGroupNode };

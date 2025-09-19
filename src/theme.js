@@ -7,7 +7,7 @@
 //   - 'dark', or
 //   - 'system', in which case the system preference is used.
 
-const { applyTheme } = require('./theme-utils');
+import { applyTheme } from './theme-utils.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   console.log('Theme script loaded');
@@ -43,5 +43,3 @@ document.addEventListener('DOMContentLoaded', function () {
   const savedTheme = localStorage.getItem('theme') || 'system';
   applyTheme(savedTheme, root, prefersDark);
 });
-
-module.exports = { applyTheme };

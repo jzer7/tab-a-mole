@@ -1,18 +1,4 @@
 // popup-utils.js
-// Utility: Convert ms since last access to human readable string
-
-export function timeSinceAccessText(lastAccessed, now = Date.now()) {
-  const timeSinceAccessMs = now - lastAccessed;
-  if (timeSinceAccessMs < 60000) {
-    return `${Math.floor(timeSinceAccessMs / 1000)} seconds ago`;
-  } else if (timeSinceAccessMs < 3600000) {
-    return `${Math.floor(timeSinceAccessMs / 60000)} minutes ago`;
-  } else if (timeSinceAccessMs < 86400000) {
-    return `${Math.floor(timeSinceAccessMs / 3600000)} hours ago`;
-  } else {
-    return `${Math.floor(timeSinceAccessMs / 86400000)} days ago`;
-  }
-}
 
 /**
  * Assembles a groupNode DOM element with tab group data and attaches event handlers.
@@ -27,7 +13,7 @@ export function timeSinceAccessText(lastAccessed, now = Date.now()) {
  * @param {Function} params.onCloseAllTabs - (tabInfos, groupNode) => void
  * @returns {Element} The filled groupNode
  */
-export function fillGroupNode({
+function fillGroupNode({
   groupTemplate,
   tabTemplate,
   matchedGroup,
@@ -90,3 +76,5 @@ export function fillGroupNode({
     .addEventListener('click', () => onGoToFirstTab(matchedGroup.tabInfos[0]));
   return groupNode;
 }
+
+export { fillGroupNode };

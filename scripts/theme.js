@@ -1,5 +1,3 @@
-/*global chrome*/
-
 // This component watches for changes to the theme, and applies it
 // to the document root, by setting a 'data-theme' attribute.
 // There are 3 possible values set in the Options UI:
@@ -7,7 +5,7 @@
 //   - 'dark', or
 //   - 'system', in which case the system preference is used.
 
-import { applyTheme } from './theme-utils.js';
+import { applyTheme } from './theme-utils.ts';
 
 document.addEventListener('DOMContentLoaded', function () {
   console.log('Theme script loaded');
@@ -19,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('Received System event to (maybe) update theme');
     const currentTheme = localStorage.getItem('theme') || 'system';
     if (currentTheme === 'system') {
-      applyTheme('system', root, prefersDark);
+      applyTheme('system', root, prefersDark.matches);
     }
   });
 
@@ -27,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('storage', function (event) {
     if (event.key === 'theme') {
       console.log('Received Storage event updating theme:', event);
-      applyTheme(event.newValue || 'system', root, prefersDark);
+      applyTheme(event.newValue || 'system', root, prefersDark.matches);
     }
   });
 
@@ -35,11 +33,11 @@ document.addEventListener('DOMContentLoaded', function () {
   chrome.runtime.onMessage.addListener(function (message) {
     if (message.type === 'themeChanged') {
       console.log('Received Message updating theme:', message);
-      applyTheme(message.theme || 'system', root, prefersDark);
+      applyTheme(message.theme || 'system', root, prefersDark.matches);
     }
   });
 
   // Initial theme application
   const savedTheme = localStorage.getItem('theme') || 'system';
-  applyTheme(savedTheme, root, prefersDark);
+  applyTheme(savedTheme, root, prefersDark.matches);
 });

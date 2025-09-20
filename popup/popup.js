@@ -1,6 +1,5 @@
-/*global chrome*/
-
-import { timeSinceAccessText, fillGroupNode } from './popup-utils.js';
+import { fillGroupNode } from './popup-utils.js';
+import { timeSinceAccessText } from '../scripts/time-since-access.ts';
 
 document.addEventListener('DOMContentLoaded', function () {
   console.info('Popup script loaded');

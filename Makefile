@@ -5,10 +5,10 @@ all: prepare build
 # Image Processing Commands
 # ----------------------------------------------------------
 images: ## process images for the extension
-	$(MAKE) -C src/images build
+	$(MAKE) -C images build
 
 cleanup_images: ## cleanup processed images
-	$(MAKE) -C src/images clean
+	$(MAKE) -C images clean
 
 .PHONY: images cleanup_images
 
@@ -40,17 +40,17 @@ build: images  ## builds a production version of the extension
 package: build  ## produce the .zip artifact
 	bun run package
 	mkdir -p dist
-	cp -p src/dist/chrome/tab-a-mole-1.0.zip dist
+	cp -p dist/chrome/tab-a-mole-1.0.zip .
 
 cleanup_code: ## cleanup development environment
 	bunx extension cleanup
 	#-find . -name dist -not -path '*/node_modules/*' -delete -print
-	-rm -r ./src/dist ./dist
+	-rm -r ./dist
 
 .PHONY: prepare lint format dev preview build package cleanup_code
 
 show: build
-	@tree -sat src/dist/chrome
+	@tree -sat dist/chrome
 
 .PHONY: show
 

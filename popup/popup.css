@@ -2,7 +2,7 @@
  * css for popup.html
  * ------------------------------------------------------ */
 
-@import url('../css/main.css');
+@import url('/pages/css/main.css');
 
 /* Theme attribute selectors for popup */
 html[data-theme="light"] {

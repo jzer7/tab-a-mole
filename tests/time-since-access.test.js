@@ -1,6 +1,6 @@
 // popup-utils.test.js
 import { describe, it, expect } from 'bun:test';
-import { timeSinceAccessText } from './popup-utils.js';
+import { timeSinceAccessText } from '../scripts/time-since-access.ts';
 
 describe('timeSinceAccessText', () => {
   const now = 1_000_000_000_000; // fixed timestamp for deterministic tests

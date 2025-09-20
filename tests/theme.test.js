@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, jest } from 'bun:test';
-import { applyTheme } from './theme-utils.js';
+import { applyTheme } from '../scripts/theme-utils.js';
 
 describe('applyTheme', () => {
   let root;
@@ -33,7 +33,7 @@ describe('applyTheme', () => {
   });
 
   it('applies system theme as light if prefersDark is false', () => {
-    prefersDark.matches = false;
+    prefersDark = false;
     applyTheme('system', root, prefersDark);
     expect(root.setAttribute).toHaveBeenCalledWith('data-theme', 'light');
     expect(root.style.colorScheme).toBe('light');

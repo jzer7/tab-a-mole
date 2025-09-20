@@ -1,9 +1,9 @@
 // theme-utils.js
 // Pure function for applying theme, testable in isolation
 
-export function applyTheme(theme, root, prefersDark) {
+function applyTheme(theme: string, root: HTMLElement, prefersDark: boolean) {
   if (theme === 'system') {
-    const systemTheme = prefersDark.matches ? 'dark' : 'light';
+    const systemTheme = prefersDark ? 'dark' : 'light';
     root.setAttribute('data-theme', systemTheme);
     root.style.colorScheme = systemTheme;
   } else {
@@ -11,3 +11,5 @@ export function applyTheme(theme, root, prefersDark) {
     root.style.colorScheme = theme;
   }
 }
+
+export { applyTheme };

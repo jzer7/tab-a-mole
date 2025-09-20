@@ -2,7 +2,7 @@
  * css for options.html
  * ------------------------------------------------------ */
 
-@import url('./main.css');
+@import url('../css/main.css');
 
 /* Theme attribute selectors for popup */
 html[data-theme="light"] {

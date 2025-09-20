@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Listen for messages from other parts of the extension
-  chrome.runtime.onMessage.addListener(function (message, _sender, _sendResponse) {
+  chrome.runtime.onMessage.addListener(function (message) {
     if (message.type === 'themeChanged') {
       console.log('Received Message updating theme:', message);
       applyTheme(message.theme || 'system', root, prefersDark);

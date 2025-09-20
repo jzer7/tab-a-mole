@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Tab-a-mole</title>
     <link rel="stylesheet" href="popup.css" />
-    <script src="theme.js"></script>
+    <script type="module" src="../shared/theme.js" defer></script>
   </head>
   <body style="min-width: 400px; max-width: 600px">
     <!-- Container for title -->
@@ -112,6 +112,6 @@
       </li>
     </template>
     <!-- Script: ensure it loads at the end -->
-    <script src="popup.js"></script>
+    <script type="module" src="popup.js" defer></script>
   </body>
 </html>

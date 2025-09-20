@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // if (window.chrome && chrome.runtime && chrome.runtime.id)
 
   /* 2. Listen for messages from the background script */
-  chrome.runtime.onMessage.addListener(function (request, _sender, _sendResponse) {
+  chrome.runtime.onMessage.addListener(function (request) {
     if (request.message === msgType.GROUP_TABS_ANS) {
       displayGroupedTabs(request.matched_tab_groups);
     }

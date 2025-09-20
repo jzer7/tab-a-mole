@@ -224,7 +224,7 @@ function groupTabsDispatch(config = {}) {
 }
 
 // Listen for a message from the popup
-chrome.runtime.onMessage.addListener(function (request, _sender, _sendResponse) {
+chrome.runtime.onMessage.addListener(function (request) {
   if (request.message === msgType.GROUP_TABS_CMD) {
     groupTabsDispatch({
       matchBy: request.matchBy,

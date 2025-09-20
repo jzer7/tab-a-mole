@@ -5,29 +5,25 @@
   "version": "1.0",
   "description": "Helps you manage your large collection of tabs.",
   "homepage_url": "https://github.com/jzer7/tab-a-mole",
-
   "permissions": ["storage", "tabs"],
-
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background/background.js"
   },
-
   "action": {
     "default_title": "Tab-a-mole - manage a pile of tabs",
-    "default_popup": "popup.html",
+    "default_popup": "popup/popup.html",
     "default_icon": {
       "128": "images/banned_stack-128.png"
     }
+  },
+  "options_ui": {
+    "page": "options_ui/options.html",
+    "open_in_tab": true
   },
   "icons": {
     "128": "images/banned_stack-128.png",
     "48": "images/banned_stack-48.png",
     "32": "images/banned_stack-32.png",
     "16": "images/banned_stack-16.png"
-  },
-
-  "options_ui": {
-    "page": "options.html",
-    "open_in_tab": true
   }
 }

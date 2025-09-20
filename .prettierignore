@@ -2,5 +2,7 @@
 .vscode
 .attic.skip
 **/*.skip
+**/dist
+build
 dist
 node_modules

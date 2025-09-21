@@ -1,5 +1,6 @@
 import { fillGroupNode } from './popup-utils.js';
 import { timeSinceAccessText } from '../scripts/time-since-access.ts';
+import { renderTabGroups, exampleTabGroups } from './popup-utils.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   console.info('Popup script loaded');

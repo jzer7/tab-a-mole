@@ -77,4 +77,71 @@ function fillGroupNode({
   return groupNode;
 }
 
+/* ---------------------------------------------------------
+   NEW RENDERING FUNCTION
+   --------------------------------------------------------- */
+
+function renderTabGroups(groups, callbacks) {
+  const groupTemplate = document.getElementById('tab-group-template');
+  const itemTemplate = document.getElementById('tab-item-template');
+
+  renderTabGroupsFunc(document, groups, callbacks, groupTemplate, itemTemplate);
+}
+
+/* groups is an array of:
+  {
+    key: 'group key',
+    count: number of tabs in group,
+    tabs: [
+      { title: 'Tab Title', id: 12345, elapsed: '5 minutes ago' },
+      ...
+    ]
+  }
+*/
+
+function renderTabGroupsFunc(root, groups, callbacks, groupTemplate, itemTemplate) {
+  const duplicateList = root.getElementById('duplicateList');
+  if (!duplicateList) return;
+  // Remove all children except resultsLiveRegion (aria-live for screen readers)
+  [...duplicateList.children].forEach((child) => {
+    if (child.id !== 'resultsLiveRegion') {
+      duplicateList.removeChild(child);
+    }
+  });
+
+  groups.forEach((group, groupIdx) => {
+    const groupNode = groupTemplate.content.cloneNode(true);
+    const groupSection = groupNode.querySelector('.tab-group');
+    groupSection.querySelector('.tab-group__key').textContent = group.key;
+    groupSection.querySelector('.tab-group__count').textContent = group.count;
+    const ul = groupSection.querySelector('.tab-list');
+
+    group.tabs.forEach((tab, tabIdx) => {
+      const itemNode = itemTemplate.content.cloneNode(true);
+      const li = itemNode.querySelector('li');
+      // Set unique IDs for accessibility
+      const tabId = `tab-title-${groupIdx + 1}-${tabIdx + 1}`;
+      const gotoId = `tab-goto-label-${groupIdx + 1}-${tabIdx + 1}`;
+      const closeId = `tab-close-label-${groupIdx + 1}-${tabIdx + 1}`;
+      const titleSpan = li.querySelector('.tab-title');
+      titleSpan.textContent = tab.title;
+      titleSpan.id = tabId;
+      li.querySelector('.tab-elapsed').textContent = tab.elapsed;
+      // Set aria-labelledby for buttons
+      const gotoBtn = li.querySelector('.tab-goto');
+      gotoBtn.setAttribute('aria-labelledby', `${tabId} ${gotoId}`);
+      gotoBtn.querySelector('.sr-only').id = gotoId;
+      const closeBtn = li.querySelector('.tab-close');
+      closeBtn.setAttribute('aria-labelledby', `${tabId} ${closeId}`);
+      closeBtn.querySelector('.sr-only').id = closeId;
+      ul.appendChild(li);
+    });
+    duplicateList.appendChild(groupSection);
+  });
+}
+
+/* ---------------------------------------------------------
+   EXPORTS
+   --------------------------------------------------------- */
 export { fillGroupNode };
+export { renderTabGroups };

@@ -7,111 +7,97 @@
     <link rel="stylesheet" href="popup.css" />
     <script type="module" src="../scripts/theme.js" defer></script>
   </head>
-  <body style="min-width: 400px; max-width: 600px">
-    <!-- Container for title -->
+  <body>
     <header>
       <h1>Tab-a-mole</h1>
     </header>
     <main>
-      <!-- Controls Section -->
-      <section class="controls" aria-labelledby="controls-legend">
-        <fieldset>
-          <legend id="controls-legend">Configure search</legend>
-
-          <!-- Search modality -->
-          <fieldset>
-            <legend>Match by</legend>
-            <label><input type="radio" name="match-by" value="url" checked /> URL</label>
-            <label><input type="radio" name="match-by" value="title" /> Title</label>
-          </fieldset>
-
-          <!-- Search by URL -->
-          <fieldset id="urlScope">
-            <legend>Configure URL scope</legend>
-            <!-- Slider control -->
-            <div class="slider">
-              <label for="matchLevelSlider">Adjust scope of URLs:</label>
-              <input type="range" min="1" max="5" value="5" class="slider__slide" id="matchLevelSlider" />
-            </div>
-
-            <!-- Text pattern indicator -->
-            <div class="text-pattern">
-              <div class="text-pattern__label">Example:</div>
-              <div class="text-pattern__text" id="sampleUrl">
-                <span class="enabled" data-part="subdomains">www.</span
-                ><span class="enabled" data-part="domain">example.com</span
-                ><span class="enabled" data-part="path">/news/earth</span
-                ><span class="enabled" data-part="query">?q=2025</span
-                ><span class="enabled" data-part="hash">#water</span>
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Control options -->
-          <div class="controls__options">
-            <input type="checkbox" id="currentWindowOnly" name="currentWindowOnly" />
-            <label for="currentWindowOnly">Find in current window only</label>
-          </div>
-          <div class="controls__options">
-            <input type="checkbox" id="httpsOnly" name="httpsOnly" />
-            <label for="httpsOnly">Only match tabs with HTTPS URLs (e.g., <em>chrome://</em> )</label>
-          </div>
-        </fieldset>
-        <div class="controls__options">
-          <button id="findDuplicates" type="button">Find Duplicates</button>
+      <fieldset class="controls" aria-labelledby="controls-legend">
+        <legend id="controls-legend">Configure search</legend>
+        <div class="controls__group">
+          <span class="controls__label">Match by:</span>
+          <label><input type="radio" name="match-by" value="url" checked /> URL</label>
+          <label><input type="radio" name="match-by" value="title" /> Title</label>
         </div>
-      </section>
+        <div class="controls__group">
+          <label for="matchLevelSlider">Adjust scope of URLs:</label>
+          <input type="range" min="1" max="5" value="5" class="slider__slide" id="matchLevelSlider" />
+        </div>
+        <div class="controls__group">
+          <span class="controls__label">Example:</span>
+          <span class="text-pattern__text" id="sampleUrl">
+            <span class="enabled" data-part="subdomains">www.</span>
+            <span class="enabled" data-part="domain">example.com</span>
+            <span class="enabled" data-part="path">/news/earth</span>
+            <span class="enabled" data-part="query">?q=2025</span>
+            <span class="enabled" data-part="hash">#water</span>
+          </span>
+        </div>
+        <div class="controls__group">
+          <input type="checkbox" id="currentWindowOnly" name="currentWindowOnly" />
+          <label for="currentWindowOnly">Search in current window only</label>
+        </div>
+        <div class="controls__group">
+          <input type="checkbox" id="httpsOnly" name="httpsOnly" checked />
+          <label for="httpsOnly">Only match tabs with <code>https://</code> URLs (e.g., <code>chrome://</code>)</label>
+        </div>
+        <div class="controls__group controls__actions">
+          <button id="findDuplicates" type="button" aria-label="Find Duplicates">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          </button>
+        </div>
+      </fieldset>
 
-      <!-- Results Section -->
-      <section class="results" aria-labelledby="results-legend">
-        <fieldset>
-          <legend id="results-legend">Results</legend>
-          <div class="results__msg" id="startSearch" aria-live="polite">
-            Configure search options, and start a search
-          </div>
-          <div class="results__msg" id="loadingMessage" hidden aria-live="polite">Loading...</div>
-          <div class="results__msg" id="noDuplicatesMessage" hidden aria-live="polite">No duplicate tabs found. 😎</div>
-          <div class="results__msg" id="duplicateList" hidden aria-live="polite"></div>
-        </fieldset>
+      <section class="results results-panel" aria-labelledby="results-legend">
+        <h2 id="results-legend" class="results__heading">Results</h2>
+
+        <div class="results__msg" id="startSearch" hidden aria-live="polite">Configure search options, and start a search</div>
+        <div class="results__msg" id="loadingMessage" hidden aria-live="polite">Loading...</div>
+        <div class="results__msg" id="noDuplicatesMessage" hidden aria-live="polite">No duplicate tabs found. 😎</div>
+        <div class="results__msg" id="duplicateList" aria-live="polite">
+          <!-- Dedicated aria-live region for dynamic result updates -->
+          <div id="resultsLiveRegion" class="sr-only" aria-live="polite" role="status"></div>
+
+        </div>
       </section>
     </main>
-    <template id="matched-group-template">
-      <section class="matched-group" role="region" aria-label="Duplicate Tab Group">
-        <header class="matched-group__header">
-          <span class="matched-group__key"></span>
-          <span class="matched-group__count"></span>
+
+    <!-- Templates for dynamic rendering -->
+    <template id="tab-group-template">
+      <section class="tab-group" role="region" aria-label="Duplicate Tab Group">
+        <header class="tab-group__header">
+          <span class="tab-group__key"></span>
+          <span class="tab-group__count"></span>
         </header>
-        <div class="matched-group__items">
-          <ul class="matched-group__list" role="list"></ul>
-        </div>
-        <div class="matched-group__actions">
-          <button class="matched-group__close-all" type="button" aria-label="Close all tabs in this group">
-            Close All
+        <ul class="tab-list" role="list"></ul>
+        <div class="tab-group__actions">
+          <button class="tab-group__close-all" type="button" aria-label="Close all tabs in this group">
+            <span class="sr-only">Close all tabs in this group</span>
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
           </button>
-          <button class="matched-group__goto-first" type="button" aria-label="Go to first tab in this group">
-            Go to First
+          <button class="tab-group__goto-first" type="button" aria-label="Go to first tab in this group">
+            <span class="sr-only">Go to first tab in this group</span>
+            <i class="fa-solid fa-arrow-turn-up" aria-hidden="true"></i>
           </button>
         </div>
       </section>
     </template>
+
     <template id="tab-item-template">
-      <li role="listitem">
-        <div class="tab-item">
-          <div>
-            <span class="tab-item__title"></span>
-            <span class="tab-item__elapsed"></span>
-            <span class="tab-item__symbol"></span>
-          </div>
-          <div class="tab-item__goto">
-            <button type="button" aria-label="Go to this tab">Go</button>
-          </div>
-          <div class="tab-item__close">
-            <button type="button" aria-label="Close this tab">Close</button>
-          </div>
-        </div>
+      <li class="tab-list__item" role="listitem">
+        <span class="tab-title"></span>
+        <span class="tab-elapsed"></span>
+        <button class="tab-goto" type="button">
+          <span class="sr-only">Go to this tab</span>
+          <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        </button>
+        <button class="tab-close" type="button">
+          <span class="sr-only">Close this tab</span>
+          <i class="fa-regular fa-circle-xmark" aria-hidden="true"></i>
+        </button>
       </li>
     </template>
-    <!-- Script: ensure it loads at the end -->
+
     <script type="module" src="popup.js" defer></script>
   </body>
 </html>

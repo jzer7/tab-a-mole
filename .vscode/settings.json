@@ -8,8 +8,9 @@
         "**/.hg": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "package-lock.json": true,
-        "node_modules": true
+        "bun.lock": true,
+        "node_modules": true,
+        "package-lock.json": true
     },
     "json.schemas": [
         {
@@ -25,4 +26,5 @@
             "url": "https://www.schemastore.org/package.json"
         }
     ],
+    "search.useIgnoreFiles": true
 }

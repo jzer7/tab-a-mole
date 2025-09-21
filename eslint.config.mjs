@@ -62,7 +62,7 @@ export default defineConfig([
       sourceType: 'module',
       globals: {
         ...globals.browser,
-        ...globals.chrome,
+        ...globals.webextensions
       }
     }
   },
@@ -78,6 +78,7 @@ export default defineConfig([
       '**/coverage/**/*',
       '**/dist/**/*',
       '**/node_modules/**/*',
+      '**/sandbox/**/*',
       '**/*.skip'
     ]
   }

@@ -13,5 +13,13 @@
                 "--load-extension=${workspaceFolder}/src/dist/chrome"
             ]
         },
+    ],
+    "inputs": [
+        {
+            "id": "portNumber",
+            "description": "port number",
+            "type": "promptString",
+            "default": "9222"
+        }
     ]
 }

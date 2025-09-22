@@ -5,12 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Attach to Chrome",
+            "port": "${input:portNumber}",
+            "request": "attach",
+            "type": "chrome",
+            "webRoot": "${workspaceFolder}",
+        },
+        {
             "name": "Launch Chrome (extension)",
             "request": "launch",
             "type": "chrome",
-            "url": "https://example.com/",
+            "url": "chrome://extensions",
+            "webRoot": "${workspaceFolder}",
             "runtimeArgs": [
-                "--load-extension=${workspaceFolder}/src/dist/chrome"
+                "--load-extension=${workspaceFolder}",
+                "--disable-features=DisableLoadExtensionCommandLineSwitch"
             ]
         },
     ],

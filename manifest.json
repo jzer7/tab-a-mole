@@ -2,7 +2,7 @@
   "$schema": "https://www.schemastore.org/chrome-manifest.json",
   "manifest_version": 3,
   "name": "Tab-a-mole",
-  "version": "1.0",
+  "version": "0.0.1",
   "description": "Helps you manage your large collection of tabs.",
   "homepage_url": "https://github.com/jzer7/tab-a-mole",
   "permissions": ["storage", "tabs"],
@@ -13,7 +13,7 @@
     "default_title": "Tab-a-mole - manage a pile of tabs",
     "default_popup": "popup/popup.html",
     "default_icon": {
-      "128": "images/banned_stack-128.png"
+      "48": "images/banned_stack-48.png"
     }
   },
   "options_ui": {

@@ -1,122 +1,98 @@
 // popup-utils.js
 
-/**
- * Assembles a groupNode DOM element with tab group data and attaches event handlers.
- * @param {Object} params
- * @param {Element} params.groupTemplate - The group template DOM element
- * @param {Element} params.tabTemplate - The tab item template DOM element
- * @param {Object} params.matchedGroup - The group data {criteria, tabInfos}
- * @param {Function} params.timeSinceAccessText - Utility to format lastAccessed
- * @param {Function} params.onGoToTab - (tabInfo) => void
- * @param {Function} params.onCloseTab - (tabInfo, tabNode) => void
- * @param {Function} params.onGoToFirstTab - (firstTabInfo) => void
- * @param {Function} params.onCloseAllTabs - (tabInfos, groupNode) => void
- * @returns {Element} The filled groupNode
- */
-function fillGroupNode({
-  groupTemplate,
-  tabTemplate,
-  matchedGroup,
-  timeSinceAccessText,
-  onGoToTab,
-  onCloseTab,
-  onGoToFirstTab,
-  onCloseAllTabs
-}) {
-  // 1. Clone group template
-  const groupNode = groupTemplate.content.cloneNode(true);
+import { timeSinceAccessText } from '../scripts/time-since-access.ts';
+import { resultState } from './popup-values.js';
 
-  // 2. Update the group Header
-  groupNode.querySelector('.matched-group__key').textContent = matchedGroup.criteria;
-  groupNode.querySelector('.matched-group__count').textContent =
-    matchedGroup.tabInfos.length;
+/* ---------------------------------------------------------
+   HELPER FUNCTIONS
+   --------------------------------------------------------- */
 
-  // 3. Tab list
-  const ul = groupNode.querySelector('.matched-group__list');
-  matchedGroup.tabInfos.forEach((oneTabInfo) => {
-    const tabNode = tabTemplate.content.cloneNode(true);
+// Clears all children of duplicateListDiv except the resultsLiveRegion (for screen readers)
+function clearResults(duplicateListDiv) {
+  if (!duplicateListDiv) return;
 
-    // Fill out the tab title (truncated to 50 chars)
-    let tabTitle = oneTabInfo.title || '(no title)';
-    if (tabTitle.length > 50) {
-      tabTitle = tabTitle.substring(0, 50) + '...';
+  // Remove all children except resultsLiveRegion (aria-live for screen readers)
+  [...duplicateListDiv.children].forEach((child) => {
+    if (child.id !== 'resultsLiveRegion') {
+      duplicateListDiv.removeChild(child);
     }
-    tabNode.querySelector('.tab-item__title').textContent = tabTitle;
-
-    // Last accessed
-    if (oneTabInfo.lastAccessed) {
-      tabNode.querySelector('.tab-item__elapsed').textContent = timeSinceAccessText(
-        oneTabInfo.lastAccessed
-      );
-    } else {
-      tabNode.querySelector('.tab-item__elapsed').textContent = '';
-    }
-
-    tabNode.querySelector('.tab-item__symbol').textContent = oneTabInfo.pinned
-      ? '📌'
-      : '';
-
-    // Per tab actions: Go to tab
-    tabNode
-      .querySelector('.tab-item__goto')
-      .addEventListener('click', () => onGoToTab(oneTabInfo));
-    // Per tab actions: Close tab
-    tabNode
-      .querySelector('.tab-item__close')
-      .addEventListener('click', () => onCloseTab(oneTabInfo, tabNode));
-    ul.appendChild(tabNode);
   });
+}
 
-  // Group actions
-  groupNode
-    .querySelector('.matched-group__close-all')
-    .addEventListener('click', () => onCloseAllTabs(matchedGroup.tabInfos, groupNode));
-  groupNode
-    .querySelector('.matched-group__goto-first')
-    .addEventListener('click', () => onGoToFirstTab(matchedGroup.tabInfos[0]));
-  return groupNode;
+// Changes the visible message based on the current state
+function changeResultState(state) {
+  console.debug('Changing result state to:', state);
+
+  if (!state) {
+    console.error('changeResultState: State is undefined or null');
+    return;
+  }
+  const resultStateValues = Object.values(resultState);
+  if (!resultStateValues.includes(state)) {
+    console.error('changeResultState: Invalid state:', state);
+    return;
+  }
+
+  // Hide all messages, then show the one for the current state
+  // Possible states are in the resultState enum object
+  // Values are the IDs of the divs
+  for (const s of resultStateValues) {
+    const elem = document.getElementById(s);
+    if (elem) {
+      if (s === state) {
+        elem.hidden = false;
+      } else {
+        elem.hidden = true;
+      }
+    }
+  }
+
+  // Clear results div except when state just change to show results.
+  if (state !== resultState.DUPLICATES_FOUND) {
+    clearResults(document.getElementById('duplicateList'));
+  }
 }
 
 /* ---------------------------------------------------------
    NEW RENDERING FUNCTION
    --------------------------------------------------------- */
 
-function renderTabGroups(groups, callbacks) {
-  const groupTemplate = document.getElementById('tab-group-template');
-  const itemTemplate = document.getElementById('tab-item-template');
-
-  renderTabGroupsFunc(document, groups, callbacks, groupTemplate, itemTemplate);
-}
-
-/* groups is an array of:
-  {
-    key: 'group key',
-    count: number of tabs in group,
-    tabs: [
-      { title: 'Tab Title', id: 12345, elapsed: '5 minutes ago' },
-      ...
-    ]
+function renderTabGroups(groups, anchorPoint, groupTemplate, itemTemplate, callbacks) {
+  console.debug('called renderTabGroups:', groups);
+  if (!groups || !anchorPoint || !groupTemplate || !itemTemplate || !callbacks) {
+    console.error('renderTabGroups: Missing required parameters');
+    return;
   }
-*/
 
-function renderTabGroupsFunc(root, groups, callbacks, groupTemplate, itemTemplate) {
-  const duplicateList = root.getElementById('duplicateList');
-  if (!duplicateList) return;
-  // Remove all children except resultsLiveRegion (aria-live for screen readers)
-  [...duplicateList.children].forEach((child) => {
-    if (child.id !== 'resultsLiveRegion') {
-      duplicateList.removeChild(child);
-    }
-  });
+  // `groups` is an array where each item represents a tab group:
+  // - group.criteria: group identifier (string)
+  // - group.tabInfos: array of tab objects, each with:
+  //     - id: tab ID (number)
+  //     - url: tab URL (string)
+  //     - title: tab title (string)
+  //     - pinned: is tab pinned (boolean)
+  //     - lastAccessed: last accessed timestamp (number, ms since epoch)
+
+  if (groups.length === 0) {
+    changeResultState(resultState.NO_DUPLICATES);
+    return;
+  }
+
+  // Prepare the are for new results
+  clearResults(anchorPoint);
+
+  // For each group, clone the group template, fill in the data, and append to anchorPoint
 
   groups.forEach((group, groupIdx) => {
     const groupNode = groupTemplate.content.cloneNode(true);
     const groupSection = groupNode.querySelector('.tab-group');
-    groupSection.querySelector('.tab-group__key').textContent = group.key;
-    groupSection.querySelector('.tab-group__count').textContent = group.count;
+    groupSection.querySelector('.tab-group__key').textContent = group.criteria;
+    groupSection.querySelector('.tab-group__count').textContent = group.tabInfos.length;
     const ul = groupSection.querySelector('.tab-list');
 
-    group.tabs.forEach((tab, tabIdx) => {
+    // TODO: still need to add the callbacks to the group buttons
+
+    group.tabInfos.forEach((tab, tabIdx) => {
       const itemNode = itemTemplate.content.cloneNode(true);
       const li = itemNode.querySelector('li');
       // Set unique IDs for accessibility
@@ -135,13 +111,18 @@ function renderTabGroupsFunc(root, groups, callbacks, groupTemplate, itemTemplat
       closeBtn.setAttribute('aria-labelledby', `${tabId} ${closeId}`);
       closeBtn.querySelector('.sr-only').id = closeId;
       ul.appendChild(li);
+
+      // TODO: still need to add the callbacks to the tab buttons
     });
-    duplicateList.appendChild(groupSection);
+    anchorPoint.appendChild(groupSection);
   });
+
+  changeResultState(resultState.DUPLICATES_FOUND);
 }
 
 /* ---------------------------------------------------------
    EXPORTS
    --------------------------------------------------------- */
-export { fillGroupNode };
+
+export { changeResultState };
 export { renderTabGroups };

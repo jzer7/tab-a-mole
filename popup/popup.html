@@ -23,7 +23,7 @@
           <label for="matchLevelSlider">Adjust scope of URLs:</label>
           <input type="range" min="1" max="5" value="5" class="slider__slide" id="matchLevelSlider" />
         </div>
-        <div class="controls__group">
+        <div class="controls__group" id="exampleUrl">
           <span class="controls__label">Example:</span>
           <span class="text-pattern__text" id="sampleUrl">
             <span class="enabled" data-part="subdomains">www.</span>
@@ -48,7 +48,7 @@
         </div>
       </fieldset>
 
-      <section class="results results-panel" aria-labelledby="results-legend">
+      <section id="results" class="results results-panel" aria-labelledby="results-legend">
         <h2 id="results-legend" class="results__heading">Results</h2>
 
         <div class="results__msg" id="startSearch" hidden aria-live="polite">Configure search options, and start a search</div>

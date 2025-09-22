@@ -9,7 +9,7 @@
             "port": "${input:portNumber}",
             "request": "attach",
             "type": "chrome",
-            "webRoot": "${workspaceFolder}",
+            "webRoot": "${workspaceFolder}"
         },
         {
             "name": "Launch Chrome (extension)",

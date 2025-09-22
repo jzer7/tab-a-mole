@@ -90,9 +90,7 @@ function renderTabGroups(groups, anchorPoint, groupTemplate, itemTemplate, callb
     groupSection.querySelector('.tab-group__count').textContent = group.tabInfos.length;
     const ul = groupSection.querySelector('.tab-list');
 
-    // TODO: still need to add the callbacks to the group buttons
-
-    group.tabInfos.forEach((tab, tabIdx) => {
+    group.tabInfos.forEach((tabinfo, tabIdx) => {
       const itemNode = itemTemplate.content.cloneNode(true);
       const li = itemNode.querySelector('li');
       // Set unique IDs for accessibility
@@ -100,9 +98,9 @@ function renderTabGroups(groups, anchorPoint, groupTemplate, itemTemplate, callb
       const gotoId = `tab-goto-label-${groupIdx + 1}-${tabIdx + 1}`;
       const closeId = `tab-close-label-${groupIdx + 1}-${tabIdx + 1}`;
       const titleSpan = li.querySelector('.tab-title');
-      titleSpan.textContent = tab.title;
+      titleSpan.textContent = tabinfo.title;
       titleSpan.id = tabId;
-      li.querySelector('.tab-elapsed').textContent = tab.elapsed;
+      li.querySelector('.tab-elapsed').textContent = tabinfo.elapsed;
       // Set aria-labelledby for buttons
       const gotoBtn = li.querySelector('.tab-goto');
       gotoBtn.setAttribute('aria-labelledby', `${tabId} ${gotoId}`);
@@ -110,10 +108,29 @@ function renderTabGroups(groups, anchorPoint, groupTemplate, itemTemplate, callb
       const closeBtn = li.querySelector('.tab-close');
       closeBtn.setAttribute('aria-labelledby', `${tabId} ${closeId}`);
       closeBtn.querySelector('.sr-only').id = closeId;
-      ul.appendChild(li);
 
-      // TODO: still need to add the callbacks to the tab buttons
+      // Per tab actions: Go to tab
+      itemNode.querySelector('.tab-goto').addEventListener('click', () => {
+        callbacks.onGoToTab(tabinfo);
+      });
+      // Per tab actions: Close tab
+      itemNode.querySelector('.tab-close').addEventListener('click', () => {
+        callbacks.onCloseTab(tabinfo, li);
+      });
+
+      ul.appendChild(li);
     });
+
+    // Per group actions: Go to first tab
+    groupSection.querySelector('.tab-group__goto-first').addEventListener('click', () => {
+      callbacks.onGoToFirstTab(group.tabInfos[0]);
+    });
+
+    // Per group actions: Close all tabs but one
+    groupSection.querySelector('.tab-group__close-all').addEventListener('click', () => {
+      callbacks.onCloseAllTabs(group.tabInfos, groupSection);
+    });
+
     anchorPoint.appendChild(groupSection);
   });
 

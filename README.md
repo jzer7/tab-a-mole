@@ -30,3 +30,33 @@ To install the extension for development in Chrome:
 4. Click the "Load unpacked" button that appears on the top-left.
 5. In the file selection dialog, navigate to the directory with these files.
 6. The "Tab-a-mole" extension is loaded. Access the icon by clicking on the extension button.
+
+### To debug
+
+I still don't have a great way to debug code here.
+What I currently do:
+
+1. Start an _extension.js_ `dev` session with:
+
+   ```sh
+   bun dev
+   ```
+
+2. _Bun_ will open a _Chrome_ browser with your extension loaded.
+   It will also show this message:
+
+   ```txt
+   ►►► Tab-a-mole compiled successfully in 2377 ms.
+   ►►► Chrome Extension running in development mode.
+   ►►► Chrome found 1 targets
+   ►►► Chrome target WebSocket URL stored for future connections
+   ►►► Chrome CDP Client browser connection established
+   ►►► Chrome CDP Client connected to 127.0.0.1:9172
+   ```
+
+   Make note of the port number `9172`.
+
+3. On VS Code, use a debug session configured as _Attach to Chrome_.
+   Pass the port number.
+   What is unclear still is the correlation of lines of code between: what actually runs, what the Chrome development environment shows, and what VS Code shows.
+   I think the issue is the `.map` files, which I still do not know how to produce.

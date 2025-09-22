@@ -28,31 +28,32 @@ document.addEventListener('DOMContentLoaded', function () {
       // Remove the tab item from the list
       tabNode.firstElementChild.parentElement.remove();
     },
-    onGoToFirstTab: (firstTab) => {
-      chrome.tabs.update(firstTab.id, { active: true });
-      chrome.tabs.get(firstTab.id, (tab) => {
+    onGoToFirstTab: (firstTabInfo) => {
+      console.debug('onGoToFirstTab:', firstTabInfo);
+      chrome.tabs.update(firstTabInfo.id, { active: true });
+      chrome.tabs.get(firstTabInfo.id, (tab) => {
         chrome.windows.update(tab.windowId, { focused: true });
       });
     },
     onCloseAllTabs: (tabInfos, groupNode) => {
-      const tabsToClose = tabInfos.slice(1);
-      const tabIdsToClose = tabsToClose.map((tab) => tab.id);
-      chrome.tabs.remove(tabIdsToClose);
-      groupNode.firstElementChild.remove();
-      if (duplicateListDiv.children.length === 0) {
-        changeResultState(resultState.NO_DUPLICATES);
-      }
+      // If the current tab is in the group, keep it open.
+      // Otherwise, keep the first tab in the group open.
+      // Close the rest of the tabs in the group.
+      // Remove the group from the UI.
+      console.debug('onCloseAllTabs:', tabInfos);
+
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        // Tabs must be an array with ONLY one element
+        const currentTabId = tabs[0].id;
+      });
     }
   };
 
   /* -----------------------------------------------
-     Helper function to render example data on load
-     ----------------------------------------------- */
-  changeResultState(resultState.START);
-
-  /* -----------------------------------------------
      1. Load settings and initialize UI
      ----------------------------------------------- */
+
+  changeResultState(resultState.START);
 
   chrome.storage.local.get(
     ['matchLevelSliderValue', 'currentWindowOnlyChecked', 'httpsOnlyChecked'],

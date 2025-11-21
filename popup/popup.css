@@ -36,6 +36,9 @@
   --color-primary: #0078d4;
   --color-primary-dark: #005fa3;
   --color-primary-bg: #e5f1fb;
+  --color-danger: #d9534f;
+  --color-danger-dark: #b52b27;
+  --color-danger-bg: #f9e5e5;
   --color-text: #222;
   --color-text-muted: #888;
   --color-text-on-primary: #fff;
@@ -128,7 +131,6 @@ input[type='range'].slider__slide {
   font-size: var(--font-size-small);
   background: var(--color-monospace-bg);
   padding: 0.2em 0.5em;
-  font-size: var(--font-size-base);
 }
 
 .enabled {
@@ -159,11 +161,24 @@ button {
   transition: var(--transition);
 }
 
+button.dangerous {
+  background: var(--color-danger);
+  color: var(--color-text-on-primary);
+}
+
 button:hover,
 button:focus {
   background: var(--color-primary-dark);
 }
 
+button.dangerous:hover,
+button.dangerous:focus {
+  background: var(--color-danger-dark);
+}
+
+/* ======================
+   Button Styles: Tab Actions
+   ====================== */
 .tab-goto,
 .tab-close {
   background: none;
@@ -176,6 +191,11 @@ button:focus {
   transition: var(--transition);
 }
 
+.tab-close.dangerous {
+  background: none;
+  color: var(--color-danger);
+}
+
 .tab-goto:hover,
 .tab-close:hover,
 .tab-goto:focus,
@@ -183,6 +203,14 @@ button:focus {
   background: var(--color-primary-bg);
 }
 
+.tab-close.dangerous:hover,
+.tab-close.dangerous:focus {
+  background: var(--color-danger-bg);
+}
+
+/* ======================
+   Button Styles: Tab Group Actions
+   ====================== */
 .tab-group__close-all,
 .tab-group__goto-first {
   background: var(--color-primary);

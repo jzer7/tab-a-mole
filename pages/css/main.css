@@ -35,7 +35,9 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
 /* ------------------------------------------------------ */
@@ -85,8 +87,8 @@ button:hover {
   background-color: var(--color-accent-hover);
 }
 
-input[type="radio"],
-input[type="checkbox"] {
+input[type='radio'],
+input[type='checkbox'] {
   margin-right: var(--space-xs);
 }
 
@@ -125,7 +127,9 @@ fieldset {
   border-radius: var(--radius);
   padding: var(--space-sm) var(--space-md) var(--space-sm) var(--space-md);
   margin-bottom: var(--space-md);
-  transition: background 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
   /* background-color: var(--color-bg-fieldset); */
 }
 

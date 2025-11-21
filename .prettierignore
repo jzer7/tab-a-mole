@@ -1,6 +1,5 @@
 .github
 .vscode
-.attic.skip
 **/*.skip
 **/dist
 build

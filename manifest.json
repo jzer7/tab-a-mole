@@ -7,7 +7,7 @@
   "homepage_url": "https://github.com/jzer7/tab-a-mole",
   "permissions": ["storage", "tabs"],
   "background": {
-    "service_worker": "background/background.js"
+    "service_worker": "background/background.ts"
   },
   "action": {
     "default_title": "Tab-a-mole - manage a pile of tabs",

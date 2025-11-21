@@ -5,11 +5,11 @@
 //   - 'dark', or
 //   - 'system', in which case the system preference is used.
 
-import { applyTheme } from './theme-utils.ts';
+import { applyTheme } from './theme-utils';
 
 document.addEventListener('DOMContentLoaded', function () {
   console.log('Theme script loaded');
-  const root = document.documentElement;
+  const root = document.documentElement as HTMLElement;
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
   // Listen for changes in system preference, and if theme is set to 'system' we apply it.
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Listen for changes in localStorage (theme changes from options page)
-  window.addEventListener('storage', function (event) {
+  window.addEventListener('storage', function (event: StorageEvent) {
     if (event.key === 'theme') {
       console.log('Received Storage event updating theme:', event);
       applyTheme(event.newValue || 'system', root, prefersDark.matches);
@@ -30,7 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Listen for messages from other parts of the extension
-  chrome.runtime.onMessage.addListener(function (message) {
+  chrome.runtime.onMessage.addListener(function (message: {
+    type: string;
+    theme?: string;
+  }) {
     if (message.type === 'themeChanged') {
       console.log('Received Message updating theme:', message);
       applyTheme(message.theme || 'system', root, prefersDark.matches);

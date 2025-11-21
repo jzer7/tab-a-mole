@@ -59,5 +59,8 @@
     "**/*.{md,html,json}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "jsdom": "^27.2.0"
   }
 }

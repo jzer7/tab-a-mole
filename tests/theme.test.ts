@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, jest } from 'bun:test';
-import { applyTheme } from '../scripts/theme-utils.js';
+import { applyTheme } from '../scripts/theme-utils';
 
 describe('applyTheme', () => {
-  let root;
-  let prefersDark;
+  let root: any;
+  let prefersDark: any;
 
   beforeEach(() => {
     root = {

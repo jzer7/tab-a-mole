@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Tab-a-mole</title>
+    <script src="https://kit.fontawesome.com/482152a765.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="popup.css" />
-    <script type="module" src="../scripts/theme.js" defer></script>
+    <script type="module" src="../scripts/theme.ts" defer></script>
   </head>
   <body>
     <header>
@@ -39,7 +40,7 @@
         </div>
         <div class="controls__group">
           <input type="checkbox" id="httpsOnly" name="httpsOnly" checked />
-          <label for="httpsOnly">Only match tabs with <code>https://</code> URLs (e.g., <code>chrome://</code>)</label>
+          <label for="httpsOnly">Only consider tabs with external HTTPS URLs (e.g., <code>chrome://</code>)</label>
         </div>
         <div class="controls__group controls__actions">
           <button id="findDuplicates" type="button" aria-label="Find Duplicates">
@@ -51,13 +52,14 @@
       <section id="results" class="results results-panel" aria-labelledby="results-legend">
         <h2 id="results-legend" class="results__heading">Results</h2>
 
-        <div class="results__msg" id="startSearch" hidden aria-live="polite">Configure search options, and start a search</div>
+        <div class="results__msg" id="startSearch" hidden aria-live="polite">
+          Configure search options, and start a search
+        </div>
         <div class="results__msg" id="loadingMessage" hidden aria-live="polite">Loading...</div>
         <div class="results__msg" id="noDuplicatesMessage" hidden aria-live="polite">No duplicate tabs found. 😎</div>
         <div class="results__msg" id="duplicateList" aria-live="polite">
           <!-- Dedicated aria-live region for dynamic result updates -->
           <div id="resultsLiveRegion" class="sr-only" aria-live="polite" role="status"></div>
-
         </div>
       </section>
     </main>
@@ -71,13 +73,13 @@
         </header>
         <ul class="tab-list" role="list"></ul>
         <div class="tab-group__actions">
-          <button class="tab-group__close-all" type="button" aria-label="Close all tabs in this group">
-            <span class="sr-only">Close all tabs in this group</span>
-            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-          </button>
           <button class="tab-group__goto-first" type="button" aria-label="Go to first tab in this group">
             <span class="sr-only">Go to first tab in this group</span>
             <i class="fa-solid fa-arrow-turn-up" aria-hidden="true"></i>
+          </button>
+          <button class="tab-group__close-all dangerous" type="button" aria-label="Close all tabs in this group">
+            <span class="sr-only">Close all tabs in this group</span>
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
           </button>
         </div>
       </section>
@@ -87,17 +89,20 @@
       <li class="tab-list__item" role="listitem">
         <span class="tab-title"></span>
         <span class="tab-elapsed"></span>
+        <span class="tab-symbol"></span>
+
         <button class="tab-goto" type="button">
           <span class="sr-only">Go to this tab</span>
           <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
         </button>
-        <button class="tab-close" type="button">
+
+        <button class="tab-close dangerous" type="button">
           <span class="sr-only">Close this tab</span>
           <i class="fa-regular fa-circle-xmark" aria-hidden="true"></i>
         </button>
       </li>
     </template>
 
-    <script type="module" src="popup.js" defer></script>
+    <script type="module" src="popup.ts" defer></script>
   </body>
 </html>

@@ -4,6 +4,7 @@
 **/dist
 build
 dist
+images
 node_modules
 sandbox
 vendor

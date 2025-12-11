@@ -4,13 +4,18 @@
 
 *.bak
 *.skip
+.DS_Store
+.idea
+backups
+tags
 
 # ----------------------------------------------------------
-# Node
+# NODE
 # ----------------------------------------------------------
 
 # Logs
 logs
+_.log
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -140,7 +145,10 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-### Node Patch ###
+# ----------------------------------------------------------
+# NODE PATCH
+# ----------------------------------------------------------
+
 # Serverless Webpack directories
 .webpack/
 
@@ -149,3 +157,20 @@ dist
 
 # SvelteKit build / generate output
 .svelte-kit
+
+# lock files
+yarn.lock
+package-lock.json
+
+# ----------------------------------------------------------
+# EXTENSION.JS
+# ----------------------------------------------------------
+
+extension-env.d.ts
+
+# ----------------------------------------------------------
+# PROJECT
+# ----------------------------------------------------------
+
+vendors/
+

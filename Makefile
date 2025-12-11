@@ -1,11 +1,48 @@
-all: prepare build
+.PHONY: help
+help: ## Show this help message
+	@echo "Available targets:"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
+.PHONY: setup
+setup: ## Set up the development environment
+	bun install
+
+.PHONY: format
+format:  ## consistent formatting of JS, HTML and CSS files
+	bun run prettier
+
+.PHONY: check
+check: ## Run all static checks
+	bun run format:check
+	bun run lint
+
+.PHONY: test
+test: ## Run all test (aka dynamic checks)
+	bun run test
+
+.PHONY: images
+images: ## Build extension's images
+	$(MAKE) -C images build
+	# bun run build:images
+
+.PHONY: build
+build: images ## Build extension's images and code
+	bun run build
+
+.PHONY: package
+package: build ## Package the extension as a ZIP file for store submission
+	bun run package
+	cp -p dist/chrome/tab-a-mole-1.0.zip .
+
+.PHONY: update
+update: ## Update dependencies
+	bun update --latest --no-progress --dry-run
+
 .PHONY: all
 
 # ----------------------------------------------------------
 # Image Processing Commands
 # ----------------------------------------------------------
-images: ## process images for the extension
-	$(MAKE) -C images build
 
 cleanup_images: ## cleanup processed images
 	$(MAKE) -C images clean
@@ -21,26 +58,13 @@ prepare: lint format
 lint:  ## review code for Javascript issues
 	bun run lint
 
-format:  ## consistent formatting of JS, HTML and CSS files
-	bun run prettier
-
-test:  ## runs unit tests
-	bun run test
-
 dev: images  ## starts a development server with hot reloading
 	bun run dev
 
 preview: images  ## previews the extension in production without building
 	bun run preview
 
-build: images  ## builds a production version of the extension
-	bun run prepare
-	bun run build
 
-package: build  ## produce the .zip artifact
-	bun run package
-	mkdir -p dist
-	cp -p dist/chrome/tab-a-mole-1.0.zip .
 
 cleanup_code: ## cleanup development environment
 	bunx extension cleanup

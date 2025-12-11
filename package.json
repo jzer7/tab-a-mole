@@ -1,66 +1,65 @@
 {
   "$schema": "https://www.schemastore.org/package.json",
-  "name": "tab-a-mole",
-  "description": "chrome extension",
   "author": "Me Yo",
-  "license": "MIT",
-  "private": true,
-  "version": "1.0.0",
+  "bugs": {
+    "url": "https://github.com/jzer7/tab-a-mole/issues"
+  },
+  "description": "chrome extension",
+  "devDependencies": {
+    "@eslint/config-inspector": "^1.4.2",
+    "@eslint/css": "^0.14.1",
+    "@eslint/js": "^9.39.1",
+    "@eslint/json": "^0.14.0",
+    "@eslint/markdown": "^7.5.1",
+    "@types/bun": "^1.3.4",
+    "@types/chrome": "^0.1.32",
+    "chrome-types": "^0.1.394",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "extension": "^2.1.3",
+    "globals": "^16.5.0",
+    "husky": "^9.1.7",
+    "jsdom": "^27.2.0",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.48.1"
+  },
+  "homepage": "https://github.com/jzer7/tab-a-mole#readme",
   "keywords": [
-    "chrome-extension"
+    "chrome-extension",
+    "tab-manager"
   ],
-  "type": "module",
+  "license": "MIT",
+  "name": "tab-a-mole",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jzer7/tab-a-mole.git"
   },
-  "bugs": {
-    "url": "https://github.com/jzer7/tab-a-mole/issues"
-  },
-  "homepage": "https://github.com/jzer7/tab-a-mole#readme",
   "scripts": {
-    "dev": "extension dev",
+    "dev": "extension dev --browser chrome",
+    "dev:bun": "bun dev",
     "start": "extension start --browser chrome",
-    "build": "extension build --browser chrome",
-    "preview": "extension preview",
-    "package": "extension build --zip",
-    "prettier": "prettier **/*.{md,html,json}",
-    "prettier:fix": "prettier **/*.{md,html,json} -w",
+    "format": "prettier **/*.{md,html,json}",
+    "format:fix": "prettier **/*.{md,html,json} -w",
+    "build:bun": "bun build",
     "lint": "eslint '**/*.js'",
     "lint:fix": "eslint '**/*.js' --fix",
+    "build": "extension build --browser chrome",
+    "package": "extension build --zip",
     "prepare": "husky",
-    "dev:bun": "bun dev",
-    "build:bun": "bun build"
+    "preview": "extension preview"
   },
-  "devDependencies": {
-    "@eslint/config-inspector": "^1.3.0",
-    "@eslint/css": "^0.11.1",
-    "@eslint/js": "^9.36.0",
-    "@eslint/json": "^0.13.2",
-    "@eslint/markdown": "^7.3.0",
-    "@types/bun": "latest",
-    "@types/chrome": "^0.1.12",
-    "chrome-types": "^0.1.377",
-    "eslint": "^9.36.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "extension": "^2.1.3",
-    "globals": "^16.4.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.0",
-    "prettier": "^3.6.2",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.1"
-  },
+  "type": "module",
+  "version": "1.0.0",
   "lint-staged": {
+    "**/*.{css,html,json,md}": [
+      "prettier --write"
+    ],
     "**/*.{js,cjs,mjs,ts}": [
       "eslint --fix"
-    ],
-    "**/*.{md,html,json}": [
-      "prettier --write"
     ]
-  },
-  "dependencies": {
-    "jsdom": "^27.2.0"
   }
 }

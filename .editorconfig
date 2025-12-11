@@ -1,4 +1,3 @@
-# top-most EditorConfig file
 root = true
 
 [*]
@@ -8,50 +7,38 @@ end_of_line = lf
 indent_size = 2
 indent_style = space
 
-insert_final_newline = false
-
-trim_trailing_whitespace = false
+insert_final_newline = true
+trim_trailing_whitespace = true
 
 [*.{bash,sh,zsh}]
 indent_size = 4
-indent_style = space
-insert_final_newline = true
 max_line_length = 80
-trim_trailing_whitespace = false
 
 [*.css]
 indent_size = 2
-indent_style = space
-insert_final_newline = true
 max_line_length = 120
-trim_trailing_whitespace = true
 
 [*.html]
 indent_size = 2
-indent_style = space
-insert_final_newline = true
 max_line_length = 120
-trim_trailing_whitespace = true
 
-[*.js]
+[*.{js,mjs,ts}]
 indent_size = 2
-indent_style = space
-insert_final_newline = true
 max_line_length = 90
-trim_trailing_whitespace = true
 
 [*.json]
 indent_size = 2
-trim_trailing_whitespace = true
+max_line_length = unset
+
+[{Makefile*,*.mk}]
+indent_size = unset
+indent_style = tab
 
 [*.md]
 indent_size = 2
-indent_style = space
-insert_final_newline = true
 max_line_length = 90
 trim_trailing_whitespace = false
+x-soft-wrap-text = true
 
-[{Makefile*,*.mk}]
-indent_size = 8
-indent_style = tab
-insert_final_newline = true
+[*.{yaml,yml}]
+indent_size = 2

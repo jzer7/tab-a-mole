@@ -1,7 +1,7 @@
 // tests/popup-utils.test.js
 
 import { describe, it, expect, beforeEach, vi } from 'bun:test';
-import { renderTabGroups } from '../popup/popup-utils';
+import { renderTabGroups, type Callbacks, type Group } from '../popup/popup-utils';
 
 // Setup jsdom for DOM APIs
 import { JSDOM } from 'jsdom';
@@ -39,13 +39,13 @@ describe('renderTabGroups', () => {
   let anchor: HTMLElement,
     groupTemplate: HTMLTemplateElement,
     itemTemplate: HTMLTemplateElement,
-    callbacks: any;
+    callbacks: Callbacks;
 
   beforeEach(() => {
     // Set up jsdom global environment
     const dom = new JSDOM(`<!DOCTYPE html><body></body>`);
-    globalThis.window = dom.window as any;
-    globalThis.document = dom.window.document as any;
+    globalThis.window = dom.window as unknown as Window & typeof globalThis;
+    globalThis.document = dom.window.document;
 
     // Set up DOM anchor
     anchor = document.createElement('div');
@@ -68,7 +68,7 @@ describe('renderTabGroups', () => {
   });
 
   it('renders groups and tabs, and wires up callbacks', () => {
-    const groups = [
+    const groups: Group[] = [
       {
         criteria: 'example.com',
         tabInfos: [
@@ -77,6 +77,7 @@ describe('renderTabGroups', () => {
             url: 'https://example.com',
             title: 'Example',
             pinned: false,
+            lastAccessed: Date.now(),
             elapsed: 1000
           },
           {
@@ -84,6 +85,7 @@ describe('renderTabGroups', () => {
             url: 'https://example.com/page',
             title: 'Page',
             pinned: true,
+            lastAccessed: Date.now(),
             elapsed: 2000
           }
         ]
@@ -96,19 +98,14 @@ describe('renderTabGroups', () => {
             url: 'https://test.com',
             title: 'Test',
             pinned: false,
+            lastAccessed: Date.now(),
             elapsed: 3000
           }
         ]
       }
     ];
 
-    renderTabGroups(
-      groups as any,
-      anchor,
-      groupTemplate,
-      itemTemplate,
-      callbacks
-    );
+    renderTabGroups(groups, anchor, groupTemplate, itemTemplate, callbacks);
 
     // Check that two groups were rendered
     expect(anchor.querySelectorAll('.tab-group').length).toBe(2);
@@ -126,9 +123,7 @@ describe('renderTabGroups', () => {
 
     // Simulate clicking group-level buttons
     const firstGroup = anchor.querySelector('.tab-group');
-    (
-      firstGroup!.querySelector('.tab-group__goto-first') as HTMLElement
-    ).click();
+    (firstGroup!.querySelector('.tab-group__goto-first') as HTMLElement).click();
     (firstGroup!.querySelector('.tab-group__close-all') as HTMLElement).click();
 
     expect(callbacks.onGoToFirstTab).toHaveBeenCalled();

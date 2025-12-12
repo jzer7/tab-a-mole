@@ -76,10 +76,7 @@ function groupTabsDispatch(config: GroupingRequest = {}) {
 // Listen for a message from the popup
 chrome.runtime.onMessage.addListener(function (request) {
   if (request.message === msgType.GROUP_TABS_CMD) {
-    console.debug(
-      'Background received grouping request:',
-      JSON.stringify(request)
-    );
+    console.debug('Background received grouping request:', JSON.stringify(request));
     groupTabsDispatch({
       matchBy: request.matchBy,
       titleThreshold: request.titleThreshold,

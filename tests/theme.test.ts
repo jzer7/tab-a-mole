@@ -2,15 +2,14 @@ import { describe, it, expect, beforeEach, jest } from 'bun:test';
 import { applyTheme } from '../scripts/theme-utils';
 
 describe('applyTheme', () => {
-  let root: any;
-  let prefersDark: any;
+  let root: HTMLElement;
+  let prefersDark: boolean;
 
   beforeEach(() => {
-    root = {
-      setAttribute: jest.fn(),
-      style: {}
-    };
-    prefersDark = { matches: false };
+    // Create a mock HTMLElement
+    root = document.createElement('div');
+    jest.spyOn(root, 'setAttribute');
+    prefersDark = false;
   });
 
   it('applies light theme', () => {
@@ -26,7 +25,7 @@ describe('applyTheme', () => {
   });
 
   it('applies system theme as dark if prefersDark is true', () => {
-    prefersDark.matches = true;
+    prefersDark = true;
     applyTheme('system', root, prefersDark);
     expect(root.setAttribute).toHaveBeenCalledWith('data-theme', 'dark');
     expect(root.style.colorScheme).toBe('dark');

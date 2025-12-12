@@ -54,9 +54,7 @@ describe('groupTabsByTitle', () => {
     const found = groups.some(
       (g) =>
         g.tabs.some((t) => t.title === 'Spatial query updates') &&
-        g.tabs.some(
-          (t) => t.title === 'Example of Temporal and Spatial updates'
-        )
+        g.tabs.some((t) => t.title === 'Example of Temporal and Spatial updates')
     );
     expect(found).toBe(true);
   });

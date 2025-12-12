@@ -12,7 +12,7 @@ export interface TabInfo {
   url: string;
   title: string;
   pinned: boolean;
-  lastAccessed: number;
+  lastAccessed?: number;
   elapsed?: number;
 }
 

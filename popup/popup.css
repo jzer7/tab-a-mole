@@ -33,16 +33,19 @@
   --color-border: #ccc;
   --color-border-group: #e0e0e0;
   --color-border-list: #ececec;
+
   --color-primary: #0078d4;
   --color-primary-dark: #005fa3;
   --color-primary-bg: #e5f1fb;
+
   --color-danger: #d9534f;
   --color-danger-dark: #b52b27;
   --color-danger-bg: #f9e5e5;
+
   --color-text: #222;
   --color-text-muted: #888;
   --color-text-on-primary: #fff;
-  --color-monospace-bg: #eef2f7;
+  --color-monospace-bg: #f5f7fa;
   --radius: 8px;
   --radius-sm: 4px;
   --radius-pill: 1em;
@@ -66,7 +69,7 @@
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip: rect(0, 0, 0, 0); /* eslint css/use-baseline: "off" */
   white-space: nowrap;
   border: 0;
 }
@@ -250,7 +253,7 @@ fieldset {
 }
 
 [hidden] {
-  display: none !important;
+  display: none !important; /* eslint css/no-important: "off" */
 }
 
 /* ======================

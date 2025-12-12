@@ -3,10 +3,7 @@
 
 console.log('before time....ts');
 
-function timeSinceAccessText(
-  lastAccessed: number,
-  now: number = Date.now()
-): string {
+function timeSinceAccessText(lastAccessed: number, now: number = Date.now()): string {
   const timeSinceAccessMs = now - lastAccessed;
   if (timeSinceAccessMs < 60000) {
     return `${Math.floor(timeSinceAccessMs / 1000)} seconds ago`;

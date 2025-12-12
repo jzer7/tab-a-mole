@@ -24,15 +24,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const currentWindowOnlyCheckbox = document.getElementById(
     'currentWindowOnly'
   ) as HTMLInputElement;
-  const httpsOnlyCheckbox = document.getElementById(
-    'httpsOnly'
-  ) as HTMLInputElement;
+  const httpsOnlyCheckbox = document.getElementById('httpsOnly') as HTMLInputElement;
   const findDuplicatesButton = document.getElementById(
     'findDuplicates'
   ) as HTMLButtonElement;
-  const duplicateListDiv = document.getElementById(
-    'duplicateList'
-  ) as HTMLElement;
+  const duplicateListDiv = document.getElementById('duplicateList') as HTMLElement;
 
   // Callbacks to be passed to rendering functions
   // These functions will be called when the user interacts with
@@ -71,9 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.debug('Current active tab:', currentTabId);
 
         // Is the current tab in the group?
-        const currentTabInGroup = tabInfos.some(
-          (tabInfo) => tabInfo.id === currentTabId
-        );
+        const currentTabInGroup = tabInfos.some((tabInfo) => tabInfo.id === currentTabId);
         console.debug('Is current tab in group?', currentTabInGroup);
 
         // If so, we will keep it open and close the rest.
@@ -134,12 +128,8 @@ document.addEventListener('DOMContentLoaded', function () {
     radio.addEventListener('change', function (event) {
       const target = event.target as HTMLInputElement;
       const value = target.value;
-      const httpsOnlyCheckbox = document.getElementById(
-        'httpsOnly'
-      ) as HTMLInputElement;
-      const exampleUrlDiv = document.getElementById(
-        'exampleUrl'
-      ) as HTMLElement;
+      const httpsOnlyCheckbox = document.getElementById('httpsOnly') as HTMLInputElement;
+      const exampleUrlDiv = document.getElementById('exampleUrl') as HTMLElement;
       if (value === 'url') {
         // searchByUrlDiv.hidden = false;
         matchLevelSlider.disabled = false;
@@ -231,9 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
       scope: scope,
       httpsOnly: httpsOnly,
       matchBy: (
-        document.querySelector(
-          'input[name="match-by"]:checked'
-        ) as HTMLInputElement
+        document.querySelector('input[name="match-by"]:checked') as HTMLInputElement
       ).value
     };
     console.debug('Popup sending grouping request:', payload);

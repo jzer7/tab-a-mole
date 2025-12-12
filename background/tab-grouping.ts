@@ -102,10 +102,7 @@ function groupTabsByTitle(
  *
  * returns an array of tab groups. A tab group is an object {groupingCriteria, Array of tabs}
  */
-function groupTabsByUrl(
-  tabs: chrome.tabs.Tab[],
-  config: UrlGroupingConfig
-): TabGroup[] {
+function groupTabsByUrl(tabs: chrome.tabs.Tab[], config: UrlGroupingConfig): TabGroup[] {
   const matchLevel = config.matchLevel || urlScope.FULL;
   const httpsOnly = config.httpsOnly || false;
   const includeParseErrors = config.includeParseErrors ?? true;

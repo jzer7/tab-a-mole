@@ -73,6 +73,7 @@ export default defineConfig([
       'eslint.config.js',
       '.repo/**/*',
       '.github/**/*',
+      '.specstory/**/*',
       '.vscode/*',
       '**/build/**/*',
       '**/coverage/**/*',

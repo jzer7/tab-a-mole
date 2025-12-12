@@ -9,21 +9,19 @@ setup: ## Set up the development environment
 
 .PHONY: format
 format:  ## consistent formatting of JS, HTML and CSS files
-	bun run prettier
+	bun run format:check
 
 .PHONY: check
 check: ## Run all static checks
-	bun run format:check
 	bun run lint
 
 .PHONY: test
 test: ## Run all test (aka dynamic checks)
-	bun run test
+	bun test
 
 .PHONY: images
 images: ## Build extension's images
-	$(MAKE) -C images build
-	# bun run build:images
+	./images/prepare-icons.sh
 
 .PHONY: build
 build: images ## Build extension's images and code
@@ -39,6 +37,7 @@ update: ## Update dependencies
 	bun update --latest --no-progress --dry-run
 
 .PHONY: all
+all: prepare build
 
 # ----------------------------------------------------------
 # Image Processing Commands
@@ -53,7 +52,7 @@ cleanup_images: ## cleanup processed images
 # Development and Build Commands
 # ----------------------------------------------------------
 
-prepare: lint format
+prepare: format check
 
 lint:  ## review code for Javascript issues
 	bun run lint

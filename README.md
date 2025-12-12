@@ -1,8 +1,10 @@
 # Tab-a-mole
 
+[![build](https://github.com/jzer7/tab-a-mole/actions/workflows/build.yml/badge.svg)](https://github.com/jzer7/tab-a-mole/actions/workflows/build.yml)
+
 "Tab-a-mole" is a Chrome extension that helps you find and manage duplicate tabs.
 
-This project uses ES6.
+This project is coded in TypeScript and uses Bun to manage the environment.
 
 ## Important Files
 

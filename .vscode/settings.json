@@ -15,16 +15,20 @@
     },
     "json.schemas": [
         {
-            "fileMatch": [ "/.prettierrc.json" ],
-            "url": "https://www.schemastore.org/prettierrc.json",
-        },
-        {
             "fileMatch": ["manifest.json"],
             "url": "https://www.schemastore.org/chrome-manifest.json"
         },
         {
             "fileMatch": ["/package.json"],
             "url": "https://www.schemastore.org/package.json"
+        },
+        {
+            "fileMatch": ["/.prettierrc.json"],
+            "url": "https://www.schemastore.org/prettierrc.json"
+        },
+        {
+            "fileMatch": ["tsconfig.json"],
+            "url": "https://www.schemastore.org/tsconfig.json"
         }
     ],
     "search.useIgnoreFiles": true

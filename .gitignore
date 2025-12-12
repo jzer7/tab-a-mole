@@ -172,5 +172,6 @@ extension-env.d.ts
 # PROJECT
 # ----------------------------------------------------------
 
+.specstory
 vendors/
 

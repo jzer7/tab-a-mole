@@ -1,5 +1,7 @@
 .github
+.specstory
 .vscode
+*.lock
 **/*.skip
 **/dist
 build

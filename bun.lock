@@ -12,18 +12,18 @@
         "@eslint/markdown": "^7.5.1",
         "@types/bun": "^1.3.4",
         "@types/chrome": "^0.1.32",
-        "chrome-types": "^0.1.394",
+        "chrome-types": "^0.1.401",
         "eslint": "^9.39.1",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.4",
         "extension": "^2.1.3",
         "globals": "^16.5.0",
         "husky": "^9.1.7",
-        "jsdom": "^27.2.0",
+        "jsdom": "^27.3.0",
         "lint-staged": "^16.2.7",
         "prettier": "^3.7.4",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.48.1",
+        "typescript-eslint": "^8.49.0",
       },
     },
   },
@@ -586,7 +586,7 @@
 
     "chrome-trace-event": ["chrome-trace-event@1.0.4", "", {}, "sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ=="],
 
-    "chrome-types": ["chrome-types@0.1.396", "", {}, "sha512-gIW2FJTdD+0jyPaeLyt3vhad2slFkEGDcDZV+NA4e6RfPW3hhgIjrbYjUtOY6gYaeWr2iz1z8Kb4Osfbk7+nVQ=="],
+    "chrome-types": ["chrome-types@0.1.401", "", {}, "sha512-nT/t+acgoMxWmHmT2/gwhpbgN+1CJ2tBZn5pxw9tAg5gkDu4m7wlG6HmXofmkHmqWGKI3Tgk0ixmwB/OnXLPTw=="],
 
     "cli-cursor": ["cli-cursor@5.0.0", "", { "dependencies": { "restore-cursor": "^5.0.0" } }, "sha512-aCj4O5wKyszjMmDT4tZj93kxyydN/K5zPWSCe6/0AV/AA1pqe5ZBIw0a2ZfPQV7lL5/yb5HsUreJ6UFAF1tEQw=="],
 

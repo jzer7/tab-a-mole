@@ -33,8 +33,18 @@ package: build ## Package the extension as a ZIP file for store submission
 	cp -p dist/chrome/tab-a-mole-1.0.zip .
 
 .PHONY: update
-update: ## Update dependencies
+update: update-dry-run ## Update dependencies
+	bun update --latest --no-progress
+
+.PHONY: update-dry-run
+update-dry-run: ## Update dependencies and check if they are stable
 	bun update --latest --no-progress --dry-run
+	@cp -p package.json package.json.bak
+	bun update --latest --no-progress
+	$(MAKE) format
+	$(MAKE) check
+	$(MAKE) test
+	@diff package.json package.json.bak > /dev/null && echo "\n[Makefile] There were no updates to dependencies." || echo "\n[Makefile] There were updates to dependencies. Please create a 'chore' commit."
 
 .PHONY: all
 all: prepare build

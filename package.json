@@ -13,7 +13,7 @@
     "@eslint/markdown": "^7.5.1",
     "@types/bun": "^1.3.9",
     "@types/chrome": "^0.1.37",
-    "chrome-types": "^0.1.420",
+    "chrome-types": "^0.1.422",
     "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",

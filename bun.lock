@@ -5,25 +5,25 @@
     "": {
       "name": "tab-a-mole",
       "devDependencies": {
-        "@eslint/config-inspector": "latest",
-        "@eslint/css": "latest",
-        "@eslint/js": "latest",
-        "@eslint/json": "latest",
-        "@eslint/markdown": "latest",
-        "@types/bun": "latest",
-        "@types/chrome": "latest",
-        "chrome-types": "latest",
-        "eslint": "latest",
-        "eslint-config-prettier": "latest",
-        "eslint-plugin-prettier": "latest",
-        "extension": "latest",
-        "globals": "latest",
-        "husky": "latest",
-        "jsdom": "latest",
-        "lint-staged": "latest",
-        "prettier": "latest",
-        "typescript": "latest",
-        "typescript-eslint": "latest",
+        "@eslint/config-inspector": "^1.4.2",
+        "@eslint/css": "^0.14.1",
+        "@eslint/js": "^10.0.1",
+        "@eslint/json": "^1.0.1",
+        "@eslint/markdown": "^7.5.1",
+        "@types/bun": "^1.3.10",
+        "@types/chrome": "^0.1.37",
+        "chrome-types": "^0.1.420",
+        "eslint": "^10.0.2",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.5",
+        "extension": "^3.8.7",
+        "globals": "^17.3.0",
+        "husky": "^9.1.7",
+        "jsdom": "^28.1.0",
+        "lint-staged": "^16.3.0",
+        "prettier": "^3.8.1",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.56.1",
       },
     },
   },
@@ -248,7 +248,7 @@
 
     "@types/bonjour": ["@types/bonjour@3.5.13", "", { "dependencies": { "@types/node": "*" } }, "sha512-z9fJ5Im06zvUL548KvYNecEVlA7cVDkGUi6kZusb04mpyEFKCIZJvloCcmpmLaIahDpOQGHaHmG6imtPMmPXGQ=="],
 
-    "@types/bun": ["@types/bun@1.3.9", "", { "dependencies": { "bun-types": "1.3.9" } }, "sha512-KQ571yULOdWJiMH+RIWIOZ7B2RXQGpL1YQrBtLIV3FqDcCu6FsbFUBwhdKUlCKUpS3PJDsHlJ1QKlpxoVR+xtw=="],
+    "@types/bun": ["@types/bun@1.3.10", "", { "dependencies": { "bun-types": "1.3.10" } }, "sha512-0+rlrUrOrTSskibryHbvQkDOWRJwJZqZlxrUs1u4oOoTln8+WIXBPmAuCF35SWB2z4Zl3E84Nl/D0P7803nigQ=="],
 
     "@types/chrome": ["@types/chrome@0.1.37", "", { "dependencies": { "@types/filesystem": "*", "@types/har-format": "*" } }, "sha512-IJE4ceuDO7lrEuua7Pow47zwNcI8E6qqkowRP7aFPaZ0lrjxh6y836OPqqkIZeTX64FTogbw+4RNH0+QrweCTQ=="],
 
@@ -430,7 +430,7 @@
 
     "buffer-from": ["buffer-from@1.1.2", "", {}, "sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ=="],
 
-    "bun-types": ["bun-types@1.3.9", "", { "dependencies": { "@types/node": "*" } }, "sha512-+UBWWOakIP4Tswh0Bt0QD0alpTY8cb5hvgiYeWCMet9YukHbzuruIEeXC2D7nMJPB12kbh8C7XJykSexEqGKJg=="],
+    "bun-types": ["bun-types@1.3.10", "", { "dependencies": { "@types/node": "*" } }, "sha512-tcpfCCl6XWo6nCVnpcVrxQ+9AYN1iqMIzgrSKYMB/fjLtV2eyAVEg7AxQJuCq/26R6HpKWykQXuSOq/21RYcbg=="],
 
     "bundle-name": ["bundle-name@4.1.0", "", { "dependencies": { "run-applescript": "^7.0.0" } }, "sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q=="],
 

@@ -59,6 +59,16 @@
           <button id="findDuplicates" type="button" aria-label="Find Duplicates">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
           </button>
+          <button
+            id="openSidebarPreview"
+            type="button"
+            class="button-secondary"
+            disabled
+            aria-disabled="true"
+            title="Sidebar mode is coming in a future update"
+          >
+            Sidebar (Soon)
+          </button>
         </div>
       </fieldset>
 
@@ -75,6 +85,7 @@
         <div class="results__msg" id="loadingMessage" hidden aria-live="polite">
           Loading...
         </div>
+        <div class="results__msg" id="errorMessage" hidden aria-live="polite"></div>
         <div class="results__msg" id="noDuplicatesMessage" hidden aria-live="polite">
           No duplicate tabs found. 😎
         </div>

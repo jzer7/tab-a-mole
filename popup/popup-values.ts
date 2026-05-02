@@ -9,6 +9,7 @@ export type MsgType = (typeof msgType)[keyof typeof msgType];
 export const resultState = {
   START: 'startSearch',
   LOADING: 'loadingMessage',
+  ERROR: 'errorMessage',
   NO_DUPLICATES: 'noDuplicatesMessage',
   DUPLICATES_FOUND: 'duplicateList'
 } as const;

@@ -2,8 +2,10 @@
  * css for popup.html
  * ------------------------------------------------------ */
 
-/* HACK: until I find a way to bundle fonts locally */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+/* Local Font Awesome assets */
+@import url('../assets/fontawesome/css/fontawesome.min.css');
+@import url('../assets/fontawesome/css/solid.min.css');
+@import url('../assets/fontawesome/css/regular.min.css');
 
 /* ======================
    Dark Mode Support

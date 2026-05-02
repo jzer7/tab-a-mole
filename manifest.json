@@ -5,7 +5,7 @@
   "version": "1.0.1",
   "description": "Helps you manage your large collection of tabs.",
   "homepage_url": "https://github.com/jzer7/tab-a-mole",
-  "permissions": ["storage", "tabs", "tabGroups"],
+  "permissions": ["storage", "tabs", "tabGroups", "sidePanel"],
   "background": {
     "service_worker": "background/background.ts"
   },
@@ -15,6 +15,9 @@
     "default_icon": {
       "48": "images/banned_stack-48.png"
     }
+  },
+  "side_panel": {
+    "default_path": "sidepanel/sidepanel.html"
   },
   "options_ui": {
     "page": "options_ui/options.html",

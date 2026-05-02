@@ -1,0 +1,11 @@
+@import url('../popup/popup.css');
+
+body {
+  min-width: 0;
+  max-width: none;
+  width: 100%;
+}
+
+main {
+  max-width: none;
+}

@@ -3,12 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tab-a-mole</title>
-    <!-- script
-      src="https://kit.fontawesome.com/482152a765.js"
-      crossorigin="anonymous"
-    script -->
-    <link rel="stylesheet" href="popup.css" />
+    <title>Tab-a-mole Sidebar</title>
+    <link rel="stylesheet" href="sidepanel.css" />
     <script type="module" src="../scripts/theme.ts" defer></script>
   </head>
   <body>
@@ -60,12 +56,12 @@
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
           </button>
           <button
-            id="openSidebarPreview"
+            id="closeSidebar"
             type="button"
             class="button-secondary"
-            title="Open Tab-a-mole in the sidebar"
+            title="Close sidebar"
           >
-            Open Sidebar
+            Close
           </button>
         </div>
       </fieldset>
@@ -88,7 +84,6 @@
           No duplicate tabs found. 😎
         </div>
         <div class="results__msg" id="duplicateList" aria-live="polite">
-          <!-- Dedicated aria-live region for dynamic result updates -->
           <div
             id="resultsLiveRegion"
             class="sr-only"
@@ -99,7 +94,6 @@
       </section>
     </main>
 
-    <!-- Templates for dynamic rendering -->
     <template id="tab-group-template">
       <section class="tab-group" role="region" aria-label="Duplicate Tab Group">
         <header class="tab-group__header">
@@ -147,6 +141,6 @@
       </li>
     </template>
 
-    <script type="module" src="popup.ts" defer></script>
+    <script type="module" src="sidepanel.ts" defer></script>
   </body>
 </html>

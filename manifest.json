@@ -5,7 +5,7 @@
   "version": "1.0.1",
   "description": "Helps you manage your large collection of tabs.",
   "homepage_url": "https://github.com/jzer7/tab-a-mole",
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "tabs", "tabGroups"],
   "background": {
     "service_worker": "background/background.ts"
   },

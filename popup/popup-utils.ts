@@ -11,6 +11,14 @@ export interface TabInfo {
   id: number;
   url: string;
   title: string;
+  windowId?: number;
+  groupId?: number;
+  tabGroup?: {
+    id: number;
+    title: string;
+    color: string;
+    collapsed: boolean;
+  };
   pinned: boolean;
   lastAccessed?: number;
   elapsed?: number;
@@ -134,6 +142,21 @@ function renderTabGroups(
       const titleSpan = li.querySelector('.tab-title') as HTMLElement;
       titleSpan.textContent = tabinfo.title;
       titleSpan.id = tabId;
+
+      const groupChip = li.querySelector('.tab-group-chip') as HTMLElement | null;
+      if (groupChip) {
+        const grouped = typeof tabinfo.groupId === 'number' && tabinfo.groupId >= 0;
+        if (grouped) {
+          const groupLabel = tabinfo.tabGroup?.title?.trim() || `#${tabinfo.groupId}`;
+          groupChip.hidden = false;
+          groupChip.textContent = groupLabel;
+          groupChip.setAttribute('data-color', tabinfo.tabGroup?.color || 'grey');
+        } else {
+          groupChip.hidden = true;
+          groupChip.textContent = '';
+          groupChip.removeAttribute('data-color');
+        }
+      }
 
       if (tabinfo.elapsed) {
         console.debug('Rendering tab:', tabinfo.title, 'with elapsed:', tabinfo.elapsed);

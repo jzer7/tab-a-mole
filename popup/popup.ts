@@ -16,6 +16,7 @@ import {
 
 document.addEventListener('DOMContentLoaded', function () {
   console.info('Popup script loaded');
+  window.scrollTo(0, 0);
 
   const matchLevelSlider = document.getElementById(
     'matchLevelSlider'

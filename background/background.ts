@@ -17,6 +17,31 @@ interface GroupingRequest extends TitleGroupingConfig, UrlGroupingConfig {
   scope?: WindowScope;
 }
 
+interface TabGroupSummary {
+  id: number;
+  title: string;
+  color: string;
+  collapsed: boolean;
+}
+
+function fetchTabGroupSummary(groupId: number): Promise<TabGroupSummary | undefined> {
+  return new Promise((resolve) => {
+    chrome.tabGroups.get(groupId, (tabGroup) => {
+      if (chrome.runtime.lastError || !tabGroup) {
+        resolve(undefined);
+        return;
+      }
+
+      resolve({
+        id: tabGroup.id,
+        title: tabGroup.title || '',
+        color: tabGroup.color,
+        collapsed: tabGroup.collapsed
+      });
+    });
+  });
+}
+
 /**
  * Groups tabs and sends them to the popup via a Chrome runtime message.
  *
@@ -36,40 +61,65 @@ function groupTabsDispatch(config: GroupingRequest = {}) {
   }
 
   chrome.tabs.query(query, function (selectedTabs) {
-    let matchedTabGroups: import('./tab-grouping').TabGroup[] = [];
+    const dispatchResults = async () => {
+      const matchedTabGroups: import('./tab-grouping').TabGroup[] =
+        matchBy === 'title'
+          ? // Group by title similarity
+            groupTabsByTitle(selectedTabs, config)
+          : // Group by URL
+            groupTabsByUrl(selectedTabs, config);
 
-    if (matchBy === 'title') {
-      // Group by title similarity
-      matchedTabGroups = groupTabsByTitle(selectedTabs, config);
-    } else {
-      // Group by URL
-      matchedTabGroups = groupTabsByUrl(selectedTabs, config);
-    }
+      // Build a tab-group lookup so popup rendering can show richer context.
+      const groupIds = new Set<number>();
+      matchedTabGroups.forEach((group) => {
+        group.tabs.forEach((tab) => {
+          if (typeof tab.groupId === 'number' && tab.groupId >= 0) {
+            groupIds.add(tab.groupId);
+          }
+        });
+      });
 
-    // matchedTabGroups is an array of tab groups.
-    // A tab group is an object {groupingCriteria, Array of tabs}
+      const tabGroupSummaries = await Promise.all(
+        [...groupIds].map((groupId) => fetchTabGroupSummary(groupId))
+      );
+      const tabGroupSummaryById = new Map<number, TabGroupSummary>();
+      tabGroupSummaries.forEach((summary) => {
+        if (summary) {
+          tabGroupSummaryById.set(summary.id, summary);
+        }
+      });
 
-    // Transform groups to only include necessary tab info
-    // Replaces the Array of tabs with an Array of tabInfos.
-    // A tabInfo is an object with selected properties of a tab.
-    const cleanupMatchedTabGroups = matchedTabGroups.map((group) => ({
-      criteria: group.groupingCriteria, // matchBy === 'title' ? group.tabs[0].title : group.tabs[0].url,
-      tabInfos: group.tabs.map((tab) => ({
-        id: tab.id,
-        url: tab.url,
-        title: tab.title,
-        windowId: tab.windowId,
-        groupId: tab.groupId,
-        lastAccessed: tab.lastAccessed,
-        pinned: tab.pinned
-      }))
-    }));
+      // matchedTabGroups is an array of tab groups.
+      // A tab group is an object {groupingCriteria, Array of tabs}
 
-    console.debug('Background sending grouped tabs:', cleanupMatchedTabGroups);
-    chrome.runtime.sendMessage({
-      message: msgType.GROUP_TABS_ANS,
-      matched_tab_groups: cleanupMatchedTabGroups
-    });
+      // Transform groups to only include necessary tab info
+      // Replaces the Array of tabs with an Array of tabInfos.
+      // A tabInfo is an object with selected properties of a tab.
+      const cleanupMatchedTabGroups = matchedTabGroups.map((group) => ({
+        criteria: group.groupingCriteria, // matchBy === 'title' ? group.tabs[0].title : group.tabs[0].url,
+        tabInfos: group.tabs.map((tab) => ({
+          id: tab.id,
+          url: tab.url,
+          title: tab.title,
+          windowId: tab.windowId,
+          groupId: tab.groupId,
+          tabGroup:
+            typeof tab.groupId === 'number' && tab.groupId >= 0
+              ? tabGroupSummaryById.get(tab.groupId)
+              : undefined,
+          lastAccessed: tab.lastAccessed,
+          pinned: tab.pinned
+        }))
+      }));
+
+      console.debug('Background sending grouped tabs:', cleanupMatchedTabGroups);
+      chrome.runtime.sendMessage({
+        message: msgType.GROUP_TABS_ANS,
+        matched_tab_groups: cleanupMatchedTabGroups
+      });
+    };
+
+    void dispatchResults();
   });
 }
 

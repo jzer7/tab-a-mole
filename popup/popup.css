@@ -2,6 +2,9 @@
  * css for popup.html
  * ------------------------------------------------------ */
 
+/* HACK: until I find a way to bundle fonts locally */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
 /* ======================
    Dark Mode Support
    ====================== */
@@ -27,6 +30,7 @@
    Design Tokens (CSS Custom Properties)
    ====================== */
 :root {
+  --popup-target-width: 780px;
   --color-bg: #f8f9fa;
   --color-bg-panel: #fff;
   --color-bg-group: #fafbfc;
@@ -59,6 +63,10 @@
   --transition: background 0.2s;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 /* ======================
    Screen reader
    ====================== */
@@ -77,13 +85,23 @@
 /* ======================
    Layout & Typography
    ====================== */
+html,
 body {
-  min-width: 400px;
-  max-width: 600px;
+  width: var(--popup-target-width);
+  min-width: var(--popup-target-width);
+  max-width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
   margin: 0;
+  padding: 0;
+}
+
+body {
   font-family: var(--font-main);
   background: var(--color-bg);
   color: var(--color-text);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 header {
@@ -93,10 +111,12 @@ header {
 }
 
 main {
-  max-width: 600px;
+  width: 100%;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
   padding: 0 1rem 1rem 1rem;
+  overflow: visible;
 }
 
 /* ======================
@@ -309,6 +329,65 @@ fieldset {
 .tab-title {
   flex: 1 1 auto;
   font-weight: 500;
+}
+
+.tab-group-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  padding: 0.1em 0.6em;
+  font-size: 0.78em;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  background: #eceff3;
+  color: #49515c;
+}
+
+.tab-group-chip[data-color='grey'] {
+  background: #eceff3;
+  color: #49515c;
+}
+
+.tab-group-chip[data-color='blue'] {
+  background: #d8ebff;
+  color: #075da8;
+}
+
+.tab-group-chip[data-color='red'] {
+  background: #ffe1e0;
+  color: #ad2720;
+}
+
+.tab-group-chip[data-color='yellow'] {
+  background: #fff2c7;
+  color: #8a6600;
+}
+
+.tab-group-chip[data-color='green'] {
+  background: #daf5e2;
+  color: #1a7f44;
+}
+
+.tab-group-chip[data-color='pink'] {
+  background: #ffe0ef;
+  color: #a23b69;
+}
+
+.tab-group-chip[data-color='purple'] {
+  background: #ebddff;
+  color: #6640a3;
+}
+
+.tab-group-chip[data-color='cyan'] {
+  background: #d8f7fb;
+  color: #0f7180;
+}
+
+.tab-group-chip[data-color='orange'] {
+  background: #ffe7d2;
+  color: #a64f00;
 }
 
 .tab-elapsed {

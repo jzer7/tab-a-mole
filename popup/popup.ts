@@ -1,12 +1,14 @@
 /* popup.ts */
 
 import { initTabSearch } from '../scripts/tab-search-controller';
+import { setupThemeToggle } from '../scripts/theme-toggle';
 
 document.addEventListener('DOMContentLoaded', function () {
   console.info('Popup loaded');
   window.scrollTo(0, 0);
 
   const { showSearchError } = initTabSearch();
+  setupThemeToggle();
 
   /* -----------------------------------------------
      Popup-specific: sidebar button

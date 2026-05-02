@@ -8,8 +8,17 @@
     <script type="module" src="../scripts/theme.ts" defer></script>
   </head>
   <body>
-    <header>
+    <header class="popup-header">
       <h1>Tab-a-mole</h1>
+      <button
+        id="themeToggle"
+        type="button"
+        class="theme-toggle"
+        title="Switch to dark theme"
+        aria-label="Switch to dark theme"
+      >
+        <i class="fa-solid fa-moon" aria-hidden="true"></i>
+      </button>
     </header>
     <main>
       <fieldset class="controls" aria-labelledby="controls-legend">

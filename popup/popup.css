@@ -11,21 +11,53 @@
    Dark Mode Support
    ====================== */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #181a1b;
-    --color-bg-panel: #232527;
-    --color-bg-group: #23272a;
-    --color-border: #33383b;
-    --color-border-group: #2c2f33;
-    --color-border-list: #23272a;
+  :root:not([data-theme='light']) {
+    --color-bg: #1c1e1f;
+    --color-bg-panel: #2a2d30;
+    --color-bg-group: #272a2d;
+    --color-border: #4a4f54;
+    --color-border-group: #3d4146;
+    --color-border-list: #363a3d;
     --color-primary: #4ea1f7;
     --color-primary-dark: #2176b6;
-    --color-primary-bg: #1a2633;
-    --color-text: #f3f6fa;
-    --color-text-muted: #b0b8c1;
+    --color-primary-bg: #1b2d42;
+    --color-text: #e8ecf0;
+    --color-text-muted: #9aa3ae;
     --color-text-on-primary: #fff;
-    --color-monospace-bg: #23272a;
+    --color-monospace-bg: #272a2d;
   }
+}
+
+:root[data-theme='dark'] {
+  --color-bg: #1c1e1f;
+  --color-bg-panel: #2a2d30;
+  --color-bg-group: #272a2d;
+  --color-border: #4a4f54;
+  --color-border-group: #3d4146;
+  --color-border-list: #363a3d;
+  --color-primary: #4ea1f7;
+  --color-primary-dark: #2176b6;
+  --color-primary-bg: #1b2d42;
+  --color-text: #e8ecf0;
+  --color-text-muted: #9aa3ae;
+  --color-text-on-primary: #fff;
+  --color-monospace-bg: #272a2d;
+}
+
+:root[data-theme='light'] {
+  --color-bg: #f8f9fa;
+  --color-bg-panel: #fff;
+  --color-bg-group: #fafbfc;
+  --color-border: #ccc;
+  --color-border-group: #e0e0e0;
+  --color-border-list: #ececec;
+  --color-primary: #0078d4;
+  --color-primary-dark: #005fa3;
+  --color-primary-bg: #e5f1fb;
+  --color-text: #222;
+  --color-text-muted: #888;
+  --color-text-on-primary: #fff;
+  --color-monospace-bg: #f5f7fa;
 }
 
 /* ======================

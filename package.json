@@ -46,15 +46,15 @@
     "format:check": "prettier --check .",
     "format:fix": "prettier --write **/*.{md,html,json}",
     "build:bun": "bun build",
-    "lint": "eslint '**/*.js'",
-    "lint:fix": "eslint --fix '**/*.js'",
+    "lint": "eslint '**/*.ts'",
+    "lint:fix": "eslint --fix '**/*.ts'",
     "build": "extension build --browser chrome",
     "package": "extension build --zip",
     "prepare": "husky",
     "preview": "extension preview"
   },
   "type": "module",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "lint-staged": {
     "**/*.{css,html,json,md}": [
       "prettier --write"

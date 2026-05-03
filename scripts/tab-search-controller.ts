@@ -22,7 +22,7 @@ const storageKeys = {
 } as const;
 
 export interface TabSearchController {
-  showSearchError: (message: string) => void;
+  showSearchError: (_message: string) => void;
   triggerSearch: () => void;
 }
 

@@ -13,7 +13,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -25,7 +25,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint, test]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install binary dependencies
         run: |
           if [ "$RUNNER_OS" = "Linux" ]

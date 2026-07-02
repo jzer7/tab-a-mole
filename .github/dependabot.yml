@@ -1,11 +1,25 @@
+---
 version: 2
 updates:
-  - package-ecosystem: bun
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: weekly
-  - package-ecosystem: github-actions
+  - package-ecosystem: "bun"
     directory: "/"
+    target-branch: "main"
     schedule:
-      interval: weekly
-    target-branch: main
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "javascript"
+  - package-ecosystem: "github-actions"
+    directory: "/.github/workflows"
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"

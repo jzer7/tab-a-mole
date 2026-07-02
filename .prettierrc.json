@@ -1,11 +1,18 @@
 {
   "$schema": "https://www.schemastore.org/prettierrc.json",
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "proseWrap": "preserve",
   "semi": true,
   "singleQuote": true,
   "trailingComma": "none",
-  "bracketSpacing": true,
-  "arrowParens": "always",
   "overrides": [
+    {
+      "files": [".devcontainer/*.json", ".vscode/*.json"],
+      "options": {
+        "trailingComma": "es5"
+      }
+    },
     {
       "files": "*.md",
       "options": {

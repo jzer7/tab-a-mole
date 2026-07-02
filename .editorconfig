@@ -8,11 +8,15 @@ indent_size = 2
 indent_style = space
 
 insert_final_newline = true
+max_line_length = 100
+spelling_lan = en-US
 trim_trailing_whitespace = true
-max_line_length = 80
 
 [*.{bash,sh,zsh}]
 indent_size = 4
+max_line_length = 80
+trim_trailing_whitespace = false
+
 
 [*.css]
 indent_size = 2
@@ -26,19 +30,29 @@ max_line_length = 90
 indent_size = 2
 max_line_length = 90
 
-[*.json]
+[*.{json,jsonc,json5}]
 indent_size = 2
 max_line_length = unset
+
+[**/.{devcontainer,vscode}/*.json]
+indent_size = 4
+max_line_length = unset
+
+[LICENSE]
+insert_final_newline = false
 
 [{Makefile*,*.mk}]
 indent_size = unset
 indent_style = tab
+trim_trailing_whitespace = false
 
 [*.md]
-indent_size = 2
 max_line_length = 90
 trim_trailing_whitespace = false
 x-soft-wrap-text = true
 
+[*.toml]
+indent_size = 4
+
 [*.{yaml,yml}]
-indent_size = 2
+max_line_length = 90

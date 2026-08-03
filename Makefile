@@ -1,99 +1,118 @@
-.PHONY: help
-help: ## Show this help message
-	@echo "Available targets:"
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-
-.PHONY: setup
-setup: ## Set up the development environment
-	bun install
-
-.PHONY: format
-format:  ## consistent formatting of JS, HTML and CSS files
-	bun run format:check
-
-.PHONY: check
-check: ## Run all static checks
-	bun run lint
-
-.PHONY: test
-test: ## Run all test (aka dynamic checks)
-	bun test
-
-.PHONY: images
-images: ## Build extension's images
-	./images/prepare-icons.sh
-
-.PHONY: build
-build: images ## Build extension's images and code
-	bun run build
-
-.PHONY: package
-package: build ## Package the extension as a ZIP file for store submission
-	bun run package
-	cp -p dist/chrome/tab-a-mole-1.0.zip .
-
-.PHONY: update
-update: update-dry-run ## Update dependencies
-	bun update --latest --no-progress
-
-.PHONY: update-dry-run
-update-dry-run: ## Update dependencies and check if they are stable
-	bun update --latest --no-progress --dry-run
-	@cp -p package.json package.json.bak
-	bun update --latest --no-progress
-	$(MAKE) format
-	$(MAKE) check
-	$(MAKE) test
-	@diff package.json package.json.bak > /dev/null && echo "\n[Makefile] There were no updates to dependencies." || echo "\n[Makefile] There were updates to dependencies. Please create a 'chore' commit."
-
-.PHONY: all
-all: prepare build
+TOP := .
 
 # ----------------------------------------------------------
-# Image Processing Commands
+# CONFIGURATION
 # ----------------------------------------------------------
 
-cleanup_images: ## cleanup processed images
-	$(MAKE) -C images clean
+include $(TOP)/rules/common.mk
+include $(TOP)/rules/targets.mk
+include $(TOP)/rules/javascript.mk
 
-.PHONY: images cleanup_images
+EXTJS_CACHE := $(shell bun run extension install --where)
 
 # ----------------------------------------------------------
-# Development and Build Commands
+# COMMON TARGETS
 # ----------------------------------------------------------
 
-prepare: format check
+.DEFAULT_GOAL := help
 
-lint:  ## review code for Javascript issues
-	bun run lint
+.PHONY: setup build qa lint test format-check format-fix clean distclean
 
-dev: images  ## starts a development server with hot reloading
-	bun run dev
+# ----------------------------------------------------------
+# COMMON TARGETS on SUBDIRECTORIES
+# ----------------------------------------------------------
 
-preview: images  ## previews the extension in production without building
+.PHONY: $(SUBDIRS)
+$(SUBDIRS):
+	@echo "== make $(MAKECMDGOALS) @ $@"
+	@$(MAKE) -C $@ $(MAKECMDGOALS)
+
+setup build qa lint test format-check format-fix clean distclean:: $(SUBDIRS)
+
+# ----------------------------------------------------------
+# LOCAL TARGETS - ENVIRONMENT MANAGEMENT
+# ----------------------------------------------------------
+
+.PHONY: setup-extension-browser
+setup-extension-browser: js-setup  ## ⚙️ Install Chrome browser under Extension.js
+	 bun run extension install --browser chrome
+	 bun run extension install --browser chromium
+
+.PHONY: list-browsers
+list-browsers:  ## 🏄 List browsers available to Extension.js
+	find $(EXTJS_CACHE) -name MacOS -print0 \
+		| xargs -0 -I _ find _ -type f -perm +111 -print \
+		| grep -v Helper \
+		| sort
+
+.PHONY: js-update-gradual
+js-update-gradual:  ## 📦 Update dependencies gradually while checking stability
+
+	@echo "== Gradual dependency update..."
+	@cp -p package.json package.json.before-update
+	bun outdated
+	@echo "== Dry run..."
+	@$(MAKE) js-update-dry-run
+
+	@echo "== Updating dependencies..."
+	@$(MAKE) js-update
+	@cp -p package.json package.json.after-update
+	@$(MAKE) qa
+
+	@echo "== Updating dependencies..."
+	@$(MAKE) js-update-latest
+	@cp -p package.json package.json.after-update-latest
+	@$(MAKE) qa
+
+	@diff package.json package.json.before-update > /dev/null \
+		&& echo "\n[Makefile] There were no updates to dependencies." \
+		|| echo "\n[Makefile] There were updates to dependencies. Please create a 'chore' commit."
+
+
+# ----------------------------------------------------------
+# LOCAL TARGETS - DEVELOPMENT
+# ----------------------------------------------------------
+
+.PHONY: dev preview cleanup_code show
+
+dev: images  ## 🧑‍💻 Starts a development server with hot reloading
+	#bun run dev
+	bun extension dev --chromium-binary /Applications/Chromium.app/Contents/MacOS/Chromium
+
+preview: images  ## 👀 Previews the extension in production without building
 	bun run preview
 
-
-
-cleanup_code: ## cleanup development environment
-	bunx extension cleanup
-	#-find . -name dist -not -path '*/node_modules/*' -delete -print
-	-rm -r ./dist
-
-.PHONY: prepare lint format dev preview build package cleanup_code
+cleanup_code:
+	bun run extension cleanup
 
 show: build
 	@tree -sat dist/chrome
 
-.PHONY: show
-
 # ----------------------------------------------------------
-# Cleanup Commands
+# CHILD TARGETS
 # ----------------------------------------------------------
 
-clean: cleanup_images cleanup_code cleanup_tests  ## cleanup project
+.PHONY: images
+images:  ## 🖼️ Build extension's images
+	@$(MAKE) -C images images
 
-cleanup_tests:
-	-rm -r ./coverage
+.PHONY: cleanup_images
+cleanup_images:  ## 🧹 Cleanup processed images
+	@$(MAKE) -C images clean
 
-.PHONY: clean cleanup_tests
+# ----------------------------------------------------------
+# EXTEND COMMON TARGETS
+# ----------------------------------------------------------
+
+setup:: setup-extension-browser
+build:: images
+clean:: cleanup_images cleanup_code
+
+# ----------------------------------------------------------
+# Temporary: targets we want to standardize and move to javascript.mk
+# ----------------------------------------------------------
+
+.PHONY: package
+package: build  ## 🎁 Package the extension as a ZIP file for store submission
+	bun run extension build --zip
+	cp -p dist/chrome/tab-a-mole-1.0.zip .

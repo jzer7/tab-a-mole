@@ -23,6 +23,12 @@ all:
 
 build: $(OUTPUT)
 
+.PHONY: images
+images:
+	@echo "== Building images..."
+	./prepare-icons.sh
+	@echo "== Images built successfully."
+
 # Function to create target rules to generate the PNG files
 define make_png_rule
 $(1)-$(2).png: $(1).svg
@@ -33,6 +39,7 @@ endef
 # The actual rules to generate the PNG files
 $(foreach name,$(BASE_NAMES),$(foreach size,$(SIZES),$(eval $(call make_png_rule,$(name),$(size)))))
 
+.PHONY: clean
 clean:
-	@echo "Cleaning up generated PNG files..."
+	@echo "Cleaning up generated images..."
 	@-rm $(OUTPUT)

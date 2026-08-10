@@ -5,6 +5,7 @@
         "editorconfig.editorconfig",
         "esbenp.prettier-vscode",
         "ms-vscode.live-server",
-        "oven.bun-vscode"
+        "oven.bun-vscode",
+        "streetsidesoftware.code-spell-checker"
     ]
 }

@@ -1,14 +1,14 @@
 TOP := .
+include $(TOP)/rules/common.mk
+include $(TOP)/rules/targets.mk
+include $(TOP)/rules/javascript.mk
 
 # ----------------------------------------------------------
 # CONFIGURATION
 # ----------------------------------------------------------
 
-include $(TOP)/rules/common.mk
-include $(TOP)/rules/targets.mk
-include $(TOP)/rules/javascript.mk
-
-EXTJS_CACHE := $(shell bun run extension install --where)
+EXTJS_BROWSER := chromium
+EXTJS_CACHE   := $(shell bun run extension install --where)
 
 # ----------------------------------------------------------
 # COMMON TARGETS
@@ -35,8 +35,11 @@ setup build qa lint test format-check format-fix clean distclean:: $(SUBDIRS)
 
 .PHONY: setup-extension-browser
 setup-extension-browser: js-setup  ## ⚙️ Install Chrome browser under Extension.js
-	 bun run extension install --browser chrome
-	 bun run extension install --browser chromium
+	 bun run extension install --browser $(EXTJS_BROWSER)
+
+.PHONY: cleanup-browsers
+cleanup-browsers:  ## 🧹 Cleanup browsers installed by Extension.js
+	bun run extension uninstall --browser $(EXTJS_BROWSER)
 
 .PHONY: list-browsers
 list-browsers:  ## 🏄 List browsers available to Extension.js
@@ -73,17 +76,13 @@ js-update-gradual:  ## 📦 Update dependencies gradually while checking stabili
 # LOCAL TARGETS - DEVELOPMENT
 # ----------------------------------------------------------
 
-.PHONY: dev preview cleanup_code show
+.PHONY: dev preview show
 
 dev: images  ## 🧑‍💻 Starts a development server with hot reloading
-	#bun run dev
-	bun extension dev --chromium-binary /Applications/Chromium.app/Contents/MacOS/Chromium
+	bun extension dev --browser $(EXTJS_BROWSER)
 
 preview: images  ## 👀 Previews the extension in production without building
-	bun run preview
-
-cleanup_code:
-	bun run extension cleanup
+	bun run extension preview --browser $(EXTJS_BROWSER)
 
 show: build
 	@tree -sat dist/chrome
@@ -96,8 +95,8 @@ show: build
 images:  ## 🖼️ Build extension's images
 	@$(MAKE) -C images images
 
-.PHONY: cleanup_images
-cleanup_images:  ## 🧹 Cleanup processed images
+.PHONY: cleanup-images
+cleanup-images:  ## 🧹 Cleanup processed images
 	@$(MAKE) -C images clean
 
 # ----------------------------------------------------------
@@ -105,14 +104,17 @@ cleanup_images:  ## 🧹 Cleanup processed images
 # ----------------------------------------------------------
 
 setup:: setup-extension-browser
-build:: images
-clean:: cleanup_images cleanup_code
+build:: package
+clean:: cleanup-images
+distclean:: cleanup-browsers
 
 # ----------------------------------------------------------
-# Temporary: targets we want to standardize and move to javascript.mk
+# Temporary: targets we want to standardize and move to a rule/*.mk
 # ----------------------------------------------------------
 
 .PHONY: package
-package: build  ## 🎁 Package the extension as a ZIP file for store submission
+package: images build  ## 🎁 Package the extension as a ZIP file for store submission
 	bun run extension build --zip
-	cp -p dist/chrome/tab-a-mole-1.0.zip .
+	@EXTJS_ZIP=$(shell ls -t dist/$(EXTJS_BROWSER)/*.zip | head -n 1) \
+		&& echo "== Packaged extension: $$EXTJS_ZIP" \
+		|| echo "== No ZIP file found in dist/$(EXTJS_BROWSER)/"

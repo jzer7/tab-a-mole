@@ -2,12 +2,30 @@
 # GENERAL
 # ----------------------------------------------------------
 
+# System and backup files
 *.bak
 *.skip
 .DS_Store
 .idea
 backups
 tags
+
+# AI Agent project notes
+.remember/
+.specstory/
+
+# Secrets / local config
+.env
+
+# Logs
+*.log
+
+# ----------------------------------------------------------
+# EXTENSION.JS
+# ----------------------------------------------------------
+
+.extension-js
+extension-env.d.ts
 
 # ----------------------------------------------------------
 # NODE
@@ -163,15 +181,14 @@ yarn.lock
 package-lock.json
 
 # ----------------------------------------------------------
-# EXTENSION.JS
+# PLAYWRIGHT
 # ----------------------------------------------------------
 
-extension-env.d.ts
+.playwright-cli/
 
 # ----------------------------------------------------------
 # PROJECT
 # ----------------------------------------------------------
 
-.specstory
 vendors/
 

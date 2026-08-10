@@ -18,9 +18,10 @@ SIZES           := 16 32 48 128
 # The output files we want to generate
 OUTPUT = $(foreach name,$(BASE_NAMES),$(foreach size,$(SIZES),$(name)-$(size).png))
 
-all:
-	@echo "Bye"
+.PHONY: all
+all: build
 
+.PHONY: build
 build: $(OUTPUT)
 
 .PHONY: images
@@ -41,5 +42,5 @@ $(foreach name,$(BASE_NAMES),$(foreach size,$(SIZES),$(eval $(call make_png_rule
 
 .PHONY: clean
 clean:
-	@echo "Cleaning up generated images..."
-	@-rm $(OUTPUT)
+	@echo "== Cleaning up generated images..."
+	@$(RM) $(OUTPUT)

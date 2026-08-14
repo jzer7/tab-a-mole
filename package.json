@@ -6,7 +6,7 @@
   },
   "description": "chrome extension",
   "devDependencies": {
-    "@eslint/config-inspector": "^3.1.1",
+    "@eslint/config-inspector": "^3.2.0",
     "@eslint/css": "^1.4.0",
     "@eslint/js": "^10.0.1",
     "@eslint/json": "^2.0.1",

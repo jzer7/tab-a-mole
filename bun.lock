@@ -12,13 +12,13 @@
         "@eslint/markdown": "^8.0.3",
         "@types/bun": "^1.3.14",
         "@types/chrome": "^0.2.5",
-        "chrome-types": "^0.1.436",
+        "chrome-types": "^0.1.439",
         "eslint": "^10.8.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.6",
         "eslint-plugin-security": "^4.0.1",
-        "extension": "^4.0.26",
-        "globals": "^17.8.0",
+        "extension": "^4.0.27",
+        "globals": "^17.9.0",
         "husky": "^9.1.7",
         "jsdom": "^30.0.1",
         "lint-staged": "^17.3.0",
@@ -441,7 +441,7 @@
 
     "chrome-trace-event": ["chrome-trace-event@1.0.4", "", {}, "sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ=="],
 
-    "chrome-types": ["chrome-types@0.1.436", "", {}, "sha512-/GtvUUa9G9w2yZgfErvczpql5KjvaBsTEyJ+n47LPcGg8/8UiUeurYyrhdIFz5Uv0Gmim80eYco2oXU0r43kfw=="],
+    "chrome-types": ["chrome-types@0.1.439", "", {}, "sha512-XiGiSxfEQehV0/pM1RB0Z5xM5RABQFejA5obTu/p+dOWuduTq1Dmq7k+24vvMDMw4UkxLbJgx3gw9tfB8lVsvA=="],
 
     "chromium-location": ["chromium-location@2.1.2", "", { "dependencies": { "userhome": "^1.0.1", "which": "^6.0.1" }, "bin": { "chromium-location": "bin.cjs" } }, "sha512-VE+2TFWsP+SikfogHj516ptohdB2+ZDU3eXlmq93PLGpaV4admAwUvN3221Ezxn3Ew2VRmtiLkJT0pxAe476KA=="],
 

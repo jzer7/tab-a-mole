@@ -48,15 +48,12 @@ setup::  ## ⚙️ Setup the development environment
 # ----------------------------------------------------------
 
 .PHONY: qa
-qa:: static test  ## ✅ Run all quality assurance checks
+qa:: lint format-check test  ## ✅ Run all quality assurance checks
 	@echo "== All QA checks passed successfully!"
 
 # ----------------------------------------------------------
-# STATIC ANALYSIS
+# LINTING
 # ----------------------------------------------------------
-
-.PHONY: static
-static:: lint format-check  ## 🔍 Run static analysis
 
 .PHONY: lint
 lint::  ## 🧹 Run linters

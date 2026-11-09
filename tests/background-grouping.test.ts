@@ -1,7 +1,31 @@
-import { describe, it, expect } from 'bun:test';
-import { groupTabsByTitle, groupTabsByUrl } from '../background/tab-grouping';
+import { describe, expect, it } from 'bun:test';
+import {
+  type TitleGroupCandidate,
+  getDefaultTitleGroupingConfig,
+  groupTabsByTitle,
+  informativeTokenTitleGrouping,
+  jaccardTitleGrouping
+} from '../background/grouping-by-title';
+import { groupTabsByUrl } from '../background/grouping-by-url';
+import { titleGroupingDataset } from './fixtures/title-grouping-dataset';
+import {
+  topThreeGroupPrecisionScore,
+  topThreeGroupResults
+} from './title-grouping-benchmark';
 
 describe('groupTabsByTitle', () => {
+  it('returns the default configuration', () => {
+    const config = getDefaultTitleGroupingConfig();
+
+    expect(config).toEqual({
+      titleThreshold: 0.5,
+      titleConfidenceThreshold: 0.5,
+      titleGroupingFunction: jaccardTitleGrouping,
+      titleNormalizationFunction: expect.any(Function),
+      titleTokenizationFunction: expect.any(Function)
+    });
+  });
+
   it('groups tabs with similar titles', () => {
     const tabs = [
       { id: 1, title: 'Google Search', url: 'https://google.com' },
@@ -228,5 +252,188 @@ describe('groupTabsByTitle (additional)', () => {
     ] as chrome.tabs.Tab[];
     const groups = groupTabsByTitle(tabs, { titleThreshold: 0.6 });
     expect(groups.length).toBe(1);
+  });
+
+  it('normalizes informative titles before tokenizing them', () => {
+    const tabs = [
+      { id: 1, title: 'Café Companies', url: 'https://a.com' },
+      { id: 2, title: 'cafe company', url: 'https://b.com' }
+    ] as chrome.tabs.Tab[];
+    const candidates = informativeTokenTitleGrouping(tabs, { threshold: 1 });
+    expect(candidates).toHaveLength(2);
+    expect(candidates.every(({ tabIndexes }) => tabIndexes.length === 2)).toBe(true);
+  });
+
+  it('passes configured options to a pluggable candidate generator', () => {
+    const tabs = [
+      { id: 1, title: 'one', url: 'https://a.com' },
+      { id: 2, title: 'two', url: 'https://b.com' }
+    ] as chrome.tabs.Tab[];
+    const normalizationFunction = (phrase: string) => phrase;
+    const tokenizationFunction = (phrase: string) => new Set([phrase]);
+    let receivedOptions;
+    const plugin = (
+      _tabs: chrome.tabs.Tab[],
+      options: Parameters<typeof jaccardTitleGrouping>[1]
+    ) => {
+      receivedOptions = options;
+      return [{ tabIndexes: [0, 1], confidence: 0.8 }];
+    };
+
+    groupTabsByTitle(tabs, {
+      titleThreshold: 0.7,
+      titleGroupingFunction: plugin,
+      titleNormalizationFunction: normalizationFunction,
+      titleTokenizationFunction: tokenizationFunction
+    });
+
+    expect(receivedOptions).toEqual({
+      threshold: 0.7,
+      normalizationFunction,
+      tokenizationFunction
+    });
+  });
+
+  it('accepts a pluggable candidate generator and deduplicates indexes', () => {
+    const tabs = [
+      { id: 1, title: 'one', url: 'https://a.com' },
+      { id: 2, title: 'two', url: 'https://b.com' }
+    ] as chrome.tabs.Tab[];
+    const plugin = () => [
+      { tabIndexes: [0, 1, 1], confidence: 0.8 },
+      { tabIndexes: [0], confidence: 1 }
+    ];
+    const groups = groupTabsByTitle(tabs, { titleGroupingFunction: plugin });
+    expect(groups).toHaveLength(1);
+    expect(groups[0].tabs).toEqual([tabs[0], tabs[1]]);
+  });
+
+  it('preserves Jaccard as the default and accepts a confidence threshold of zero', () => {
+    const tabs = [
+      { id: 1, title: 'shared words', url: 'https://a.com' },
+      { id: 2, title: 'shared words extra', url: 'https://b.com' }
+    ] as chrome.tabs.Tab[];
+    const defaults = getDefaultTitleGroupingConfig();
+    expect(groupTabsByTitle(tabs, {}).length).toBe(
+      jaccardTitleGrouping(tabs, {
+        threshold: defaults.titleThreshold,
+        normalizationFunction: defaults.titleNormalizationFunction,
+        tokenizationFunction: defaults.titleTokenizationFunction
+      }).length
+    );
+    expect(
+      groupTabsByTitle(tabs, { titleThreshold: 0, titleConfidenceThreshold: 0 })
+    ).toHaveLength(1);
+  });
+
+  it('uses the configured normalization and tokenization functions in Jaccard grouping', () => {
+    const tabs = [
+      { id: 1, title: 'left title', url: 'https://a.com' },
+      { id: 2, title: 'right title', url: 'https://b.com' }
+    ] as chrome.tabs.Tab[];
+    const normalizedTitles: string[] = [];
+    const normalize = (phrase: string) => {
+      normalizedTitles.push(phrase);
+      return phrase;
+    };
+    const tokenize = (phrase: string) =>
+      new Set([phrase.replace(/left|right/g, 'shared')]);
+    const grouped = groupTabsByTitle(tabs, {
+      titleThreshold: 1,
+      titleConfidenceThreshold: 0,
+      titleNormalizationFunction: normalize,
+      titleTokenizationFunction: tokenize
+    });
+
+    expect(normalizedTitles).toEqual(['left title', 'right title']);
+    expect(grouped).toHaveLength(1);
+    expect(grouped[0].tabs).toEqual(tabs);
+  });
+
+  it('supports overlapping topic groups and ignores stopwords', () => {
+    const tabs = [
+      { id: 1, title: 'california golden gate bridge', url: 'a' },
+      { id: 2, title: 'california golden raisins', url: 'b' },
+      { id: 3, title: 'electric gates', url: 'c' },
+      { id: 4, title: 'Bill Gates and his legacy', url: 'd' },
+      { id: 5, title: 'nginx and docker', url: 'e' },
+      { id: 6, title: 'famous golden california beaches', url: 'f' }
+    ] as chrome.tabs.Tab[];
+    const groups = groupTabsByTitle(tabs, {
+      titleGroupingFunction: informativeTokenTitleGrouping,
+      titleThreshold: 0.2
+    });
+    const hasGroup = (left: number, right: number) =>
+      groups.some((group) =>
+        [left, right].every((id) => group.tabs.some((tab) => tab.id === id))
+      );
+    expect(hasGroup(1, 2)).toBe(true);
+    expect(hasGroup(1, 3)).toBe(true);
+    expect(hasGroup(1, 4)).toBe(true);
+    expect(hasGroup(2, 6)).toBe(true);
+    expect(hasGroup(5, 4)).toBe(false);
+  });
+
+  it('keeps the top five candidates and includes additional candidates over threshold', () => {
+    const tabs = Array.from({ length: 8 }, (_, index) => ({
+      id: index,
+      title: `tab ${index}`,
+      url: `https://${index}.com`
+    })) as chrome.tabs.Tab[];
+    const candidates: TitleGroupCandidate[] = Array.from({ length: 7 }, (_, index) => ({
+      tabIndexes: [0, index + 1],
+      confidence: index < 6 ? 0.9 : 0.4
+    }));
+    const groups = groupTabsByTitle(tabs, {
+      titleGroupingFunction: () => candidates,
+      titleConfidenceThreshold: 0.5
+    });
+    expect(groups).toHaveLength(6);
+  });
+
+  it('compares top-three pairwise precision for both heuristics', () => {
+    const tabs = titleGroupingDataset.map(({ title }, id) => ({
+      id,
+      title,
+      url: `https://example.com/${id}`
+    })) as chrome.tabs.Tab[];
+    const defaults = getDefaultTitleGroupingConfig();
+    const options = {
+      threshold: 0.3,
+      normalizationFunction: defaults.titleNormalizationFunction,
+      tokenizationFunction: defaults.titleTokenizationFunction
+    };
+    const jaccardCandidates = jaccardTitleGrouping(tabs, options);
+    const informativeCandidates = informativeTokenTitleGrouping(tabs, options);
+    const jaccardScore = topThreeGroupPrecisionScore(
+      jaccardCandidates,
+      titleGroupingDataset
+    );
+    const informativeScore = topThreeGroupPrecisionScore(
+      informativeCandidates,
+      titleGroupingDataset
+    );
+    expect(jaccardScore).toBeGreaterThanOrEqual(0);
+    expect(informativeScore).toBeGreaterThanOrEqual(0);
+    expect(informativeScore).not.toBe(jaccardScore);
+    const topResults = topThreeGroupResults(informativeCandidates, titleGroupingDataset);
+    expect(topResults.length).toBeLessThanOrEqual(3);
+    expect(topResults[0].titles.length).toBeGreaterThan(1);
+    expect(topResults[0].precision).toBeGreaterThanOrEqual(0);
+    expect(topResults[0].confidence).toBeGreaterThan(0);
+  });
+
+  it('handles 300 titles of up to 50 words', () => {
+    const words = Array.from({ length: 50 }, (_, index) => `topic${index}`);
+    const tabs = Array.from({ length: 300 }, (_, index) => ({
+      id: index,
+      title: `${words.join(' ')} article${index}`,
+      url: `https://example.com/${index}`
+    })) as chrome.tabs.Tab[];
+    const groups = groupTabsByTitle(tabs, {
+      titleGroupingFunction: informativeTokenTitleGrouping,
+      titleThreshold: 0.5
+    });
+    expect(groups.length).toBeGreaterThan(0);
   });
 });

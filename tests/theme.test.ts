@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, jest } from 'bun:test';
+import { beforeEach, describe, expect, it, jest } from 'bun:test';
 import { applyTheme } from '../scripts/theme-utils';
 
 describe('applyTheme', () => {

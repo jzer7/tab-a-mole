@@ -1,12 +1,11 @@
 console.log('Background script running');
 
-import {
-  groupTabsByTitle,
-  groupTabsByUrl,
-  type TitleGroupingConfig,
-  type UrlGroupingConfig
-} from './tab-grouping';
-import { msgType, windowScope, type WindowScope } from '../popup/popup-values';
+import type { WindowScope } from '../popup/popup-values';
+import { msgType, windowScope } from '../popup/popup-values';
+import type { TitleGroupingConfig } from './grouping-by-title';
+import { groupTabsByTitle } from './grouping-by-title';
+import type { UrlGroupingConfig } from './grouping-by-url';
+import { groupTabsByUrl } from './grouping-by-url';
 
 /* ---------------------------------------------------------
  * General Tab Grouping and Messaging

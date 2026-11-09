@@ -1,15 +1,21 @@
 // tests/popup-utils.test.js
 
-import { describe, it, expect, beforeEach, vi } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'bun:test';
 import {
-  renderTabGroups,
   changeResultState,
+  renderTabGroups,
   type Callbacks,
-  type Group
+  type Group,
+  type TabInfo
 } from '../popup/popup-utils';
+import { resultState } from '../popup/popup-values';
 
 // Setup jsdom for DOM APIs
 import { JSDOM } from 'jsdom';
+
+function createDom() {
+  return new JSDOM('<!DOCTYPE html><body></body>');
+}
 
 // Helper to create a mock template element
 function createGroupTemplate() {
@@ -32,6 +38,7 @@ function createItemTemplate() {
     <li>
       <span class="tab-symbol"></span>
       <span class="tab-title"></span>
+      <span class="tab-group-chip" hidden></span>
       <span class="tab-elapsed"></span>
       <button class="tab-goto"><span class="sr-only"></span></button>
       <button class="tab-close"><span class="sr-only"></span></button>
@@ -41,6 +48,7 @@ function createItemTemplate() {
 }
 
 describe('renderTabGroups', () => {
+  let dom: ReturnType<typeof createDom>;
   let anchor: HTMLElement,
     groupTemplate: HTMLTemplateElement,
     itemTemplate: HTMLTemplateElement,
@@ -48,12 +56,13 @@ describe('renderTabGroups', () => {
 
   beforeEach(() => {
     // Set up jsdom global environment
-    const dom = new JSDOM(`<!DOCTYPE html><body></body>`);
+    dom = createDom();
     globalThis.window = dom.window as unknown as Window & typeof globalThis;
     globalThis.document = dom.window.document;
 
     // Set up DOM anchor
     anchor = document.createElement('div');
+    anchor.innerHTML = '<div id="resultsLiveRegion"></div>';
     // Set up templates
     groupTemplate = createGroupTemplate() as HTMLTemplateElement;
     itemTemplate = createItemTemplate() as HTMLTemplateElement;
@@ -66,10 +75,16 @@ describe('renderTabGroups', () => {
     };
     // Add required result state elements to DOM
     document.body.innerHTML = `
-      <div id="DUPLICATES_FOUND"></div>
-      <div id="NO_DUPLICATES"></div>
-      <div id="duplicateList"></div>
+      <div id="startSearch" hidden></div>
+      <div id="loadingMessage" hidden></div>
+      <div id="errorMessage" hidden></div>
+      <div id="noDuplicatesMessage" hidden></div>
+      <div id="duplicateList" hidden><div id="resultsLiveRegion"></div></div>
     `;
+  });
+
+  afterEach(() => {
+    dom.window.close();
   });
 
   it('renders groups and tabs, and wires up callbacks', () => {
@@ -118,30 +133,128 @@ describe('renderTabGroups', () => {
     // Check that the correct number of tabs were rendered
     expect(anchor.querySelectorAll('.tab-list li').length).toBe(3);
 
-    // Simulate clicking the first tab's goto and close buttons
-    const firstTab = anchor.querySelector('.tab-list li');
-    (firstTab!.querySelector('.tab-goto') as HTMLElement).click();
-    (firstTab!.querySelector('.tab-close') as HTMLElement).click();
+    const firstTab = anchor.querySelector('.tab-list li') as HTMLElement;
+    const firstTitle = firstTab.querySelector('.tab-title') as HTMLElement;
+    expect(firstTitle.textContent).toBe('Example');
+    expect(firstTitle.id).toBe('tab-title-1-1');
+    expect((firstTab.querySelector('.tab-elapsed') as HTMLElement).textContent).toMatch(
+      /ago$/
+    );
+    expect(
+      (firstTab.querySelector('.tab-goto') as HTMLElement).getAttribute('aria-labelledby')
+    ).toBe('tab-title-1-1 tab-goto-label-1-1');
+    expect(
+      (firstTab.querySelector('.tab-close') as HTMLElement).getAttribute(
+        'aria-labelledby'
+      )
+    ).toBe('tab-title-1-1 tab-close-label-1-1');
 
-    expect(callbacks.onGoToTab).toHaveBeenCalled();
-    expect(callbacks.onCloseTab).toHaveBeenCalled();
+    (firstTab.querySelector('.tab-goto') as HTMLElement).click();
+    (firstTab.querySelector('.tab-close') as HTMLElement).click();
 
-    // Simulate clicking group-level buttons
-    const firstGroup = anchor.querySelector('.tab-group');
-    (firstGroup!.querySelector('.tab-group__goto-first') as HTMLElement).click();
-    (firstGroup!.querySelector('.tab-group__close-all') as HTMLElement).click();
+    expect(callbacks.onGoToTab).toHaveBeenCalledWith(groups[0].tabInfos[0]);
+    expect(callbacks.onCloseTab).toHaveBeenCalledWith(groups[0].tabInfos[0], firstTab);
 
-    expect(callbacks.onGoToFirstTab).toHaveBeenCalled();
-    expect(callbacks.onCloseAllTabs).toHaveBeenCalled();
+    const firstGroup = anchor.querySelector('.tab-group') as HTMLElement;
+    (firstGroup.querySelector('.tab-group__goto-first') as HTMLElement).click();
+    (firstGroup.querySelector('.tab-group__close-all') as HTMLElement).click();
+
+    expect(callbacks.onGoToFirstTab).toHaveBeenCalledWith(groups[0].tabInfos[0]);
+    expect(callbacks.onCloseAllTabs).toHaveBeenCalledWith(groups[0].tabInfos, firstGroup);
+    expect((document.getElementById('duplicateList') as HTMLElement).hidden).toBe(false);
+    expect((document.getElementById('noDuplicatesMessage') as HTMLElement).hidden).toBe(
+      true
+    );
   });
 
-  it('calls changeResultState(NO_DUPLICATES) when groups is empty', () => {
+  it('shows the no-duplicates state for empty groups without rendering', () => {
+    const existingResult = document.createElement('div');
+    existingResult.id = 'existing-result';
+    anchor.appendChild(existingResult);
+
     renderTabGroups([], anchor, groupTemplate, itemTemplate, callbacks);
 
-    const noDuplicates = document.getElementById('NO_DUPLICATES');
-    const duplicateList = document.getElementById('duplicateList');
-    expect(noDuplicates?.hidden).toBe(false);
-    expect(duplicateList?.hidden).toBe(true);
+    expect(
+      (document.getElementById(resultState.NO_DUPLICATES) as HTMLElement).hidden
+    ).toBe(false);
+    expect(
+      (document.getElementById(resultState.DUPLICATES_FOUND) as HTMLElement).hidden
+    ).toBe(true);
+    expect(anchor.querySelector('#existing-result')).not.toBeNull();
+    expect(callbacks.onGoToTab).not.toHaveBeenCalled();
+  });
+
+  it('preserves the live region and replaces prior groups when rendering results', () => {
+    const previousResult = document.createElement('div');
+    previousResult.id = 'previous-result';
+    anchor.appendChild(previousResult);
+
+    const group: Group = {
+      criteria: 'example.com',
+      tabInfos: [{ id: 1, url: 'https://example.com', title: 'Example', pinned: false }]
+    };
+    renderTabGroups([group], anchor, groupTemplate, itemTemplate, callbacks);
+
+    expect(anchor.querySelector('#resultsLiveRegion')).not.toBeNull();
+    expect(anchor.querySelector('#previous-result')).toBeNull();
+    expect(anchor.querySelectorAll('.tab-group')).toHaveLength(1);
+  });
+
+  it('renders tab group chips only for grouped tabs', () => {
+    const tabs: TabInfo[] = [
+      {
+        id: 1,
+        url: 'https://example.com/one',
+        title: 'Named group',
+        pinned: false,
+        groupId: 7,
+        tabGroup: {
+          id: 7,
+          title: '  Work  ',
+          color: 'blue',
+          collapsed: false
+        }
+      },
+      {
+        id: 2,
+        url: 'https://example.com/two',
+        title: 'Fallback group',
+        pinned: false,
+        groupId: 8
+      },
+      {
+        id: 3,
+        url: 'https://example.com/three',
+        title: 'Ungrouped',
+        pinned: false,
+        groupId: -1
+      },
+      {
+        id: 4,
+        url: 'https://example.com/four',
+        title: 'No group id',
+        pinned: false
+      }
+    ];
+    renderTabGroups(
+      [{ criteria: 'example.com', tabInfos: tabs }],
+      anchor,
+      groupTemplate,
+      itemTemplate,
+      callbacks
+    );
+
+    const chips = anchor.querySelectorAll<HTMLSpanElement>('.tab-group-chip');
+    expect(chips[0]?.hidden).toBe(false);
+    expect(chips[0]?.textContent).toBe('Work');
+    expect(chips[0]?.getAttribute('data-color')).toBe('blue');
+    expect(chips[1]?.hidden).toBe(false);
+    expect(chips[1]?.textContent).toBe('#8');
+    expect(chips[1]?.getAttribute('data-color')).toBe('grey');
+    expect(chips[2]?.hidden).toBe(true);
+    expect(chips[2]?.textContent).toBe('');
+    expect(chips[2]?.hasAttribute('data-color')).toBe(false);
+    expect(chips[3]?.hidden).toBe(true);
   });
 
   it('renders pinned tab with pin symbol', () => {
@@ -244,7 +357,7 @@ describe('renderTabGroups', () => {
 
 describe('changeResultState', () => {
   beforeEach(() => {
-    const dom = new JSDOM(`<!DOCTYPE html><body></body>`);
+    const dom = createDom();
     globalThis.window = dom.window as unknown as Window & typeof globalThis;
     globalThis.document = dom.window.document;
 

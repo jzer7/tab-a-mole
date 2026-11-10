@@ -1,5 +1,14 @@
 import type { TabGroup } from './tab-grouping';
 
+/*
+ * Purpose:
+ *  - Groups tabs based on similarity of their page titles.
+ *
+ * Approach:
+ *  - Strategies consume an ordered array of title strings and return indexes.
+ *  - The entrypoint maps those indexes back to the original tabs.
+ */
+
 /* ---------------------------------------------------------
  * Interfaces
  * ------------------------------------------------------ */
@@ -24,7 +33,7 @@ export interface TitleGroupingOptions {
 }
 
 export type TitleGroupingFunction = (
-  _tabs: chrome.tabs.Tab[],
+  _titles: readonly string[],
   _options: TitleGroupingOptions
 ) => TitleGroupCandidate[];
 
@@ -124,21 +133,21 @@ function jaccardSimilarity(setA: Set<string>, setB: Set<string>): number {
 }
 
 /** Existing greedy Jaccard grouping, adapted to the pluggable strategy contract. */
-export const jaccardTitleGrouping: TitleGroupingFunction = (tabs, options) => {
+export const jaccardTitleGrouping: TitleGroupingFunction = (titles, options) => {
   const { threshold, normalizationFunction, tokenizationFunction } = options;
 
-  const tokenizedTitles = tabs.map((tab) =>
-    tokenizationFunction(normalizationFunction(tab.title || ''))
+  const tokenizedTitles = titles.map((title) =>
+    tokenizationFunction(normalizationFunction(title))
   );
-  const visited = new Array(tabs.length).fill(false);
+  const visited = new Array(titles.length).fill(false);
   const candidates: TitleGroupCandidate[] = [];
 
-  for (let i = 0; i < tabs.length; i += 1) {
+  for (let i = 0; i < titles.length; i += 1) {
     if (visited[i]) continue;
     const tabIndexes = [i];
     let totalSimilarity = 0;
     visited[i] = true;
-    for (let j = i + 1; j < tabs.length; j += 1) {
+    for (let j = i + 1; j < titles.length; j += 1) {
       if (visited[j]) continue;
       const similarity = jaccardSimilarity(tokenizedTitles[i], tokenizedTitles[j]);
       if (similarity >= threshold) {
@@ -165,11 +174,9 @@ export const jaccardTitleGrouping: TitleGroupingFunction = (tabs, options) => {
  * Forms overlapping topic candidates around informative title tokens.
  * Token * weights use inverse document frequency so common title words contribute less.
  */
-export const informativeTokenTitleGrouping: TitleGroupingFunction = (tabs, options) => {
+export const informativeTokenTitleGrouping: TitleGroupingFunction = (titles, options) => {
   const { threshold } = options;
-  const tokenizedTitles = tabs.map((tab) =>
-    normalizeTokenizeAndFilterPhrase(tab.title || '')
-  );
+  const tokenizedTitles = titles.map(normalizeTokenizeAndFilterPhrase);
   const documentFrequency = new Map<string, number>();
   tokenizedTitles.forEach((tokens) => {
     tokens.forEach((token) => {
@@ -177,15 +184,15 @@ export const informativeTokenTitleGrouping: TitleGroupingFunction = (tabs, optio
     });
   });
   const tokenWeight = (token: string) =>
-    Math.log(1 + tabs.length / (1 + (documentFrequency.get(token) || 0)));
+    Math.log(1 + titles.length / (1 + (documentFrequency.get(token) || 0)));
   const candidates: TitleGroupCandidate[] = [];
 
-  for (let i = 0; i < tabs.length; i += 1) {
+  for (let i = 0; i < titles.length; i += 1) {
     const anchors = tokenizedTitles[i];
     if (anchors.size === 0) continue;
     const matchedIndexes = [i];
     let totalScore = 0;
-    for (let j = 0; j < tabs.length; j += 1) {
+    for (let j = 0; j < titles.length; j += 1) {
       if (i === j) continue;
       const otherTokens = tokenizedTitles[j];
       let sharedWeight = 0;
@@ -240,8 +247,9 @@ function groupTabsByTitle(
   };
 
   const uniqueCandidates = new Map<string, TitleGroupCandidate>();
+  const titles = tabs.map((tab) => tab.title ?? '');
 
-  groupingFunction(tabs, options).forEach((candidate) => {
+  groupingFunction(titles, options).forEach((candidate) => {
     const { tabIndexes, confidence } = candidate;
     if (
       tabIndexes.length < 2 ||
@@ -271,7 +279,7 @@ function groupTabsByTitle(
   );
 
   return selected.map(({ tabIndexes }) => ({
-    groupingCriteria: '?',
+    name: '?',
     tabs: [...new Set(tabIndexes)].map((index) => tabs[index])
   }));
 }

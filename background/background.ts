@@ -6,6 +6,7 @@ import type { TitleGroupingConfig } from './grouping-by-title';
 import { groupTabsByTitle } from './grouping-by-title';
 import type { UrlGroupingConfig } from './grouping-by-url';
 import { groupTabsByUrl } from './grouping-by-url';
+import type { TabGroup } from './tab-grouping';
 
 /* ---------------------------------------------------------
  * General Tab Grouping and Messaging
@@ -61,7 +62,7 @@ function groupTabsDispatch(config: GroupingRequest = {}) {
 
   chrome.tabs.query(query, function (selectedTabs) {
     const dispatchResults = async () => {
-      const matchedTabGroups: import('./tab-grouping').TabGroup[] =
+      const matchedTabGroups: TabGroup[] =
         matchBy === 'title'
           ? // Group by title similarity
             groupTabsByTitle(selectedTabs, config)
@@ -89,13 +90,13 @@ function groupTabsDispatch(config: GroupingRequest = {}) {
       });
 
       // matchedTabGroups is an array of tab groups.
-      // A tab group is an object {groupingCriteria, Array of tabs}
+      // A tab group is an object {group name, Array of tabs}
 
       // Transform groups to only include necessary tab info
       // Replaces the Array of tabs with an Array of tabInfos.
       // A tabInfo is an object with selected properties of a tab.
       const cleanupMatchedTabGroups = matchedTabGroups.map((group) => ({
-        criteria: group.groupingCriteria, // matchBy === 'title' ? group.tabs[0].title : group.tabs[0].url,
+        criteria: group.name, // matchBy === 'title' ? group.tabs[0].title : group.tabs[0].url,
         tabInfos: group.tabs.map((tab) => ({
           id: tab.id,
           url: tab.url,

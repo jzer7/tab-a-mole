@@ -1,5 +1,18 @@
 import type { TabGroup } from './tab-grouping';
 
+/*
+ * Purpose:
+ *  - Groups tabs by their URL according to the specified match level and HTTPS filter.
+ *
+ * Approach:
+ *
+ * Inputs:
+ *  - collection of tabs: only use URL
+ *  - config:
+ *    - https only:
+ *    - url scope: full url, url w/o hash, url w/o query, hostname, domain
+ */
+
 /* ---------------------------------------------------------
  * Constants and Enums
  * ------------------------------------------------------ */
@@ -30,7 +43,7 @@ export interface UrlGroupingConfig {
 /**
  * Groups tabs by their URL according to the specified match level and HTTPS filter.
  *
- * returns an array of tab groups. A tab group is an object {groupingCriteria, Array of tabs}
+ * returns an array of tab groups. A tab group is an object {group name, Array of tabs}
  */
 function groupTabsByUrl(tabs: chrome.tabs.Tab[], config: UrlGroupingConfig): TabGroup[] {
   const matchLevel = config.matchLevel || urlScope.FULL;
@@ -98,7 +111,7 @@ function groupTabsByUrl(tabs: chrome.tabs.Tab[], config: UrlGroupingConfig): Tab
   // Collect groups with more than one tab
   for (const [matchKey, data] of tabGroupMap.entries()) {
     if (data.tabs.length > 1) {
-      matchedTabGroups.push({ groupingCriteria: matchKey, tabs: data.tabs });
+      matchedTabGroups.push({ name: matchKey, tabs: data.tabs });
     }
   }
 

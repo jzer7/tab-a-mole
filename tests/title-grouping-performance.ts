@@ -13,9 +13,12 @@
  * The seed makes runs reproducible.
  */
 import {
+  getDefaultTitleGroupingConfig,
   informativeTokenTitleGrouping,
   jaccardTitleGrouping,
-  type TitleGroupCandidate
+  type TitleGroupCandidate,
+  type TitleGroupingFunction,
+  type TitleGroupingOptions
 } from '../background/grouping-by-title';
 
 const wordCount = 100;
@@ -118,15 +121,14 @@ function parseThreshold(args: string[]): number {
 
 function benchmark(
   name: string,
-  groupingFunction: typeof jaccardTitleGrouping,
+  groupingFunction: TitleGroupingFunction,
   phrases: string[],
-  threshold: number
+  options: TitleGroupingOptions
 ): void {
   console.log(`\n${name}`);
   for (let run = 1; run <= runs; run += 1) {
-    const tabs = phrases.map((title) => ({ title }) as chrome.tabs.Tab);
     const started = performance.now();
-    const groups = groupingFunction(tabs, { threshold });
+    const groups = groupingFunction(phrases, options);
     const elapsedMs = performance.now() - started;
     console.log(
       `Run ${run}: ${elapsedMs.toFixed(2)} ms; top-three phrase coverage: ${coveredPhraseCount(groups)}/${phrases.length}; groups: ${groups.length}`
@@ -136,8 +138,14 @@ function benchmark(
 
 const threshold = parseThreshold(Bun.argv.slice(2));
 const phrases = generateDataset(randomSeed);
+const defaults = getDefaultTitleGroupingConfig();
+const options: TitleGroupingOptions = {
+  threshold,
+  normalizationFunction: defaults.titleNormalizationFunction,
+  tokenizationFunction: defaults.titleTokenizationFunction
+};
 console.log(
   `Synthetic title grouping benchmark (${phraseCount} phrases, seed ${randomSeed}, threshold ${threshold})`
 );
-benchmark('Jaccard', jaccardTitleGrouping, phrases, threshold);
-benchmark('Informative-token overlap', informativeTokenTitleGrouping, phrases, threshold);
+benchmark('Jaccard', jaccardTitleGrouping, phrases, options);
+benchmark('Informative-token overlap', informativeTokenTitleGrouping, phrases, options);

@@ -154,7 +154,7 @@ describe('groupTabsByUrl', () => {
     const groups = groupTabsByUrl(tabs, config);
     expect(groups.length).toBe(1);
     expect(groups[0].tabs.length).toBe(2);
-    expect(groups[0].groupingCriteria).toBe('sub.example.com');
+    expect(groups[0].name).toBe('sub.example.com');
   });
 
   it('groups tabs by no-query (ignores query string)', () => {
@@ -259,7 +259,15 @@ describe('groupTabsByTitle (additional)', () => {
       { id: 1, title: 'Café Companies', url: 'https://a.com' },
       { id: 2, title: 'cafe company', url: 'https://b.com' }
     ] as chrome.tabs.Tab[];
-    const candidates = informativeTokenTitleGrouping(tabs, { threshold: 1 });
+    const defaults = getDefaultTitleGroupingConfig();
+    const candidates = informativeTokenTitleGrouping(
+      tabs.map((tab) => tab.title ?? ''),
+      {
+        threshold: 1,
+        normalizationFunction: defaults.titleNormalizationFunction,
+        tokenizationFunction: defaults.titleTokenizationFunction
+      }
+    );
     expect(candidates).toHaveLength(2);
     expect(candidates.every(({ tabIndexes }) => tabIndexes.length === 2)).toBe(true);
   });
@@ -271,12 +279,15 @@ describe('groupTabsByTitle (additional)', () => {
     ] as chrome.tabs.Tab[];
     const normalizationFunction = (phrase: string) => phrase;
     const tokenizationFunction = (phrase: string) => new Set([phrase]);
-    let receivedOptions;
+    const receivedOptions: {
+      value: Parameters<typeof jaccardTitleGrouping>[1] | undefined;
+    } = { value: undefined };
     const plugin = (
-      _tabs: chrome.tabs.Tab[],
+      titles: readonly string[],
       options: Parameters<typeof jaccardTitleGrouping>[1]
     ) => {
-      receivedOptions = options;
+      expect(titles).toEqual(['one', 'two']);
+      receivedOptions.value = options;
       return [{ tabIndexes: [0, 1], confidence: 0.8 }];
     };
 
@@ -287,11 +298,28 @@ describe('groupTabsByTitle (additional)', () => {
       titleTokenizationFunction: tokenizationFunction
     });
 
-    expect(receivedOptions).toEqual({
+    expect(receivedOptions.value).toEqual({
       threshold: 0.7,
       normalizationFunction,
       tokenizationFunction
     });
+  });
+
+  it('maps title indexes back to tabs and preserves missing titles as empty strings', () => {
+    const tabs = [
+      { id: 1, title: undefined, url: 'https://a.com' },
+      { id: 2, title: 'middle', url: 'https://b.com' },
+      { id: 3, title: 'last', url: 'https://c.com' }
+    ] as chrome.tabs.Tab[];
+    const plugin = (titles: readonly string[]) => {
+      expect(titles).toEqual(['', 'middle', 'last']);
+      return [{ tabIndexes: [0, 2], confidence: 0.8 }];
+    };
+
+    const groups = groupTabsByTitle(tabs, { titleGroupingFunction: plugin });
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0].tabs).toEqual([tabs[0], tabs[2]]);
   });
 
   it('accepts a pluggable candidate generator and deduplicates indexes', () => {
@@ -315,11 +343,14 @@ describe('groupTabsByTitle (additional)', () => {
     ] as chrome.tabs.Tab[];
     const defaults = getDefaultTitleGroupingConfig();
     expect(groupTabsByTitle(tabs, {}).length).toBe(
-      jaccardTitleGrouping(tabs, {
-        threshold: defaults.titleThreshold,
-        normalizationFunction: defaults.titleNormalizationFunction,
-        tokenizationFunction: defaults.titleTokenizationFunction
-      }).length
+      jaccardTitleGrouping(
+        tabs.map((tab) => tab.title ?? ''),
+        {
+          threshold: defaults.titleThreshold,
+          normalizationFunction: defaults.titleNormalizationFunction,
+          tokenizationFunction: defaults.titleTokenizationFunction
+        }
+      ).length
     );
     expect(
       groupTabsByTitle(tabs, { titleThreshold: 0, titleConfidenceThreshold: 0 })
@@ -403,8 +434,9 @@ describe('groupTabsByTitle (additional)', () => {
       normalizationFunction: defaults.titleNormalizationFunction,
       tokenizationFunction: defaults.titleTokenizationFunction
     };
-    const jaccardCandidates = jaccardTitleGrouping(tabs, options);
-    const informativeCandidates = informativeTokenTitleGrouping(tabs, options);
+    const titles = tabs.map((tab) => tab.title ?? '');
+    const jaccardCandidates = jaccardTitleGrouping(titles, options);
+    const informativeCandidates = informativeTokenTitleGrouping(titles, options);
     const jaccardScore = topThreeGroupPrecisionScore(
       jaccardCandidates,
       titleGroupingDataset

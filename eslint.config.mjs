@@ -36,6 +36,12 @@ export default defineConfig([
     extends: ['markdown/recommended']
   },
   {
+    files: ['CHANGELOG.md'],
+    rules: {
+      'markdown/no-missing-label-refs': 'off'
+    }
+  },
+  {
     files: ['**/*.css'],
     plugins: { css },
     language: 'css/css',
@@ -75,6 +81,7 @@ export default defineConfig([
       '.github/**/*',
       '.specstory/**/*',
       '.vscode/*',
+      '**/assets/fontawesome/*',
       '**/build/**/*',
       '**/coverage/**/*',
       '**/dist/**/*',

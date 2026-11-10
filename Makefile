@@ -1,14 +1,14 @@
 TOP := .
 include $(TOP)/rules/common.mk
 include $(TOP)/rules/targets.mk
-include $(TOP)/rules/javascript.mk
+include $(TOP)/rules/typescript.mk
 
 # ----------------------------------------------------------
 # CONFIGURATION
 # ----------------------------------------------------------
 
 EXTJS_BROWSER := chromium
-EXTJS_CACHE   := $(shell bun run extension install --where)
+EXTJS_CACHE   := $(shell bunx extension install --where)
 
 # ----------------------------------------------------------
 # COMMON TARGETS
@@ -34,7 +34,7 @@ setup build qa lint test format-check format-fix clean distclean:: $(SUBDIRS)
 # ----------------------------------------------------------
 
 .PHONY: setup-extension-browser
-setup-extension-browser: js-setup  ## ⚙️ Install Chrome browser under Extension.js
+setup-extension-browser: ts-setup  ## ⚙️ Install Chrome browser under Extension.js
 	 bun run extension install --browser $(EXTJS_BROWSER)
 
 .PHONY: cleanup-browsers
@@ -113,7 +113,7 @@ distclean:: cleanup-browsers
 # ----------------------------------------------------------
 
 .PHONY: package
-package: images build  ## 🎁 Package the extension as a ZIP file for store submission
+package: images ## 🎁 Package the extension as a ZIP file for store submission
 	bun run extension build --zip
 	@EXTJS_ZIP=$(shell ls -t dist/$(EXTJS_BROWSER)/*.zip | head -n 1) \
 		&& echo "== Packaged extension: $$EXTJS_ZIP" \

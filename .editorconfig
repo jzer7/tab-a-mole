@@ -34,7 +34,7 @@ max_line_length = 90
 indent_size = 2
 max_line_length = unset
 
-[**/.{devcontainer,vscode}/*.json]
+[**/.{devcontainer,vscode}/*.{json,jsonc}]
 indent_size = 4
 max_line_length = unset
 

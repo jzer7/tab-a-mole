@@ -41,15 +41,14 @@
   },
   "scripts": {
     "NOTE": "echo bun has their own commands 'build', 'dev', 'test' which are different than their 'run' scripts",
-    "dev": "extension dev --browser chrome",
+    "dev": "extension dev --browser chromium",
     "dev:bun": "bun dev",
-    "start": "extension start --browser chrome",
+    "start": "extension start --browser chromium",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write **/*.{md,html,json}",
-    "build:bun": "bun build",
     "lint": "eslint '**/*.ts'",
     "lint:fix": "eslint --fix '**/*.ts'",
-    "build": "extension build --browser chrome",
+    "build": "extension build --browser chromium",
     "package": "extension build --zip",
     "prepare": "husky",
     "preview": "extension preview"

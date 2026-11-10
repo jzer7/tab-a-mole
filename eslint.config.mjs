@@ -47,6 +47,12 @@ export default defineConfig([
     language: 'css/css',
     extends: ['css/recommended']
   },
+  {
+    files: ['options/options.css', 'pages/css/main.css', 'popup/popup.css'],
+    rules: {
+      'css/no-invalid-properties': 'off'
+    }
+  },
   eslintPluginPrettierRecommended,
   {
     plugins: {

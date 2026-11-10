@@ -54,7 +54,7 @@
     "preview": "extension preview"
   },
   "type": "module",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "lint-staged": {
     "**/*.{css,html,json,md}": [
       "prettier --write"

@@ -2,6 +2,7 @@
 
 import { initTabSearch } from '../scripts/tab-search-controller';
 import { setupThemeToggle } from '../scripts/theme-toggle';
+import { setupOpenSettingsButton } from '../scripts/open-settings';
 
 document.addEventListener('DOMContentLoaded', function () {
   console.info('Popup loaded');
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const { showSearchError } = initTabSearch();
   setupThemeToggle();
+  setupOpenSettingsButton();
 
   /* -----------------------------------------------
      Popup-specific: sidebar button

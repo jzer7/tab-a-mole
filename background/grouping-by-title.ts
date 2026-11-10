@@ -13,6 +13,8 @@ import type { TabGroup } from './tab-grouping';
  * Interfaces
  * ------------------------------------------------------ */
 
+export type TitleGroupingMethod = 'jaccard' | 'informative-token';
+
 export interface TitleGroupingConfig {
   titleThreshold?: number;
   titleConfidenceThreshold?: number;
@@ -296,6 +298,33 @@ export function getDefaultTitleGroupingConfig(): Required<TitleGroupingConfig> {
     titleGroupingFunction: jaccardTitleGrouping,
     titleNormalizationFunction: normalizePhraseDiacriticsAndInflections,
     titleTokenizationFunction: tokenizeTitle
+  };
+}
+
+export function createTitleGroupingConfig(
+  preferences: {
+    method?: TitleGroupingMethod;
+    threshold?: number;
+    confidenceThreshold?: number;
+  } = {}
+): Required<TitleGroupingConfig> {
+  const defaults = getDefaultTitleGroupingConfig();
+  const clamp = (value: number | undefined, fallback: number) =>
+    typeof value === 'number' && Number.isFinite(value)
+      ? Math.max(0, Math.min(1, value))
+      : fallback;
+
+  return {
+    ...defaults,
+    titleThreshold: clamp(preferences.threshold, defaults.titleThreshold),
+    titleConfidenceThreshold: clamp(
+      preferences.confidenceThreshold,
+      defaults.titleConfidenceThreshold
+    ),
+    titleGroupingFunction:
+      preferences.method === 'informative-token'
+        ? informativeTokenTitleGrouping
+        : jaccardTitleGrouping
   };
 }
 

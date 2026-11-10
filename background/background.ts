@@ -1,12 +1,32 @@
-console.log('Background script running');
-
 import type { WindowScope } from '../popup/popup-values';
 import { msgType, windowScope } from '../popup/popup-values';
 import type { TitleGroupingConfig } from './grouping-by-title';
-import { groupTabsByTitle } from './grouping-by-title';
+import { createTitleGroupingConfig, groupTabsByTitle } from './grouping-by-title';
+import {
+  normalizeTitleGroupingSettings,
+  titleGroupingSettingsKey
+} from '../scripts/title-grouping-settings';
 import type { UrlGroupingConfig } from './grouping-by-url';
 import { groupTabsByUrl } from './grouping-by-url';
 import type { TabGroup } from './tab-grouping';
+
+console.log('Background script running');
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({
+      id: 'open-tab-a-mole-settings',
+      title: 'Settings',
+      contexts: ['action']
+    });
+  });
+});
+
+chrome.contextMenus.onClicked.addListener((info) => {
+  if (info.menuItemId === 'open-tab-a-mole-settings') {
+    chrome.runtime.openOptionsPage();
+  }
+});
 
 /* ---------------------------------------------------------
  * General Tab Grouping and Messaging
@@ -62,12 +82,27 @@ function groupTabsDispatch(config: GroupingRequest = {}) {
 
   chrome.tabs.query(query, function (selectedTabs) {
     const dispatchResults = async () => {
-      const matchedTabGroups: TabGroup[] =
-        matchBy === 'title'
-          ? // Group by title similarity
-            groupTabsByTitle(selectedTabs, config)
-          : // Group by URL
-            groupTabsByUrl(selectedTabs, config);
+      let matchedTabGroups: TabGroup[];
+      if (matchBy === 'title') {
+        const storedSettings = await chrome.storage.local.get<Record<string, unknown>>(
+          titleGroupingSettingsKey
+        );
+        const settings = normalizeTitleGroupingSettings(
+          storedSettings[titleGroupingSettingsKey] as
+            Partial<ReturnType<typeof normalizeTitleGroupingSettings>> | undefined
+        );
+        matchedTabGroups = groupTabsByTitle(
+          selectedTabs,
+          createTitleGroupingConfig({
+            method: settings.method,
+            threshold: config.titleThreshold ?? settings.threshold,
+            confidenceThreshold:
+              config.titleConfidenceThreshold ?? settings.confidenceThreshold
+          })
+        );
+      } else {
+        matchedTabGroups = groupTabsByUrl(selectedTabs, config);
+      }
 
       // Build a tab-group lookup so popup rendering can show richer context.
       const groupIds = new Set<number>();

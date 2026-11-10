@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tab-a-mole Settings</title>
+    <link rel="stylesheet" href="options.css" />
+    <script type="module" src="../scripts/theme.ts" defer></script>
+  </head>
+  <body>
+    <header class="settings-header">
+      <h1>Tab-a-mole</h1>
+      <p>Settings</p>
+    </header>
+    <main>
+      <form id="settingsForm" class="settings-card">
+        <h2>Title grouping</h2>
+        <p class="settings-description">
+          Choose how similar page titles are grouped and tune the matching thresholds.
+        </p>
+        <label class="setting" for="groupingMethod">
+          <span>Grouping method</span>
+          <select id="groupingMethod" name="method">
+            <option value="jaccard">Jaccard</option>
+            <option value="informative-token">Informative token</option>
+          </select>
+        </label>
+        <label class="setting" for="threshold">
+          <span>Threshold</span>
+          <input id="threshold" name="threshold" type="number" step="any" required />
+        </label>
+        <label class="setting" for="confidenceThreshold">
+          <span>Confidence threshold</span>
+          <input
+            id="confidenceThreshold"
+            name="confidenceThreshold"
+            type="number"
+            step="0.01"
+            required
+          />
+        </label>
+        <div class="settings-footer">
+          <p id="saveStatus" role="status" aria-live="polite"></p>
+          <button type="submit">Save settings</button>
+        </div>
+      </form>
+    </main>
+    <script type="module" src="options.ts" defer></script>
+  </body>
+</html>

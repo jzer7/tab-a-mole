@@ -4,6 +4,25 @@ Notable changes are documented here, based on the repository's tagged history.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Add a settings page for title-grouping method and thresholds, accessible from the
+  popup, sidebar, and toolbar context menu.
+- Automate common TypeScript development flows using Makefile.
+- Add configurable, pluggable title-grouping heuristics and a benchmark.
+
+### Changed
+
+- Unify light and dark theme tokens across the popup, sidebar, options, and page
+  styles while preserving system preference and manual theme selection.
+- Persist title-grouping preferences and apply them to title-based searches.
+- Refactor tab grouping to separate URL and title grouping, with title indexes
+  mapped back to tabs.
+- Improve tests for background grouping and the **popup** component.
+- Update development configuration and tooling.
+
 ## [v2.1.2] - 2026-11-07
 
 ### Changed

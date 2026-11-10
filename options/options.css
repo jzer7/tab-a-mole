@@ -8,11 +8,11 @@ body {
 
 .settings-header {
   max-width: 680px;
-  margin: 2.5rem auto 1rem;
+  margin: 2.5rem auto var(--space-lg);
 }
 
 .settings-header p {
-  margin: 0.35rem 0 0;
+  margin: var(--space-xs) 0 0;
   color: var(--color-text-muted);
 }
 
@@ -22,7 +22,7 @@ main {
 }
 
 .settings-card {
-  padding: 1.5rem;
+  padding: var(--space-xl);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   background: var(--color-bg-panel);
@@ -33,14 +33,14 @@ main {
 }
 
 .settings-description {
-  margin: 0.5rem 0 1.5rem;
+  margin: var(--space-sm) 0 var(--space-xl);
   color: var(--color-text-muted);
 }
 
 .setting {
   display: grid;
-  gap: 0.5rem;
-  margin: 1rem 0;
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0;
   font-weight: var(--font-weight-medium);
 }
 
@@ -48,7 +48,7 @@ main {
 .setting input {
   width: 100%;
   min-height: 2.5rem;
-  padding: 0.5rem 0.65rem;
+  padding: var(--space-sm) 0.65rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-bg);
@@ -66,8 +66,8 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
 }
 
 .settings-footer p {
@@ -77,7 +77,7 @@ main {
 
 .settings-footer button {
   min-height: 2.5rem;
-  padding: 0.5rem 1rem;
+  padding: var(--space-sm) var(--space-lg);
   border: 0;
   border-radius: var(--radius-sm);
   background: var(--color-primary);
@@ -92,11 +92,11 @@ main {
 
 @media (max-width: 480px) {
   .settings-header {
-    margin-top: 1.5rem;
+    margin-top: var(--space-lg);
   }
 
   .settings-card {
-    padding: 1rem;
+    padding: var(--space-lg);
   }
 
   .settings-footer {

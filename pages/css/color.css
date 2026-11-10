@@ -1,60 +1,48 @@
-/* ------------------------------------------------------
- * color.css - Centralized Color Design Tokens
- * ------------------------------------------------------ */
-
-/* --------------------------------------------------------
- * Color Tokens for Light and Dark Themes
- * ------------------------------------------------------ */
-
+/* Shared semantic color tokens for every extension surface. */
 :root {
-  /* Palette:
-   *  - Start with a simple palette of 3 colors: primary, secondary
-   *    and accent. They will be used for 60%, 30% and 10% of a page.
-   *
-   *    primary:   white    100%
-   *    secondary: teal     25%, 50%, 75% tint approx.
-   *    accent:    beige    25%, 50%, 75% tint approx.
-   */
-  --c-white: #ffffff;
-  --c-teal-1: #cce1e6; /* light teal, but not white */
-  --c-teal-2: #506b70; /* teal */
-  --c-teal-3: #1a2f33; /* very dark teal, black replacement */
-  --c-beige-1: #f0bf95; /* almost like a soft peach */
-  --c-beige-2: #b8a28f; /* neutral beige */
-  --c-beige-3: #807369; /* a darker muted beige */
-}
-
-:root {
-  /* Set 2 color schemes */
   color-scheme: light dark;
 
-  /* Colors for backgrounds: general, header, sections, grouped items */
-  --color-bg: light-dark(#eff3f4, #000000);
-  --color-bg-header: light-dark(#5aa1b9, #7f7f7f);
-  --color-bg-panel: light-dark(#c2e2ea, #2f2f2f);
-  --color-bg-group: light-dark(#c2e2ea, #2f2f2f);
-  --color-bg-fieldset: light-dark(#efffff, #1f1f1f);
+  --color-bg: light-dark(#f8f9fa, #1c1e1f);
+  --color-bg-panel: light-dark(#ffffff, #2a2d30);
+  --color-bg-group: light-dark(#fafbfc, #272a2d);
+  --color-bg-header: light-dark(#5aa1b9, #2a2d30);
+  --color-border: light-dark(#d0d7de, #4a4f54);
+  --color-border-group: light-dark(#e0e0e0, #3d4146);
+  --color-border-list: light-dark(#ececec, #363a3d);
+  --color-shadow: light-dark(#1b1f2308, #00000040);
 
-  /* Borders and shadows for depth */
-  --color-border: light-dark(#d0d7de, #f1f1f1);
-  --color-shadow: light-dark(#1b1f2308, #1b1f2308);
+  --color-text: light-dark(#222222, #e8ecf0);
+  --color-text-header: #ffffff;
+  --color-text-emphasis: light-dark(#172b4d, #f1f3f5);
+  --color-text-muted: light-dark(#57606a, #b0b8c2);
 
-  /* Text colors: primary, header, emphasis, muted, enabled, disabled */
-  --color-text: light-dark(#172b4d, #f1f1f1);
-  --color-text-header: light-dark(#ffffff, #ffffff);
-  --color-text-emphasis: light-dark(#091e42, #ffffff);
-  --color-text-secondary: light-dark(#57606a, #b0b0b0);
-  --color-text-enabled: light-dark(#2949b4, #f1f1f1);
-  --color-text-disabled: light-dark(#787862, #121212);
-  --color-text-reversed: light-dark(#ffffff, #000000);
-
-  /* Accent colors for interactive elements and states */
   --color-accent: light-dark(#558c9a, #72bbce);
   --color-accent-hover: light-dark(#0065ff, #0099ff);
-  --color-accent-alt: light-dark(#8dc8d8, #8dc8d8);
-  --color-accent-alt-hover: light-dark(#15b0bb, #00cfff);
-  --color-danger: light-dark(#cf222e, #ff4b5c);
-  --color-danger-hover: light-dark(#a40e26, #a40e26);
-  --color-success: light-dark(#19d81f, #19d81f);
-  --color-slider: light-dark(#0070d3, #d3d300);
+  --color-primary: light-dark(#0078d4, #4ea1f7);
+  --color-primary-dark: light-dark(#005fa3, #2176b6);
+  --color-text-on-primary: light-dark(#ffffff, #10202e);
+  --color-primary-bg: light-dark(#e5f1fb, #1b2d42);
+  --color-danger: light-dark(#d9534f, #ff6b72);
+  --color-danger-dark: light-dark(#b52b27, #d64550);
+  --color-danger-bg: light-dark(#f9e5e5, #49282b);
+  --color-monospace-bg: light-dark(#f5f7fa, #202326);
+
+  --chip-grey-bg: light-dark(#eceff3, #3a3e43);
+  --chip-grey-text: light-dark(#49515c, #d5d9df);
+  --chip-blue-bg: light-dark(#d8ebff, #203b55);
+  --chip-blue-text: light-dark(#075da8, #9bcaff);
+  --chip-red-bg: light-dark(#ffe1e0, #512b2c);
+  --chip-red-text: light-dark(#ad2720, #ffb3b1);
+  --chip-yellow-bg: light-dark(#fff2c7, #4a3d1b);
+  --chip-yellow-text: light-dark(#765800, #f6d879);
+  --chip-green-bg: light-dark(#daf5e2, #203f2d);
+  --chip-green-text: light-dark(#1a7f44, #9ce0ae);
+  --chip-pink-bg: light-dark(#ffe0ef, #4a2c3b);
+  --chip-pink-text: light-dark(#8f2f5b, #f2a8cb);
+  --chip-purple-bg: light-dark(#ebddff, #3b2d54);
+  --chip-purple-text: light-dark(#56358c, #c9aaf8);
+  --chip-cyan-bg: light-dark(#d8f7fb, #1d4147);
+  --chip-cyan-text: light-dark(#0f7180, #92dce5);
+  --chip-orange-bg: light-dark(#ffe7d2, #4a3524);
+  --chip-orange-text: light-dark(#8a4100, #ffc18b);
 }

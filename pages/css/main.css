@@ -20,13 +20,7 @@
 @import url('../../assets/fontawesome/css/solid.min.css');
 @import url('../../assets/fontawesome/css/regular.min.css');
 
-/* HACK: eslint "Can't validate with unknown variable", they are being imported, so we need to ignore this rule */
-/* eslint css/no-invalid-properties: "off" */
-
-/* ------------------------------------------------------
- * DO NOT HARDCODE VALUES IN THIS FILE
- * Use the design tokens defined in color.css and geometry.css
- * ------------------------------------------------------ */
+/* Shared color and geometry tokens are imported above. */
 
 /* ------------------------------------------------------ */
 /* General Body Styles */
@@ -41,9 +35,7 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;
-  transition:
-    background 0.2s,
-    color 0.2s;
+  transition: var(--transition);
 }
 
 /* ------------------------------------------------------ */
@@ -64,8 +56,6 @@ h1 {
   text-align: center;
   color: var(--color-text-emphasis);
   text-shadow: 0 0 12px var(--color-shadow);
-  /* text-shadow: 0px 0px 20px #fff; 2px 2px 3px #000; */
-  /* text-shadow: #ffcc00 1px 0 10px; */
 }
 
 h2 {
@@ -80,13 +70,13 @@ button {
   width: 100%;
   padding: var(--space-md);
   font-size: var(--font-size-md);
-  font-weight: 500;
-  color: #fff;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-on-primary);
   background-color: var(--color-accent);
   border: none;
   border-radius: var(--radius);
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: var(--transition);
 }
 
 button:hover {
@@ -131,12 +121,10 @@ section:last-child {
 
 fieldset {
   border-radius: var(--radius);
-  padding: var(--space-sm) var(--space-md) var(--space-sm) var(--space-md);
+  padding: var(--space-sm) var(--space-md);
   margin-bottom: var(--space-md);
-  transition:
-    background 0.2s,
-    border-color 0.2s;
-  /* background-color: var(--color-bg-fieldset); */
+  background-color: var(--color-bg-panel);
+  transition: var(--transition);
 }
 
 legend {
